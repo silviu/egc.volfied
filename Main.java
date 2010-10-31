@@ -3,16 +3,20 @@ import java.awt.event.*;
 import java.applet.*;
 
 
-public class Main extends Applet implements KeyListener, Runnable {
-
+public class Main extends Applet implements KeyListener, Runnable 
+{
+	private static final long serialVersionUID = 1L;
+	
 	static final int OFFSET_GRID = 10;
 	static final int GRID_X = OFFSET_GRID + Player.WIDTH/2;
 	static final int GRID_Y = OFFSET_GRID + Player.HEIGHT/2;
+	static final int BOARD_WIDTH = 1000;
+	static final int BOARD_HEIGHT = 600;
+	
 	int delay, frame;
-	Player pl = new Player();
+	Player player = new Player();
 	Thread animator;
 	
-	private static final long serialVersionUID = 1L;
 	Graphics g_main;
 	public static int window_width, window_height;
 	public static int keyState;
@@ -24,7 +28,6 @@ public class Main extends Applet implements KeyListener, Runnable {
 		this.setSize(800,1000);
 		int fps = 20;
 		delay = (fps > 0) ? (1000 / fps) : 100;
-
 	}
 	
 	 /**
@@ -35,8 +38,6 @@ public class Main extends Applet implements KeyListener, Runnable {
 		animator = new Thread(this);
 		animator.start();
     }
-
-
 	
 	public void run() {
 		// Remember the starting time
@@ -44,17 +45,14 @@ public class Main extends Applet implements KeyListener, Runnable {
 		while (true) {
 		    // Display the next frame of animation.
 		    repaint();
-	
 		    // Delay depending on how far we are behind.
 		    try {
 				tm += delay;
 				Thread.sleep(Math.max(0, tm - System.currentTimeMillis()));
-		    } catch (InterruptedException e) {
-				break;
-			    }
+		    } catch (InterruptedException e) {break;}
 	    	// Advance the frame
 	    	frame++;
-	    	pl.pl_move();
+	    	//player.pl_move();
 		}
 	}
 	public void paint(Graphics g_main) {
@@ -65,10 +63,9 @@ public class Main extends Applet implements KeyListener, Runnable {
 		g_main.fillRect(0, 0, window_width, window_height);
 		
 		g_main.setColor(Color.black);
-		g_main.drawRect(GRID_X,GRID_Y, 1000, 600);
+		g_main.drawRect(GRID_X,GRID_Y, BOARD_WIDTH, BOARD_HEIGHT);
 		
-		pl.draw(g_main);
-		
+		player.draw(g_main);
 	}
 
 	public void update(Graphics g_main) {
@@ -77,8 +74,7 @@ public class Main extends Applet implements KeyListener, Runnable {
 
 	public void keyPressed(KeyEvent ke) {
 		keyState = ke.getKeyCode();
-		window_width  = this.getSize().width;
-		window_height = this.getSize().height;
+		player.key_decide(keyState);
 	}
 
 	public void keyReleased(KeyEvent ke) {}
