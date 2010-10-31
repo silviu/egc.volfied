@@ -6,10 +6,7 @@ public class Player extends Shape {
 	static final int HEIGHT = 20;
 	int pos_x = 0;
 	int pos_y = 0;
-	int pase = 20;
-	
-	public Player() {
-	}
+	int pase = 7;
 
 	public void draw(Graphics g_main){
 		Graphics2D g2 = (Graphics2D) g_main;
