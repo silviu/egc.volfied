@@ -1,0 +1,90 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.applet.*;
+
+
+public class Main extends Applet implements KeyListener, Runnable {
+
+	static final int OFFSET_GRID = 10;
+	static final int GRID_X = OFFSET_GRID + Player.WIDTH/2;
+	static final int GRID_Y = OFFSET_GRID + Player.HEIGHT/2;
+	int delay, frame;
+	Player pl = new Player();
+	Thread animator;
+	
+	private static final long serialVersionUID = 1L;
+	Graphics g_main;
+	public static int window_width, window_height;
+	public static int keyState;
+
+	public void init() {
+		addKeyListener(this);
+
+		/* Set window size */		
+		this.setSize(800,1000);
+		int fps = 20;
+		delay = (fps > 0) ? (1000 / fps) : 100;
+
+	}
+	
+	 /**
+     * This method is called when the applet becomes visible on
+     * the screen. Create a thread and start it.
+     */
+    public void start() {
+		animator = new Thread(this);
+		animator.start();
+    }
+
+
+	
+	public void run() {
+		// Remember the starting time
+		long tm = System.currentTimeMillis();
+		while (true) {
+		    // Display the next frame of animation.
+		    repaint();
+	
+		    // Delay depending on how far we are behind.
+		    try {
+				tm += delay;
+				Thread.sleep(Math.max(0, tm - System.currentTimeMillis()));
+		    } catch (InterruptedException e) {
+				break;
+			    }
+	    	// Advance the frame
+	    	frame++;
+	    	pl.pl_move();
+		}
+	}
+	public void paint(Graphics g_main) {
+		window_width  = this.getSize().width;
+		window_height = this.getSize().height;
+		
+		g_main.setColor(Color.white);
+		g_main.fillRect(0, 0, window_width, window_height);
+		
+		g_main.setColor(Color.black);
+		g_main.drawRect(GRID_X,GRID_Y, 1000, 600);
+		
+		pl.draw(g_main);
+		
+	}
+
+	public void update(Graphics g_main) {
+		paint(g_main);
+	}
+
+	public void keyPressed(KeyEvent ke) {
+		keyState = ke.getKeyCode();
+		window_width  = this.getSize().width;
+		window_height = this.getSize().height;
+	}
+
+	public void keyReleased(KeyEvent ke) {}
+	public void keyTyped(KeyEvent ke) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	public void mouseMoved(MouseEvent e) {}
+
+}
