@@ -294,7 +294,7 @@ public class Player extends Shape {
 						if (pre_prev_pos >= 0) {
 							Point prev     = trail.get(prev_pos);
 							Point pre_prev = trail.get(pre_prev_pos);
-							if (prev.x == pre_prev.x)
+							if (prev.y == pre_prev.y)
 								this.trail.set(prev_pos, new Point(this.x, this.y));
 							else 
 								this.trail.add(new Point(this.x, this.y));
@@ -323,7 +323,7 @@ public class Player extends Shape {
 					if (pre_prev_pos >= 0) {
 						Point prev     = trail.get(prev_pos);
 						Point pre_prev = trail.get(pre_prev_pos);
-						if (prev.x == pre_prev.x)
+						if (prev.y == pre_prev.y)
 							this.trail.set(prev_pos, new Point(this.x, this.y));
 						else 
 							this.trail.add(new Point(this.x, this.y));
