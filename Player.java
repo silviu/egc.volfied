@@ -3,12 +3,13 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 
 public class Player extends Shape {
-	static final int WIDTH = 50;
-	static final int HEIGHT = 50;
+	static final int WIDTH = 30;
+	static final int HEIGHT = 30;
 	int x = Volfied.BOARD_WIDTH;
 	int y = Volfied.BOARD_HEIGHT;
 	int pase = 7;
-	static final int ATACK = 0;
+	int prev_key;
+	boolean isAttacking = false;
 	
 	ArrayList<Point> trail  = new ArrayList<Point>();
 
@@ -22,6 +23,11 @@ public class Player extends Shape {
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
 		g.drawRect(Volfied.OFFSET_GRID + x, Volfied.OFFSET_GRID + y, WIDTH, HEIGHT);
+		g.setColor(Color.blue);
+		int trail_size = this.trail.size();
+		for (int i = 0; i < trail_size-1; i++)
+			g.drawLine(Volfied.OFFSET_GRID + WIDTH/2 + trail.get(i).x, Volfied.OFFSET_GRID +  trail.get(i).y + HEIGHT/2,
+					Volfied.OFFSET_GRID + trail.get(i+1).x +WIDTH/2, Volfied.OFFSET_GRID + trail.get(i+1).y+HEIGHT/2);
 	}
 	
 	public ArrayList<Point> onWhatLine() {
@@ -63,9 +69,11 @@ public class Player extends Shape {
 		return ret;
 	}
 	
-	public boolean canMove(int keyCode) {
+	public boolean canMoveNotAttack(int keyCode) {
 		ArrayList<Point> position = onWhatLine();
 		int nr_elem = position.size();
+		if (nr_elem == 0)
+			return false;
 		System.out.println(nr_elem);
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
@@ -110,38 +118,124 @@ public class Player extends Shape {
 		}
 		return false;
 	}
-
-	public void key_decide(int keyCode){
-		switch (keyCode) {
+	
+	public void calc_trail(int keyCode)
+	{
+		switch(keyCode) {
 			case KeyEvent.VK_UP:
-				if (canMove(keyCode)) {
+				if (canMoveNotAttack(keyCode)) {
 					if (this.y - this.pase < 0)
 						this.y = 0;
 					else this.y -= this.pase;
 				}
-			break;
-			
+				break;
+		
 			case KeyEvent.VK_DOWN:
-				if (canMove(keyCode)) {
+				if (canMoveNotAttack(keyCode)) {
 					if (this.y + this.pase > Volfied.BOARD_HEIGHT)
 						this.y = Volfied.BOARD_HEIGHT;
 					else this.y += this.pase;
 				}
-			break;
-			
+				break;
+		
 			case KeyEvent.VK_LEFT:
-				if (canMove(keyCode)) {
+				if (canMoveNotAttack(keyCode)) {
 					if (this.x - this.pase < 0)
 						this.x = 0;
 					else this.x -= this.pase;
 				}
-			break;
-			
+				break;
+		
 			case KeyEvent.VK_RIGHT:
-				if (canMove(keyCode)) {
+				if (canMoveNotAttack(keyCode)) {
 					if (this.x + this.pase > Volfied.BOARD_WIDTH)
 						this.x = Volfied.BOARD_WIDTH;
 					else this.x += this.pase;
+				}
+				break;
+		}
+	}
+	
+	public boolean isValidAttack(int keyCode) {
+		switch(keyCode) {
+			case KeyEvent.VK_UP:
+				if (this.y == 0)
+					return false;
+				break;
+	
+			case KeyEvent.VK_DOWN:
+					if (this.y == Volfied.BOARD_HEIGHT)
+						return false;
+				break;
+	
+			case KeyEvent.VK_LEFT:
+					if (this.x == 0)
+						return false;
+				break;
+	
+			case KeyEvent.VK_RIGHT:
+					if (this.x == Volfied.BOARD_WIDTH)
+						return false;
+				break;
+		}
+		return true;
+	}
+
+	public void key_decide(int keyCode){
+		switch (keyCode) {
+			case KeyEvent.VK_UP:
+				if (canMoveNotAttack(keyCode)) {
+					if (this.y - this.pase < 0)
+						this.y = 0;
+					else this.y -= this.pase;
+				}
+				else if (isValidAttack(keyCode)) {
+					System.out.println("Atac in sus");
+					this.y -= this.pase;
+					this.trail.add(new Point(this.x, this.y));
+				}
+					
+			break;
+			
+			case KeyEvent.VK_DOWN:
+				if (canMoveNotAttack(keyCode)) {
+					if (this.y + this.pase > Volfied.BOARD_HEIGHT)
+						this.y = Volfied.BOARD_HEIGHT;
+					else this.y += this.pase;
+				}
+				else if (isValidAttack(keyCode)) {
+					System.out.println("Atac in jos");
+					this.y += this.pase;
+					this.trail.add(new Point(this.x, this.y));
+
+				}
+			break;
+			
+			case KeyEvent.VK_LEFT:
+				if (canMoveNotAttack(keyCode)) {
+					System.out.println("CIca ma pot misca la stanga");
+					if (this.x - this.pase < 0)
+						this.x = 0;
+					else this.x -= this.pase;
+				}
+				else if (isValidAttack(keyCode)) {
+					System.out.println("Atac in stanga");
+					this.x -= this.pase;
+					this.trail.add(new Point(this.x, this.y));
+				}
+			break;
+			
+			case KeyEvent.VK_RIGHT:
+				if (canMoveNotAttack(keyCode)) {
+					System.out.println("CIca ma pot misca");
+					if (this.x + this.pase > Volfied.BOARD_WIDTH)
+						this.x = Volfied.BOARD_WIDTH;
+					else this.x += this.pase;
+				}
+				else if (isValidAttack(keyCode)) {
+					System.out.println("Atac in dreapta");
+					this.x += this.pase;
+					this.trail.add(new Point(this.x, this.y));
 				}
 			break;
 		}

@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
-import java.util.*;
 
 
 public class Volfied extends Applet implements KeyListener, Runnable 
@@ -58,7 +57,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		window_width  = this.getSize().width;
 		window_height = this.getSize().height;
 		
-		g_main.setColor(Color.green);
+		g_main.setColor(Color.white);
 		g_main.fillRect(0, 0, window_width, window_height);
 		
 		g_main.setColor(Color.black);
@@ -95,10 +94,10 @@ public class Volfied extends Applet implements KeyListener, Runnable
 
    		frame.add(applet);
    		frame.pack();
+   		
    		applet.init();
    		applet.start();
-   		applet.show(true);
-   		//frame .setSize(2 * GRID_X + BOARD_WIDTH, 2* GRID_Y + BOARD_HEIGHT + 20);
+   		
    		frame.setVisible(true);
 	}
 
