@@ -7,8 +7,7 @@ public class Player extends Shape {
 	static final int HEIGHT = 30;
 	int x = Volfied.BOARD_WIDTH;
 	int y = Volfied.BOARD_HEIGHT;
-	int pase = 7;
-	int prev_key;
+	int pase = 5;
 	boolean isAttacking = false;
 	
 	ArrayList<Point> trail  = new ArrayList<Point>();
@@ -69,6 +68,36 @@ public class Player extends Shape {
 		return ret;
 	}
 	
+	public boolean isPointonTrail(Point lookup) {
+		int n = this.trail.size();
+		
+		for (int i = 0; i < n; i++) {
+			Point curr_point = trail.get(i);
+			Point next_point = trail.get((i == n - 1) ? 0 : i + 1);
+			
+			if (lookup.y == curr_point.y && lookup.x == curr_point.x)
+			{
+				return true;
+			}
+			
+			if ((lookup.y == curr_point.y) && (lookup.y == next_point.y))
+				if (((lookup.x >  curr_point.x) && (lookup.x <  next_point.x)) ||
+					((lookup.x <  curr_point.x) && (lookup.x >  next_point.x))) 
+				{
+			   		return true;
+				}
+			
+			if ((lookup.x == curr_point.x) && (lookup.x == next_point.x))
+				if (((lookup.y >  curr_point.y) && (lookup.y <  next_point.y)) ||
+					((lookup.y <  curr_point.y) && (lookup.y >  next_point.y))) 
+				{
+			   		return true;
+				}
+
+		}
+		return false;
+	}
+	
 	public boolean canMoveNotAttack(int keyCode) {
 		ArrayList<Point> position = onWhatLine();
 		int nr_elem = position.size();
@@ -119,66 +148,134 @@ public class Player extends Shape {
 		return false;
 	}
 	
-	public void calc_trail(int keyCode)
-	{
-		switch(keyCode) {
-			case KeyEvent.VK_UP:
-				if (canMoveNotAttack(keyCode)) {
-					if (this.y - this.pase < 0)
-						this.y = 0;
-					else this.y -= this.pase;
-				}
-				break;
-		
-			case KeyEvent.VK_DOWN:
-				if (canMoveNotAttack(keyCode)) {
-					if (this.y + this.pase > Volfied.BOARD_HEIGHT)
-						this.y = Volfied.BOARD_HEIGHT;
-					else this.y += this.pase;
-				}
-				break;
-		
-			case KeyEvent.VK_LEFT:
-				if (canMoveNotAttack(keyCode)) {
-					if (this.x - this.pase < 0)
-						this.x = 0;
-					else this.x -= this.pase;
-				}
-				break;
-		
-			case KeyEvent.VK_RIGHT:
-				if (canMoveNotAttack(keyCode)) {
-					if (this.x + this.pase > Volfied.BOARD_WIDTH)
-						this.x = Volfied.BOARD_WIDTH;
-					else this.x += this.pase;
-				}
-				break;
-		}
-	}
+
 	
 	public boolean isValidAttack(int keyCode) {
+		Point next_point;
 		switch(keyCode) {
 			case KeyEvent.VK_UP:
-				if (this.y == 0)
+				next_point = new Point(this.x, this.y - this.pase);
+				if (isPointonTrail(next_point))
 					return false;
 				break;
 	
 			case KeyEvent.VK_DOWN:
-					if (this.y == Volfied.BOARD_HEIGHT)
-						return false;
+				next_point = new Point(this.x, this.y + this.pase);
+				if (isPointonTrail(next_point))
+					return false;
 				break;
 	
 			case KeyEvent.VK_LEFT:
-					if (this.x == 0)
-						return false;
+				next_point = new Point(this.x - this.pase, this.y);
+				if (isPointonTrail(next_point))
+					return false;
 				break;
 	
 			case KeyEvent.VK_RIGHT:
-					if (this.x == Volfied.BOARD_WIDTH)
-						return false;
+				next_point = new Point(this.x + this.pase, this.y);
+				if (isPointonTrail(next_point))
+					return false;
 				break;
 		}
 		return true;
+	}
+	
+	public void attack(int keyCode) {
+		switch (keyCode) {
+			case KeyEvent.VK_UP:
+				if (isValidAttack(keyCode)) {
+					if (!isAttacking)
+						this.trail.add(new Point(this.x, this.y));
+					isAttacking = true;
+					if (this.y - this.pase < 0)
+						this.y = 0;
+					else 
+						this.y -= this.pase;
+					
+					int prev_pos     = trail.size() -1 ;
+					int pre_prev_pos = trail.size() - 2;
+					
+					if (pre_prev_pos >= 0) {
+						Point prev     = trail.get(prev_pos);
+						Point pre_prev = trail.get(pre_prev_pos);
+						if (prev.x == pre_prev.x)
+							this.trail.set(prev_pos, new Point(this.x, this.y));
+						else 
+							this.trail.add(new Point(this.x, this.y));
+					}
+					else this.trail.add(new Point(this.x, this.y));
+				}
+				break;
+			
+			case KeyEvent.VK_DOWN:
+				if (isValidAttack(keyCode)) {
+					if (!isAttacking)
+						this.trail.add(new Point(this.x, this.y));
+					isAttacking = true;
+					if (this.y + this.pase > Volfied.BOARD_HEIGHT)
+						this.y = Volfied.BOARD_HEIGHT;
+					else this.y += this.pase;
+					
+					int prev_pos     = trail.size() -1;
+					int pre_prev_pos = trail.size() - 2;
+					if (pre_prev_pos >= 0) {
+						Point prev     = trail.get(prev_pos);
+						Point pre_prev = trail.get(pre_prev_pos);
+						if (prev.x == pre_prev.x)
+							this.trail.set(prev_pos, new Point(this.x, this.y));
+						else 
+							this.trail.add(new Point(this.x, this.y));
+					}
+					else this.trail.add(new Point(this.x, this.y));
+				}
+				break;
+			
+			case KeyEvent.VK_LEFT:
+				if (isValidAttack(keyCode)) {
+					if (!isAttacking)
+						this.trail.add(new Point(this.x, this.y));
+					isAttacking = true;
+					if (this.x - this.pase < 0)
+						this.x = 0;
+					else this.x -= this.pase;
+					
+					int prev_pos     = trail.size() - 1;
+					int pre_prev_pos = trail.size() - 2;
+					if (pre_prev_pos >= 0) {
+						Point prev     = trail.get(prev_pos);
+						Point pre_prev = trail.get(pre_prev_pos);
+						if (prev.y == pre_prev.y)
+							this.trail.set(prev_pos, new Point(this.x, this.y));
+						else 
+							this.trail.add(new Point(this.x, this.y));
+					}
+					else this.trail.add(new Point(this.x, this.y));
+				}
+				break;
+		
+		case KeyEvent.VK_RIGHT:
+			if (isValidAttack(keyCode)) {
+				if (!isAttacking)
+					this.trail.add(new Point(this.x, this.y));
+				isAttacking = true;
+				if (this.x + this.pase > Volfied.BOARD_WIDTH)
+					this.x = Volfied.BOARD_WIDTH;
+				else this.x += this.pase;
+				
+				int prev_pos     = trail.size() - 1;
+				int pre_prev_pos = trail.size() - 2;
+				if (pre_prev_pos >= 0) {
+					Point prev     = trail.get(prev_pos);
+					Point pre_prev = trail.get(pre_prev_pos);
+					if (prev.y == pre_prev.y)
+						this.trail.set(prev_pos, new Point(this.x, this.y));
+					else 
+						this.trail.add(new Point(this.x, this.y));
+				}
+				else this.trail.add(new Point(this.x, this.y));
+			}
+			break;
+		}
 	}
 
 	public void key_decide(int keyCode){
@@ -189,16 +286,7 @@ public class Player extends Shape {
 						this.y = 0;
 					else this.y -= this.pase;
 				}
-				else if (isValidAttack(keyCode)) {
-					if (!isAttacking)
-						this.trail.add(new Point(this.x, this.y));
-					if (this.y - this.pase < 0)
-						this.y = 0;
-					else this.y -= this.pase;
-					this.trail.add(new Point(this.x, this.y));
-					isAttacking = true;
-				}
-					
+				else attack(keyCode);
 			break;
 			
 			case KeyEvent.VK_DOWN:
@@ -207,54 +295,25 @@ public class Player extends Shape {
 						this.y = Volfied.BOARD_HEIGHT;
 					else this.y += this.pase;
 				}
-				else if (isValidAttack(keyCode)) {
-					if (!isAttacking)
-						this.trail.add(new Point(this.x, this.y));
-					if (this.y + this.pase > Volfied.BOARD_HEIGHT)
-						this.y = Volfied.BOARD_HEIGHT;
-					else this.y += this.pase;
-					this.trail.add(new Point(this.x, this.y));
-					isAttacking = true;
-
-
-				}
+				else attack(keyCode);
 			break;
 			
 			case KeyEvent.VK_LEFT:
 				if (canMoveNotAttack(keyCode)) {
-					System.out.println("CIca ma pot misca la stanga");
 					if (this.x - this.pase < 0)
 						this.x = 0;
 					else this.x -= this.pase;
 				}
-				else if (isValidAttack(keyCode)) {
-					if (!isAttacking)
-						this.trail.add(new Point(this.x, this.y));
-					if (this.x - this.pase < 0)
-						this.x = 0;
-					else this.x -= this.pase;
-					this.trail.add(new Point(this.x, this.y));
-					isAttacking = true;
-
-				}
+				else attack(keyCode);
 			break;
 			
 			case KeyEvent.VK_RIGHT:
 				if (canMoveNotAttack(keyCode)) {
-					System.out.println("CIca ma pot misca");
 					if (this.x + this.pase > Volfied.BOARD_WIDTH)
 						this.x = Volfied.BOARD_WIDTH;
 					else this.x += this.pase;
 				}
-				else if (isValidAttack(keyCode)) {
-					if (!isAttacking)
-						this.trail.add(new Point(this.x, this.y));
-					if (this.x + this.pase > Volfied.BOARD_WIDTH)
-						this.x = Volfied.BOARD_WIDTH;
-					else this.x += this.pase;
-					this.trail.add(new Point(this.x, this.y));
-					isAttacking = true;
-				}
+				else attack(keyCode);
 			break;
 		}
 	}
