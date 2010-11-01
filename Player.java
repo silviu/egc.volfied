@@ -190,9 +190,13 @@ public class Player extends Shape {
 					else this.y -= this.pase;
 				}
 				else if (isValidAttack(keyCode)) {
-					System.out.println("Atac in sus");
-					this.y -= this.pase;
+					if (!isAttacking)
+						this.trail.add(new Point(this.x, this.y));
+					if (this.y - this.pase < 0)
+						this.y = 0;
+					else this.y -= this.pase;
 					this.trail.add(new Point(this.x, this.y));
+					isAttacking = true;
 				}
 					
 			break;
@@ -204,9 +208,14 @@ public class Player extends Shape {
 					else this.y += this.pase;
 				}
 				else if (isValidAttack(keyCode)) {
-					System.out.println("Atac in jos");
-					this.y += this.pase;
+					if (!isAttacking)
+						this.trail.add(new Point(this.x, this.y));
+					if (this.y + this.pase > Volfied.BOARD_HEIGHT)
+						this.y = Volfied.BOARD_HEIGHT;
+					else this.y += this.pase;
 					this.trail.add(new Point(this.x, this.y));
+					isAttacking = true;
+
 
 				}
 			break;
@@ -219,9 +228,14 @@ public class Player extends Shape {
 					else this.x -= this.pase;
 				}
 				else if (isValidAttack(keyCode)) {
-					System.out.println("Atac in stanga");
-					this.x -= this.pase;
+					if (!isAttacking)
+						this.trail.add(new Point(this.x, this.y));
+					if (this.x - this.pase < 0)
+						this.x = 0;
+					else this.x -= this.pase;
 					this.trail.add(new Point(this.x, this.y));
+					isAttacking = true;
+
 				}
 			break;
 			
@@ -233,9 +247,13 @@ public class Player extends Shape {
 					else this.x += this.pase;
 				}
 				else if (isValidAttack(keyCode)) {
-					System.out.println("Atac in dreapta");
-					this.x += this.pase;
+					if (!isAttacking)
+						this.trail.add(new Point(this.x, this.y));
+					if (this.x + this.pase > Volfied.BOARD_WIDTH)
+						this.x = Volfied.BOARD_WIDTH;
+					else this.x += this.pase;
 					this.trail.add(new Point(this.x, this.y));
+					isAttacking = true;
 				}
 			break;
 		}
