@@ -137,6 +137,7 @@ public class Player extends Shape {
 		System.out.println(nr_elem);
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
+				if (isPointonMyTerrain(new Point(this.x, this.y - this.pase))) {
 				if (nr_elem == 2) {
 					if (position.get(0).x == position.get(1).x)
 						return true;
@@ -144,9 +145,11 @@ public class Player extends Shape {
 				else if ((position.get(0).x == position.get(1).x) ||
 						(position.get(1).x == position.get(2).x))
 						return true;
+				}
 				break;
 			
 			case KeyEvent.VK_DOWN:
+				if (isPointonMyTerrain(new Point(this.x, this.y + this.pase))){
 				if (nr_elem == 2) {
 					if (position.get(0).x == position.get(1).x)
 						return true;
@@ -154,9 +157,11 @@ public class Player extends Shape {
 				else if ((position.get(0).x == position.get(1).x) ||
 						 (position.get(1).x == position.get(2).x))
 						return true;
+				}
 				break;
 			
 			case KeyEvent.VK_LEFT:
+				if (isPointonMyTerrain(new Point(this.x - this.pase, this.y))){
 				if (nr_elem == 2) {
 					if (position.get(0).y == position.get(1).y)
 						return true;
@@ -164,9 +169,11 @@ public class Player extends Shape {
 				else if ((position.get(0).y == position.get(1).y) ||
 						 (position.get(1).y == position.get(2).y))
 						return true;
+				}
 				break;
 			
 			case KeyEvent.VK_RIGHT:
+				if (isPointonMyTerrain(new Point(this.x + this.pase, this.y))){
 				if (nr_elem == 2) {
 					if (position.get(0).y == position.get(1).y)
 						return true;
@@ -174,6 +181,7 @@ public class Player extends Shape {
 				else if ((position.get(0).y == position.get(1).y) ||
 						 (position.get(1).y == position.get(2).y))
 						return true;
+				}
 				break;
 		}
 		return false;
@@ -237,22 +245,6 @@ public class Player extends Shape {
 		return false;
 	}
 	
-	public void cutTerrain1() {
-		int terain_size = Volfied.terain.poli.size();
-		int trail_size  = this.trail.size();
-		Point start_point = trail.get(0);
-		for (int j = 0; j < terain_size; j++) {
-			Point curr_point = Volfied.terain.poli.get(j);
-			Point next_point = Volfied.terain.poli.get((j == terain_size - 1) ? 0 : j + 1);
-			if (isPointOnLine(start_point, curr_point, next_point)){
-				System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-				for (int i = trail_size-1; i >= 0; i--)
-					Volfied.terain.poli.add(j, trail.get(i));
-			}
-			break;
-		}
-	}
-	
 	public void cutTerrain() {
 		int terain_size = Volfied.terain.poli.size();
 		int trail_size  = this.trail.size();
@@ -292,25 +284,29 @@ public class Player extends Shape {
 						this.y = 0;
 					else 
 						this.y -= this.pase;
-					if (isPointonMyTerrain(new Point(this.x, this.y))){
-						this.trail.add(new Point(this.x, this.y));
-						isAttacking = false;
-						cutTerrain();
-						this.trail.clear();
-						return;
-					}
+					
 					int prev_pos     = trail.size() - 1;
 					int pre_prev_pos = trail.size() - 2;
 					if (pre_prev_pos >= 0) {
 						Point prev     = trail.get(prev_pos);
 						Point pre_prev = trail.get(pre_prev_pos);
-						if (prev.x == pre_prev.x)
-							this.trail.set(prev_pos, new Point(this.x, this.y));
+						if (prev.x == pre_prev.x){
+							System.out.println("SEEEETTT");
+						this.trail.set(prev_pos, new Point(this.x, this.y));
+						}
 						else 
 							this.trail.add(new Point(this.x, this.y));
 					}
 					else this.trail.add(new Point(this.x, this.y));
+					if (isPointonMyTerrain(new Point(this.x, this.y))){
+						isAttacking = false;
+						first_time = true;
+						cutTerrain();
+						this.trail.clear();
+						return;
+					}
 				}
+				System.out.println("TRAIL: " + trail.toString());
 				break;
 			
 			case KeyEvent.VK_DOWN:
@@ -323,26 +319,32 @@ public class Player extends Shape {
 						this.y = Volfied.BOARD_HEIGHT;
 					else 
 						this.y += this.pase;
-					if (isPointonMyTerrain(new Point(this.x, this.y))){
-						//finalize attack
-						isAttacking = false;
-						cutTerrain();
-						this.trail.clear();
-						return;
-					}
-						int prev_pos     = trail.size() - 1 ;
+					
+						int prev_pos     = trail.size() - 1;
 						int pre_prev_pos = trail.size() - 2;
 					
 						if (pre_prev_pos >= 0) {
 							Point prev     = trail.get(prev_pos);
 							Point pre_prev = trail.get(pre_prev_pos);
-							if (prev.x == pre_prev.x)
-								this.trail.set(prev_pos, new Point(this.x, this.y));
+							if (prev.x == pre_prev.x){
+								System.out.println("SEEEETTT");
+							this.trail.set(prev_pos, new Point(this.x, this.y));
+						}
 							else 
 								this.trail.add(new Point(this.x, this.y));
 						}
 						else this.trail.add(new Point(this.x, this.y));
+						if (isPointonMyTerrain(new Point(this.x, this.y))){
+							//finalize attack
+							isAttacking = false;
+							first_time = true;
+							cutTerrain();
+							this.trail.clear();
+							return;
+						}
 				}
+				System.out.println("TRAIL: " + trail.toString());
+
 				break;
 			
 			case KeyEvent.VK_LEFT:
@@ -355,26 +357,32 @@ public class Player extends Shape {
 						this.x = 0;
 					else 
 						this.x -= this.pase;
-					if (isPointonMyTerrain(new Point(this.x, this.y))){
-						//finalize attack
-						isAttacking = false;
-						cutTerrain();
-						this.trail.clear();
-						return;
-					}
+					
 						int prev_pos     = trail.size() - 1 ;
 						int pre_prev_pos = trail.size() - 2;
 					
 						if (pre_prev_pos >= 0) {
 							Point prev     = trail.get(prev_pos);
 							Point pre_prev = trail.get(pre_prev_pos);
-							if (prev.y == pre_prev.y)
-								this.trail.set(prev_pos, new Point(this.x, this.y));
+							if (prev.y == pre_prev.y){
+								System.out.println("SEEEETTT");
+							this.trail.set(prev_pos, new Point(this.x, this.y));
+						}
 							else 
 								this.trail.add(new Point(this.x, this.y));
 						}
 						else this.trail.add(new Point(this.x, this.y));
+						if (isPointonMyTerrain(new Point(this.x, this.y))){
+							//finalize attack
+							isAttacking = false;
+							first_time = true;
+							cutTerrain();
+							this.trail.clear();
+							return;
+						}
 				}
+				System.out.println("TRAIL: " + trail.toString());
+
 				break;
 		
 		case KeyEvent.VK_RIGHT:
@@ -387,26 +395,33 @@ public class Player extends Shape {
 					this.x = Volfied.BOARD_WIDTH;
 				else 
 					this.x += this.pase;
-				if (isPointonMyTerrain(new Point(this.x, this.y))){
-					//finalize attack
-					isAttacking = false;
-					cutTerrain();
-					this.trail.clear();
-					return;
-				}
+				
 					int prev_pos     = trail.size() - 1;
 					int pre_prev_pos = trail.size() - 2;
 				
 					if (pre_prev_pos >= 0) {
 						Point prev     = trail.get(prev_pos);
 						Point pre_prev = trail.get(pre_prev_pos);
-						if (prev.y == pre_prev.y)
+						if (prev.y == pre_prev.y) {
+							System.out.println("SEEEETTT");
 							this.trail.set(prev_pos, new Point(this.x, this.y));
+						}
 						else 
 							this.trail.add(new Point(this.x, this.y));
 					}
 					else this.trail.add(new Point(this.x, this.y));
+					if (isPointonMyTerrain(new Point(this.x, this.y))){
+						this.trail.add(new Point(this.x, this.y));
+						//finalize attack
+						isAttacking = false;
+						first_time = true;
+						cutTerrain();
+						this.trail.clear();
+						return;
+					}
 			}
+			System.out.println("TRAIL: " + trail.toString());
+
 			break;
 		}
 	}
@@ -421,9 +436,8 @@ public class Player extends Shape {
 					else this.y -= this.pase;
 				}
 				else {
-					System.out.println("ATACK! " + Volfied.terain.poli.toString());
+					//System.out.println("ATACK! " + Volfied.terain.poli.toString());
 					isAttacking = true;
-					first_time = true;
 					attack(keyCode);
 				}
 				break;
@@ -436,9 +450,8 @@ public class Player extends Shape {
 					else this.y += this.pase;
 				}
 				else{
-					System.out.println("ATACK! " + Volfied.terain.poli.toString());
+					//System.out.println("ATACK! " + Volfied.terain.poli.toString());
 					isAttacking = true;
-					first_time = true;
 					attack(keyCode);
 				}
 				break;
@@ -451,9 +464,8 @@ public class Player extends Shape {
 					else this.x -= this.pase;
 				}
 				else {
-					System.out.println("ATACK! " + Volfied.terain.poli.toString());
+					//System.out.println("ATACK! " + Volfied.terain.poli.toString());
 					isAttacking = true;
-					first_time = true;
 					attack(keyCode);
 				}
 				break;
@@ -466,9 +478,8 @@ public class Player extends Shape {
 					else this.x += this.pase;
 				}
 				else {
-					System.out.println("ATACK! " + Volfied.terain.poli.toString());
+					//System.out.println("ATACK! " + Volfied.terain.poli.toString());
 					isAttacking = true;
-					first_time = true;
 					attack(keyCode);
 				}
 				break;
