@@ -308,8 +308,8 @@ public class Player extends Shape {
 				System.out.println("UUUUUUUUUUP");
 				if (special && outer == Point.UP && !isPointonMyTerrain(new Point(this.x, this.y - this.pase)))
 					return true;
-					
-				if (!isPointonMyTerrain(new Point(this.x, this.y - this.pase)) && 
+				else 
+				if (!special && !isPointonMyTerrain(new Point(this.x, this.y - this.pase)) && 
 					(start_point.outer.get(0) == Point.UP || start_point.outer.get(1) == Point.UP)) {
 					System.out.println("UP FAIL");
 					return true;
@@ -321,7 +321,7 @@ public class Player extends Shape {
 				if (special && outer == Point.DO && !isPointonMyTerrain(new Point(this.x, this.y + this.pase)))
 					return true;
 				
-				if (!isPointonMyTerrain(new Point(this.x, this.y + this.pase)) && 
+				if (!special && !isPointonMyTerrain(new Point(this.x, this.y + this.pase)) && 
 						(start_point.outer.get(0) == Point.DO || start_point.outer.get(1) == Point.DO)){
 					System.out.println("DOWN FAIL");
 					return true;
@@ -334,7 +334,7 @@ public class Player extends Shape {
 				if (special && outer == Point.LE && !isPointonMyTerrain(new Point(this.x - this.pase, this.y)))
 					return true;
 				
-				if (!isPointonMyTerrain(new Point(this.x - this.pase, this.y)) && 
+				if (!special && !isPointonMyTerrain(new Point(this.x - this.pase, this.y)) && 
 						(start_point.outer.get(0) == Point.LE || start_point.outer.get(1) == Point.LE)){
 					System.out.println("left fail");
 					return true;
@@ -346,7 +346,7 @@ public class Player extends Shape {
 				if (special && outer == Point.RI && !isPointonMyTerrain(new Point(this.x + this.pase, this.y)))
 					return true;
 				
-				if (!isPointonMyTerrain(new Point(this.x + this.pase, this.y)) && 
+				if (!special && !isPointonMyTerrain(new Point(this.x + this.pase, this.y)) && 
 						(start_point.outer.get(0) == Point.RI || start_point.outer.get(1) == Point.RI)){
 					System.out.println("RIGHTTT fail");
 					return true;
