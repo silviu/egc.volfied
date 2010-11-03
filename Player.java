@@ -260,10 +260,32 @@ public class Player extends Shape {
 			return -7;
 	}
 	
+	public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
+		
+		ArrayList<Point> linePointIsOn = getLinePointIsOn(new Point(this.x, this.y));
+		ArrayList<Point> ret = new ArrayList<Point>();
+		
+		Point start_point  = linePointIsOn.get(0);
+		Point end_point    = linePointIsOn.get(1);
+		
+		int start_point_i  = Volfied.terain.poli.indexOf(start_point);
+		int end_point_i    = Volfied.terain.poli.indexOf(end_point);
+		
+		Point left_corner  = Volfied.terain.poli.get(start_point_i - 1);
+		Point right_corner = Volfied.terain.poli.get(end_point_i + 1);
+		
+		ret.add(left_corner);
+		ret.add(right_corner);
+		return ret;
+	}
+	
 	public boolean isOuter(int keyCode) {
 		Point start_point = new Point();
 		ArrayList<Point> line = getLinePointIsOn(new Point(this.x, this.y));
 		System.out.println("inrat in ISOUTER");
+		boolean special = false;
+		int outer = -9;
+		
 		if (line.isEmpty())
 			return false;
 		
@@ -275,11 +297,18 @@ public class Player extends Shape {
 				System.out.println("PRIMUL IF == 2");
 				start_point = line.get(0);
 			}
-			else return false;
+			else {
+				ArrayList<Point> ret = getOuterForNoCornerLine(new Point(this.x, this.y));
+				outer = getConstantOuter(ret.get(0), ret.get(1));
+				special = true;
+			}
 		
 		switch(keyCode) {
 			case KeyEvent.VK_UP:
 				System.out.println("UUUUUUUUUUP");
+				if (special && outer == Point.UP && !isPointonMyTerrain(new Point(this.x, this.y - this.pase)))
+					return true;
+					
 				if (!isPointonMyTerrain(new Point(this.x, this.y - this.pase)) && 
 					(start_point.outer.get(0) == Point.UP || start_point.outer.get(1) == Point.UP)) {
 					System.out.println("UP FAIL");
@@ -289,6 +318,9 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_DOWN:
 				System.out.println("DOOOWN");
+				if (special && outer == Point.DO && !isPointonMyTerrain(new Point(this.x, this.y + this.pase)))
+					return true;
+				
 				if (!isPointonMyTerrain(new Point(this.x, this.y + this.pase)) && 
 						(start_point.outer.get(0) == Point.DO || start_point.outer.get(1) == Point.DO)){
 					System.out.println("DOWN FAIL");
@@ -299,6 +331,9 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_LEFT:
 				System.out.println("LEEFT");
+				if (special && outer == Point.LE && !isPointonMyTerrain(new Point(this.x - this.pase, this.y)))
+					return true;
+				
 				if (!isPointonMyTerrain(new Point(this.x - this.pase, this.y)) && 
 						(start_point.outer.get(0) == Point.LE || start_point.outer.get(1) == Point.LE)){
 					System.out.println("left fail");
@@ -308,6 +343,9 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_RIGHT:
 				System.out.println("RIIGHT");
+				if (special && outer == Point.RI && !isPointonMyTerrain(new Point(this.x + this.pase, this.y)))
+					return true;
+				
 				if (!isPointonMyTerrain(new Point(this.x + this.pase, this.y)) && 
 						(start_point.outer.get(0) == Point.RI || start_point.outer.get(1) == Point.RI)){
 					System.out.println("RIGHTTT fail");
