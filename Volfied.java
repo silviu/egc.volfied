@@ -61,7 +61,11 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		g_main.fillRect(0, 0, window_width, window_height);
 		
 		g_main.setColor(Color.black);
-		g_main.drawRect(GRID_X, GRID_Y, BOARD_WIDTH, BOARD_HEIGHT);
+		int n = terain.poli.size()-1;
+		for (int i = 0; i < n; i++)
+			g_main.drawLine(GRID_X + terain.poli.get(i).x, GRID_Y + terain.poli.get(i).y ,
+							GRID_X + terain.poli.get(i+1).x, GRID_Y + terain.poli.get(i+1).y);
+		//g_main.drawRect(GRID_X, GRID_Y, BOARD_WIDTH, BOARD_HEIGHT);
 		
 		player.draw(g_main);
 	}

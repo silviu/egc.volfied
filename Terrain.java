@@ -7,5 +7,7 @@ public class Terrain {
 		poli.add(new Point(Volfied.BOARD_WIDTH, 0));
 		poli.add(new Point(Volfied.BOARD_WIDTH, Volfied.BOARD_HEIGHT));
 		poli.add(new Point(0, Volfied.BOARD_HEIGHT));
+		poli.add(new Point(0, 0));
+
 	}
 }
