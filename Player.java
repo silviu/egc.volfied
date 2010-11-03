@@ -274,8 +274,7 @@ public class Player extends Shape {
 	
 	public void attack(int keyCode) {
 		switch (keyCode) {
-			case KeyEvent.VK_UP:
-				if (isValidAttack(keyCode) && isAttacking) {
+			case KeyEvent.VK_UP:{
 					if (first_time) {
 						this.trail.add(new Point(this.x, this.y));
 						first_time = false;
@@ -287,10 +286,11 @@ public class Player extends Shape {
 					
 					int prev_pos     = trail.size() - 1;
 					int pre_prev_pos = trail.size() - 2;
+					
 					if (pre_prev_pos >= 0) {
 						Point prev     = trail.get(prev_pos);
 						Point pre_prev = trail.get(pre_prev_pos);
-						if (prev.x == pre_prev.x){
+						if (prev.x == pre_prev.x) {
 							System.out.println("SEEEETTT");
 						this.trail.set(prev_pos, new Point(this.x, this.y));
 						}
@@ -305,12 +305,10 @@ public class Player extends Shape {
 						this.trail.clear();
 						return;
 					}
-				}
 				System.out.println("TRAIL: " + trail.toString());
 				break;
-			
-			case KeyEvent.VK_DOWN:
-				if (isValidAttack(keyCode) && isAttacking) {
+			}
+			case KeyEvent.VK_DOWN:{
 					if (first_time) {
 						this.trail.add(new Point(this.x, this.y));
 						first_time = false;
@@ -326,7 +324,7 @@ public class Player extends Shape {
 						if (pre_prev_pos >= 0) {
 							Point prev     = trail.get(prev_pos);
 							Point pre_prev = trail.get(pre_prev_pos);
-							if (prev.x == pre_prev.x){
+							if (prev.x == pre_prev.x) {
 								System.out.println("SEEEETTT");
 							this.trail.set(prev_pos, new Point(this.x, this.y));
 						}
@@ -341,14 +339,12 @@ public class Player extends Shape {
 							cutTerrain();
 							this.trail.clear();
 							return;
-						}
 				}
 				System.out.println("TRAIL: " + trail.toString());
 
 				break;
-			
-			case KeyEvent.VK_LEFT:
-				if (isValidAttack(keyCode) && isAttacking) {
+			}
+			case KeyEvent.VK_LEFT:{
 					if (first_time) {
 						this.trail.add(new Point(this.x, this.y));
 						first_time = false;
@@ -380,13 +376,11 @@ public class Player extends Shape {
 							this.trail.clear();
 							return;
 						}
-				}
 				System.out.println("TRAIL: " + trail.toString());
 
 				break;
-		
-		case KeyEvent.VK_RIGHT:
-			if (isValidAttack(keyCode) && isAttacking) {
+			}
+		case KeyEvent.VK_RIGHT:{
 				if (first_time) {
 					this.trail.add(new Point(this.x, this.y));
 					first_time = false;
@@ -419,69 +413,73 @@ public class Player extends Shape {
 						this.trail.clear();
 						return;
 					}
-			}
 			System.out.println("TRAIL: " + trail.toString());
 
 			break;
+		}
 		}
 	}
 
 	public void key_decide(int keyCode){
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
-				if (canMoveNotAttack(keyCode)) {
+				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x, this.y - this.pase))) {
 					System.out.println("TERRIT " + Volfied.terain.poli.toString());
 					if (this.y - this.pase < 0)
 						this.y = 0;
 					else this.y -= this.pase;
 				}
-				else {
-					//System.out.println("ATACK! " + Volfied.terain.poli.toString());
-					isAttacking = true;
-					attack(keyCode);
-				}
+				else
+					if (isValidAttack(keyCode)) {
+						//System.out.println("ATACK! " + Volfied.terain.poli.toString());
+						isAttacking = true;
+						attack(keyCode);
+					}
 				break;
 			
 			case KeyEvent.VK_DOWN:
-				if (canMoveNotAttack(keyCode)) {
+				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x, this.y + this.pase))) {
 					System.out.println("TERRIT " + Volfied.terain.poli.toString());
 					if (this.y + this.pase > Volfied.BOARD_HEIGHT)
 						this.y = Volfied.BOARD_HEIGHT;
 					else this.y += this.pase;
 				}
-				else{
-					//System.out.println("ATACK! " + Volfied.terain.poli.toString());
-					isAttacking = true;
-					attack(keyCode);
-				}
+				else
+					if (isValidAttack(keyCode)) {
+						//System.out.println("ATACK! " + Volfied.terain.poli.toString());
+						isAttacking = true;
+						attack(keyCode);
+					}
 				break;
 			
 			case KeyEvent.VK_LEFT:
-				if (canMoveNotAttack(keyCode)) {
+				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x - this.pase, this.y))) {
 					System.out.println("TERRIT " + Volfied.terain.poli.toString());
 					if (this.x - this.pase < 0)
 						this.x = 0;
 					else this.x -= this.pase;
 				}
-				else {
-					//System.out.println("ATACK! " + Volfied.terain.poli.toString());
-					isAttacking = true;
-					attack(keyCode);
-				}
+				else
+					if (isValidAttack(keyCode)) {
+						//System.out.println("ATACK! " + Volfied.terain.poli.toString());
+						isAttacking = true;
+						attack(keyCode);
+					}
 				break;
 			
 			case KeyEvent.VK_RIGHT:
-				if (canMoveNotAttack(keyCode)) {
+				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x + this.pase, this.y))) {
 					System.out.println("TERRIT " + Volfied.terain.poli.toString());
 					if (this.x + this.pase > Volfied.BOARD_WIDTH)
 						this.x = Volfied.BOARD_WIDTH;
 					else this.x += this.pase;
 				}
-				else {
-					//System.out.println("ATACK! " + Volfied.terain.poli.toString());
-					isAttacking = true;
-					attack(keyCode);
-				}
+				else
+					if (isValidAttack(keyCode)) {
+						//System.out.println("ATACK! " + Volfied.terain.poli.toString());
+						isAttacking = true;
+						attack(keyCode);
+					}
 				break;
 		}
 	}
