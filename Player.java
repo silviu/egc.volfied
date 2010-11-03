@@ -245,11 +245,28 @@ public class Player extends Shape {
 		return false;
 	}
 	
+	public int getConstantOuter(Point p1, Point p2) {
+			if (p1.outer.get(0) == p2.outer.get(0))
+				return p1.outer.get(0);
+			
+			if (p1.outer.get(0) == p2.outer.get(1))
+				return p1.outer.get(0);
+			
+			if (p1.outer.get(1) == p2.outer.get(0))
+				return p1.outer.get(1);
+			
+			if (p1.outer.get(1) == p2.outer.get(1))
+				return p1.outer.get(1);
+			return -7;
+	}
+	
 	public void cutTerrain() {
 		int terain_size = Volfied.terain.poli.size();
 		int trail_size  = this.trail.size();
+		
 		Point start_point = new Point();
 		Point end_point = new Point();
+		
 		for (int i = 0; i < terain_size-1; i++) {
 			if (isPointOnLine(trail.get(0), Volfied.terain.poli.get(i), Volfied.terain.poli.get(i+1))) {
 				start_point = trail.get(0);
@@ -267,9 +284,77 @@ public class Player extends Shape {
 				break;
 			}
 		}
+		ArrayList<Point> lineOfStart = getLinePointIsOn(start_point);
+		ArrayList<Point> lineOfEnd = getLinePointIsOn(end_point);
 		int i = 0;
 				for (int j = trail_size-1; j >= 0; j--)
-					Volfied.terain.poli.add(i+1,trail.get(j));
+					if (isSameLine(lineOfStart, lineOfEnd)) {
+							int outer = getConstantOuter(lineOfStart.get(0), lineOfStart.get(1));
+							trail.get(j).addOuter(outer);
+								
+								/*switch (lineOfStart.get(0).outer.get(k)){
+									case Point.LE:
+										trail.get(j).addOuter(Point.LE);
+										break;
+									case Point.UP:
+										trail.get(j).addOuter(Point.UP);
+										break;
+									case Point.RI:
+										trail.get(j).addOuter(Point.RI);
+										break;
+									case Point.DO:
+										trail.get(j).addOuter(Point.DO);
+										break;
+							}
+							*/
+							Volfied.terain.poli.add(i+1,trail.get(j));
+						}
+						
+	}
+	
+	public boolean isSameLine(ArrayList<Point> line1, ArrayList<Point> line2) {
+		if ((line1.get(0).x == line2.get(0).x) && (line1.get(0).y == line2.get(0).y))
+			return true;
+		return false;
+	}
+	
+	public ArrayList<Point> getLinePointIsOn(Point lookup) {
+		ArrayList<Point> ret = new ArrayList<Point>();
+		int n = Volfied.terain.poli.size();
+		
+		for (int i = 0; i < n; i++) {
+			Point curr_point = Volfied.terain.poli.get(i);
+			Point next_point = Volfied.terain.poli.get((i == n - 1) ? 0 : i + 1);
+			
+			if (this.y == curr_point.y && this.x == curr_point.x)
+			{
+				Point prev_point = Volfied.terain.poli.get(i == 0 ? n - 1 : i - 1);
+				ret.add(prev_point);
+				ret.add(curr_point);
+				ret.add(next_point);
+				return ret;
+			}
+			
+			if ((this.y == curr_point.y) && (this.y == next_point.y))
+				if (((this.x >  curr_point.x) && (this.x <  next_point.x)) ||
+					((this.x <  curr_point.x) && (this.x >  next_point.x))) 
+				{
+			   		ret.add(curr_point);
+			   		ret.add(next_point);
+			   		return ret;
+				}
+			
+			if ((this.x == curr_point.x) && (this.x == next_point.x))
+				if (((this.y >  curr_point.y) && (this.y <  next_point.y)) ||
+					((this.y <  curr_point.y) && (this.y >  next_point.y))) 
+				{
+			   		ret.add(curr_point);
+			   		ret.add(next_point);
+			   		return ret;
+				}
+
+		}
+		return ret;
 	}
 	
 	public void attack(int keyCode) {
@@ -420,11 +505,22 @@ public class Player extends Shape {
 		}
 	}
 
+		
+	public void print_territory() {
+		int n = Volfied.terain.poli.size();
+		for (int i = 0; i < n; i++)
+			System.out.print("TERIT: X=[" + Volfied.terain.poli.get(i).x +
+							   "]; Y=[" 	+ Volfied.terain.poli.get(i).y + 
+							   "]; OUTER=" + Volfied.terain.poli.get(i).outer.toString() + " ");
+		System.out.println();
+	}
+	
 	public void key_decide(int keyCode){
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
 				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x, this.y - this.pase))) {
-					System.out.println("TERRIT " + Volfied.terain.poli.toString());
+					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
+					print_territory();
 					if (this.y - this.pase < 0)
 						this.y = 0;
 					else this.y -= this.pase;
@@ -439,7 +535,8 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_DOWN:
 				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x, this.y + this.pase))) {
-					System.out.println("TERRIT " + Volfied.terain.poli.toString());
+					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
+					print_territory();
 					if (this.y + this.pase > Volfied.BOARD_HEIGHT)
 						this.y = Volfied.BOARD_HEIGHT;
 					else this.y += this.pase;
@@ -454,7 +551,8 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_LEFT:
 				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x - this.pase, this.y))) {
-					System.out.println("TERRIT " + Volfied.terain.poli.toString());
+					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
+					print_territory();
 					if (this.x - this.pase < 0)
 						this.x = 0;
 					else this.x -= this.pase;
@@ -469,7 +567,8 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_RIGHT:
 				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x + this.pase, this.y))) {
-					System.out.println("TERRIT " + Volfied.terain.poli.toString());
+					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
+					print_territory();
 					if (this.x + this.pase > Volfied.BOARD_WIDTH)
 						this.x = Volfied.BOARD_WIDTH;
 					else this.x += this.pase;
