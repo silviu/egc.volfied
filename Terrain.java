@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.util.*;
 public class Terrain {
 	ArrayList<Point> poli = new ArrayList<Point>();

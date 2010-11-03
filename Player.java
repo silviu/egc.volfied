@@ -5,8 +5,8 @@ import java.util.*;
 public class Player extends Shape {
 	static final int WIDTH = 30;
 	static final int HEIGHT = 30;
-	int x = Volfied.BOARD_WIDTH;
-	int y = Volfied.BOARD_HEIGHT;
+	int x = Volfied.BOARD_WIDTH/2;
+	int y = 0;
 	int pase = 5;
 	boolean isAttacking = false;
 	boolean first_time = true;
@@ -309,7 +309,7 @@ public class Player extends Shape {
 				if (special && outer == Point.UP && !isPointonMyTerrain(new Point(this.x, this.y - this.pase)))
 					return true;
 				else 
-				if (!special && !isPointonMyTerrain(new Point(this.x, this.y - this.pase)) && 
+				if ((!special && !isPointonMyTerrain(new Point(this.x, this.y - this.pase)) && isAttacking) && 
 					(start_point.outer.get(0) == Point.UP || start_point.outer.get(1) == Point.UP)) {
 					System.out.println("UP FAIL");
 					return true;
@@ -423,17 +423,8 @@ public class Player extends Shape {
 		Point start_point = new Point();
 		Point end_point = new Point();
 		
-		for (int i = 0; i < terain_size-1; i++) {
-			if (isPointOnLine(trail.get(0), Volfied.terain.poli.get(i), Volfied.terain.poli.get(i+1))) {
-				start_point = trail.get(0);
-				end_point   = trail.get(trail_size-1);
-				start_i = 0;
-				end_i = trail_size - 1;
-				System.out.println("Start_point=[" + start_point.x + "," + start_point.y +"]");
-				System.out.println("End_point=[" + end_point.x + "," + end_point.y +"]");
+		/*for (int i = 0; i < terain_size-1; i++) {
 
-				break;
-			}
 			if (isPointOnLine(trail.get(trail_size-1), Volfied.terain.poli.get(i), Volfied.terain.poli.get(i+1))) {
 				start_point = trail.get(trail_size -1);
 				end_point   = trail.get(0);
@@ -441,15 +432,63 @@ public class Player extends Shape {
 				end_i = 0;
 				System.out.println("Start_point=[" + start_point.x + "," + start_point.y +"]");
 				System.out.println("End_point=[" + end_point.x + "," + end_point.y +"]");
-				break;
 			}
 		}
+		Collections.reverse(trail);
+			*/
+		
+		Point potential_start = trail.get(0);
+		Point potential_end   = trail.get(trail_size - 1);
+		
+		System.out.println("POT_start=[" + potential_start.x + "," + potential_start.y +"]");
+		System.out.println("POT_end=[" + potential_end.x + "," + potential_end.y +"]");
+		
+		
+		ArrayList<Point> line = getLinePointIsOn(trail.get(0));
+		
+		int outer_for_smallest = getConstantOuter(line.get(0), line.get(1));
+		System.out.println("OUTER SMALLEST=[" + outer_for_smallest + "]");
+		
+		start_point = trail.get(0);
+		end_point	= trail.get(trail_size -1);
+		start_i = 0;
+		end_i = trail_size - 1;
+		
+		switch (outer_for_smallest){
+			case Point.UP:
+				if (potential_start.x > potential_end.x) 
+					Collections.reverse(trail);
+				break;
+				
+			case Point.DO:
+				if (potential_start.x > potential_end.x) 
+					Collections.reverse(trail);
+				break;
+				
+			case Point.LE:
+				if (potential_start.y > potential_end.y)
+					Collections.reverse(trail);
+				break;
+			
+			case Point.RI:
+				if (potential_start.y > potential_end.y)
+					Collections.reverse(trail);
+				break;
+		}
+		
 		ArrayList<Point> lineOfStart = getLinePointIsOn(start_point);
 		ArrayList<Point> lineOfEnd = getLinePointIsOn(end_point);
 		
 		int i = 0;
 		int common_outer_start = decideOuterForPoint(lineOfStart);
 		int common_outer_end = decideOuterForPoint(lineOfEnd);
+		
+		System.out.println("Start_i=[" + start_i +"]");
+		System.out.println("End_i=[" + end_i +"]");
+		
+		System.out.println("Start_point=[" + start_point.x + "," + start_point.y +"]");
+		System.out.println("End_point=[" + end_point.x + "," + end_point.y +"]");
+		
 		trail.get(start_i).addOuter(common_outer_start); // adaug proprietatile de outer pt start_point
 		trail.get(end_i).addOuter(common_outer_end); // adaug proprietatile de outer pt end_point
 		
