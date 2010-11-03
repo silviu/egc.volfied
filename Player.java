@@ -260,9 +260,127 @@ public class Player extends Shape {
 			return -7;
 	}
 	
+	public boolean isOuter(int keyCode) {
+		Point start_point = new Point();
+		ArrayList<Point> line = getLinePointIsOn(new Point(this.x, this.y));
+		System.out.println("inrat in ISOUTER");
+		if (line.isEmpty())
+			return false;
+		
+			if (line.get(1).outer.size() == 2){
+				System.out.println("AL DOILEA IF == 2");
+				start_point = line.get(1);
+			}
+			else if (line.get(0).outer.size() == 2){
+				System.out.println("PRIMUL IF == 2");
+				start_point = line.get(0);
+			}
+			else return false;
+		
+		switch(keyCode) {
+			case KeyEvent.VK_UP:
+				System.out.println("UUUUUUUUUUP");
+				if (!isPointonMyTerrain(new Point(this.x, this.y - this.pase)) && 
+					(start_point.outer.get(0) == Point.UP || start_point.outer.get(1) == Point.UP)) {
+					System.out.println("UP FAIL");
+					return true;
+				}
+				break;
+			
+			case KeyEvent.VK_DOWN:
+				System.out.println("DOOOWN");
+				if (!isPointonMyTerrain(new Point(this.x, this.y + this.pase)) && 
+						(start_point.outer.get(0) == Point.DO || start_point.outer.get(1) == Point.DO)){
+					System.out.println("DOWN FAIL");
+					return true;
+				}
+				break;
+				
+			
+			case KeyEvent.VK_LEFT:
+				System.out.println("LEEFT");
+				if (!isPointonMyTerrain(new Point(this.x - this.pase, this.y)) && 
+						(start_point.outer.get(0) == Point.LE || start_point.outer.get(1) == Point.LE)){
+					System.out.println("left fail");
+					return true;
+				}
+				break;
+			
+			case KeyEvent.VK_RIGHT:
+				System.out.println("RIIGHT");
+				if (!isPointonMyTerrain(new Point(this.x + this.pase, this.y)) && 
+						(start_point.outer.get(0) == Point.RI || start_point.outer.get(1) == Point.RI)){
+					System.out.println("RIGHTTT fail");
+					return true;
+				}
+				break;
+			
+		}
+		return false;
+	}
+	
+	//decide care va fi OUTER pentru un punct
+	//primeste parametrii liniile de unde a pornit taierea teritoriului
+	//si linia unde termina
+	public int decideOuterForPoint(ArrayList<Point> line) {
+		
+			//daca punctul de inceput al liniei sau punctul de final
+			//are doua outer-uri (e colț) alege outer-ul comun
+			if (line.get(0).outer.size() == 2 || 
+				line.get(1).outer.size() == 2) {
+				int outer = getConstantOuter(line.get(0), line.get(1));
+				return outer;
+			}
+			else 
+				switch (line.get(0).outer.get(0)) {
+					case Point.LE:
+						return Point.LE;
+					case Point.UP:
+						return Point.UP;
+					case Point.RI:
+						return Point.RI;
+					case Point.DO:
+						return Point.DO;
+				}
+		return -7;
+	}
+	
+	public int decideIndivOuter(Point corner, int trail_i) {
+		Point next_point = new Point();
+		Point next_next_point = new Point();
+		if (trail_i == 0) {
+			next_point	  = trail.get(trail_i + 1);
+			next_next_point = trail.get(trail_i + 2);
+		}
+		
+		if (trail_i == trail.size() - 1) {
+			next_point	  = trail.get(trail_i - 1);
+			next_next_point = trail.get(trail_i - 2);
+		}
+		
+		if (corner.outer.get(0) == Point.UP ||
+			corner.outer.get(0) == Point.DO) {
+				if (next_next_point.x > next_point.x)
+					return Point.RI;
+				if (next_next_point.x < next_point.x)
+					return Point.LE;
+		}
+		if (corner.outer.get(0) == Point.UP ||
+			corner.outer.get(0) == Point.DO) {
+					if (next_next_point.x > next_point.x)
+						return Point.RI;
+					if (next_next_point.x < next_point.x)
+						return Point.LE;
+			}
+		return -8;
+		
+	}
+	
 	public void cutTerrain() {
 		int terain_size = Volfied.terain.poli.size();
 		int trail_size  = this.trail.size();
+		
+		int start_i = -1, end_i = -1;
 		
 		Point start_point = new Point();
 		Point end_point = new Point();
@@ -271,6 +389,8 @@ public class Player extends Shape {
 			if (isPointOnLine(trail.get(0), Volfied.terain.poli.get(i), Volfied.terain.poli.get(i+1))) {
 				start_point = trail.get(0);
 				end_point   = trail.get(trail_size-1);
+				start_i = 0;
+				end_i = trail_size - 1;
 				System.out.println("Start_point=[" + start_point.x + "," + start_point.y +"]");
 				System.out.println("End_point=[" + end_point.x + "," + end_point.y +"]");
 
@@ -279,6 +399,8 @@ public class Player extends Shape {
 			if (isPointOnLine(trail.get(trail_size-1), Volfied.terain.poli.get(i), Volfied.terain.poli.get(i+1))) {
 				start_point = trail.get(trail_size -1);
 				end_point   = trail.get(0);
+				start_i = trail_size - 1;
+				end_i = 0;
 				System.out.println("Start_point=[" + start_point.x + "," + start_point.y +"]");
 				System.out.println("End_point=[" + end_point.x + "," + end_point.y +"]");
 				break;
@@ -286,29 +408,23 @@ public class Player extends Shape {
 		}
 		ArrayList<Point> lineOfStart = getLinePointIsOn(start_point);
 		ArrayList<Point> lineOfEnd = getLinePointIsOn(end_point);
+		
 		int i = 0;
-				for (int j = trail_size-1; j >= 0; j--)
-					if (isSameLine(lineOfStart, lineOfEnd)) {
-							int outer = getConstantOuter(lineOfStart.get(0), lineOfStart.get(1));
-							trail.get(j).addOuter(outer);
-								
-								/*switch (lineOfStart.get(0).outer.get(k)){
-									case Point.LE:
-										trail.get(j).addOuter(Point.LE);
-										break;
-									case Point.UP:
-										trail.get(j).addOuter(Point.UP);
-										break;
-									case Point.RI:
-										trail.get(j).addOuter(Point.RI);
-										break;
-									case Point.DO:
-										trail.get(j).addOuter(Point.DO);
-										break;
-							}
-							*/
-							Volfied.terain.poli.add(i+1,trail.get(j));
-						}
+		int common_outer_start = decideOuterForPoint(lineOfStart);
+		int common_outer_end = decideOuterForPoint(lineOfEnd);
+		trail.get(start_i).addOuter(common_outer_start); // adaug proprietatile de outer pt start_point
+		trail.get(end_i).addOuter(common_outer_end); // adaug proprietatile de outer pt end_point
+		
+		int individual_outer_start = decideIndivOuter(start_point, start_i);
+		int individual_outer_end = decideIndivOuter(end_point, end_i);
+		
+		trail.get(start_i).addOuter(individual_outer_start); // adaug proprietatile de outer pt start_point
+		trail.get(end_i).addOuter(individual_outer_end); // adaug proprietatile de outer pt end_point
+		
+		//doar punctul de inceput si de final vor avea 2 outer
+		for (int j = trail_size-1; j >= 0; j--) {
+			Volfied.terain.poli.add(i+1,trail.get(j));
+		}
 						
 	}
 	
@@ -518,6 +634,7 @@ public class Player extends Shape {
 	public void key_decide(int keyCode){
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
+				if (!isOuter(keyCode)) {
 				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x, this.y - this.pase))) {
 					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
 					print_territory();
@@ -531,9 +648,11 @@ public class Player extends Shape {
 						isAttacking = true;
 						attack(keyCode);
 					}
+				}
 				break;
 			
 			case KeyEvent.VK_DOWN:
+				if (!isOuter(keyCode)) {
 				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x, this.y + this.pase))) {
 					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
 					print_territory();
@@ -547,9 +666,11 @@ public class Player extends Shape {
 						isAttacking = true;
 						attack(keyCode);
 					}
+				}
 				break;
 			
 			case KeyEvent.VK_LEFT:
+				if (!isOuter(keyCode)) {
 				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x - this.pase, this.y))) {
 					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
 					print_territory();
@@ -563,9 +684,11 @@ public class Player extends Shape {
 						isAttacking = true;
 						attack(keyCode);
 					}
+				}
 				break;
 			
 			case KeyEvent.VK_RIGHT:
+				if (!isOuter(keyCode)) {
 				if (canMoveNotAttack(keyCode) && isPointonMyTerrain(new Point(this.x + this.pase, this.y))) {
 					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
 					print_territory();
@@ -579,6 +702,7 @@ public class Player extends Shape {
 						isAttacking = true;
 						attack(keyCode);
 					}
+				}
 				break;
 		}
 	}
