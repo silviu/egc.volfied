@@ -288,20 +288,22 @@ public class Player extends Shape {
 		
 		if (line.isEmpty())
 			return false;
-		
-			if (line.get(1).outer.size() == 2){
-				System.out.println("AL DOILEA IF == 2");
-				start_point = line.get(1);
-			}
-			else if (line.get(0).outer.size() == 2){
-				System.out.println("PRIMUL IF == 2");
-				start_point = line.get(0);
-			}
-			else {
-				ArrayList<Point> ret = getOuterForNoCornerLine(new Point(this.x, this.y));
-				outer = getConstantOuter(ret.get(0), ret.get(1));
-				special = true;
-			}
+		for (int i = 0; i < line.size(); i++)
+			System.out.println("LINIAAAAAAA=" + line.get(i).x + ", " + line.get(i).y);
+		if (line.get(1).outer.size() == 2){
+			System.out.println("AL DOILEA IF == 2");
+			start_point = line.get(1);
+		}
+		else if (line.get(0).outer.size() == 2){
+			System.out.println("PRIMUL IF == 2");
+			start_point = line.get(0);
+		}
+		else {
+			ArrayList<Point> ret = getOuterForNoCornerLine(new Point(this.x, this.y));
+			outer = getConstantOuter(ret.get(0), ret.get(1));
+			System.out.println("SPECIAAAALLLLLLLLLLLLLLLLLLL");
+			special = true;
+		}
 		
 		switch(keyCode) {
 			case KeyEvent.VK_UP:
@@ -415,27 +417,12 @@ public class Player extends Shape {
 	}
 	
 	public void cutTerrain() {
-		int terain_size = Volfied.terain.poli.size();
 		int trail_size  = this.trail.size();
 		
 		int start_i = -1, end_i = -1;
 		
 		Point start_point = new Point();
 		Point end_point = new Point();
-		
-		/*for (int i = 0; i < terain_size-1; i++) {
-
-			if (isPointOnLine(trail.get(trail_size-1), Volfied.terain.poli.get(i), Volfied.terain.poli.get(i+1))) {
-				start_point = trail.get(trail_size -1);
-				end_point   = trail.get(0);
-				start_i = trail_size - 1;
-				end_i = 0;
-				System.out.println("Start_point=[" + start_point.x + "," + start_point.y +"]");
-				System.out.println("End_point=[" + end_point.x + "," + end_point.y +"]");
-			}
-		}
-		Collections.reverse(trail);
-			*/
 		
 		Point potential_start = trail.get(0);
 		Point potential_end   = trail.get(trail_size - 1);
@@ -479,7 +466,6 @@ public class Player extends Shape {
 		ArrayList<Point> lineOfStart = getLinePointIsOn(start_point);
 		ArrayList<Point> lineOfEnd = getLinePointIsOn(end_point);
 		
-		int i = 0;
 		int common_outer_start = decideOuterForPoint(lineOfStart);
 		int common_outer_end = decideOuterForPoint(lineOfEnd);
 		
@@ -498,9 +484,12 @@ public class Player extends Shape {
 		trail.get(start_i).addOuter(individual_outer_start); // adaug proprietatile de outer pt start_point
 		trail.get(end_i).addOuter(individual_outer_end); // adaug proprietatile de outer pt end_point
 		
+		ArrayList<Point> bla = getLinePointIsOn(start_point);
+		int insert_pos = Volfied.terain.poli.indexOf(bla.get(0));
+		
 		//doar punctul de inceput si de final vor avea 2 outer
 		for (int j = trail_size-1; j >= 0; j--) {
-			Volfied.terain.poli.add(i+1,trail.get(j));
+			Volfied.terain.poli.add(insert_pos+1,trail.get(j));
 		}
 						
 	}
