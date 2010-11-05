@@ -417,6 +417,11 @@ public class Player extends Shape {
 						return Point.DO;
 					}
 					
+					if (next_next_point.y > next_point.y && trail_i == (trail.size() - 1)) {
+						System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK`");
+						return Point.DO;
+					}
+					
 					if (next_next_point.y < next_point.y && trail_i == (trail.size() - 1)) {
 						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
 						return Point.UP;
@@ -451,8 +456,7 @@ public class Player extends Shape {
 		int outer_for_smallest = getConstantOuter(line.get(0), line.get(1));
 		System.out.println("OUTER SMALLEST=[" + outer_for_smallest + "]");
 		
-		start_point = trail.get(0);
-		end_point	= trail.get(trail_size -1);
+		
 		start_i = 0;
 		end_i = trail_size - 1;
 		
@@ -468,7 +472,7 @@ public class Player extends Shape {
 				break;
 				
 			case Point.LE:
-				if (potential_start.y > potential_end.y)
+				if (potential_start.y < potential_end.y)
 					Collections.reverse(trail);
 				break;
 			
@@ -477,6 +481,9 @@ public class Player extends Shape {
 					Collections.reverse(trail);
 				break;
 		}
+		
+		start_point = trail.get(0);
+		end_point	= trail.get(trail_size -1);
 		
 		ArrayList<Point> lineOfStart = getLinePointIsOn(start_point);
 		ArrayList<Point> lineOfEnd = getLinePointIsOn(end_point);
