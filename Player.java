@@ -246,6 +246,8 @@ public class Player extends Shape {
 	}
 	
 	public int getConstantOuter(Point p1, Point p2) {
+		if (p1.outer.isEmpty() || p2.outer.isEmpty())
+			return -7;
 			if (p1.outer.get(0) == p2.outer.get(0))
 				return p1.outer.get(0);
 			
@@ -400,17 +402,17 @@ public class Player extends Shape {
 		
 		if (corner.outer.get(0) == Point.UP ||
 			corner.outer.get(0) == Point.DO) {
-				if (next_next_point.x > next_point.x)
-					return Point.RI;
-				if (next_next_point.x < next_point.x)
-					return Point.LE;
-		}
-		if (corner.outer.get(0) == Point.UP ||
-			corner.outer.get(0) == Point.DO) {
 					if (next_next_point.x > next_point.x)
 						return Point.RI;
 					if (next_next_point.x < next_point.x)
 						return Point.LE;
+			}
+		if (corner.outer.get(0) == Point.LE ||
+				corner.outer.get(0) == Point.RI) {
+					if (next_next_point.y > next_point.y)
+						return Point.DO;
+					if (next_next_point.y < next_point.y)
+						return Point.UP;
 			}
 		return -8;
 		
@@ -448,7 +450,7 @@ public class Player extends Shape {
 				break;
 				
 			case Point.DO:
-				if (potential_start.x > potential_end.x) 
+				if (potential_start.x < potential_end.x) 
 					Collections.reverse(trail);
 				break;
 				
