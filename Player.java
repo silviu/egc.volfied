@@ -290,6 +290,7 @@ public class Player extends Shape {
 		
 		if (line.isEmpty())
 			return false;
+		
 		for (int i = 0; i < line.size(); i++)
 			System.out.println("LINIAAAAAAA=" + line.get(i).x + ", " + line.get(i).y);
 		if (line.get(1).outer.size() == 2){
@@ -313,7 +314,7 @@ public class Player extends Shape {
 				if (special && outer == Point.UP && !isPointonMyTerrain(new Point(this.x, this.y - this.pase)))
 					return true;
 				else 
-				if ((!special && !isPointonMyTerrain(new Point(this.x, this.y - this.pase)) && isAttacking) && 
+				if (!special && !isPointonMyTerrain(new Point(this.x, this.y - this.pase)) && 
 					(start_point.outer.get(0) == Point.UP || start_point.outer.get(1) == Point.UP)) {
 					System.out.println("UP FAIL");
 					return true;
@@ -397,7 +398,7 @@ public class Player extends Shape {
 		
 		if (trail_i == trail.size() - 1) {
 			next_point	  = trail.get(trail_i - 1);
-			next_next_point = trail.get(trail_i - 2);
+			next_next_point = trail.get(trail_i -2);
 		}
 		
 		if (corner.outer.get(0) == Point.UP ||
@@ -409,10 +410,22 @@ public class Player extends Shape {
 			}
 		if (corner.outer.get(0) == Point.LE ||
 				corner.outer.get(0) == Point.RI) {
-					if (next_next_point.y > next_point.y)
+					System.out.println("DEBUG OUTER RIGHT pentr trail_i = " + trail_i +"; " +" next_next_point=[" + next_next_point.x + "," + next_next_point.y
+										+ "]; next_point=[" + next_point.x + "," + next_point.y + "]");
+					if (next_next_point.y > next_point.y && trail_i == 0) {
+						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
 						return Point.DO;
-					if (next_next_point.y < next_point.y)
+					}
+					
+					if (next_next_point.y < next_point.y && trail_i == (trail.size() - 1)) {
+						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
 						return Point.UP;
+					}
+					
+					if (next_next_point.y < next_point.y && trail_i == 0) {
+						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111");
+						return Point.UP;
+					}
 			}
 		return -8;
 		
@@ -574,7 +587,7 @@ public class Player extends Shape {
 						this.trail.clear();
 						return;
 					}
-				System.out.println("TRAIL: " + trail.toString());
+				print_trail();
 				break;
 			}
 			case KeyEvent.VK_DOWN:{
@@ -609,7 +622,7 @@ public class Player extends Shape {
 							this.trail.clear();
 							return;
 				}
-				System.out.println("TRAIL: " + trail.toString());
+				print_trail();
 
 				break;
 			}
@@ -645,7 +658,7 @@ public class Player extends Shape {
 							this.trail.clear();
 							return;
 						}
-				System.out.println("TRAIL: " + trail.toString());
+				print_trail();
 
 				break;
 			}
@@ -674,7 +687,6 @@ public class Player extends Shape {
 					}
 					else this.trail.add(new Point(this.x, this.y));
 					if (isPointonMyTerrain(new Point(this.x, this.y))){
-						this.trail.add(new Point(this.x, this.y));
 						//finalize attack
 						isAttacking = false;
 						first_time = true;
@@ -682,7 +694,7 @@ public class Player extends Shape {
 						this.trail.clear();
 						return;
 					}
-			System.out.println("TRAIL: " + trail.toString());
+			print_trail();
 
 			break;
 		}
@@ -696,6 +708,15 @@ public class Player extends Shape {
 			System.out.print("TERIT: X=[" + Volfied.terain.poli.get(i).x +
 							   "]; Y=[" 	+ Volfied.terain.poli.get(i).y + 
 							   "]; OUTER=" + Volfied.terain.poli.get(i).outer.toString() + " ");
+		System.out.println();
+	}
+	
+	public void print_trail() {
+		int n = trail.size();
+		for (int i = 0; i < n; i++)
+			System.out.print("TRAIL: X=[" + trail.get(i).x +
+							   "]; Y=[" 	+ trail.get(i).y + 
+							   "]; OUTER=" + trail.get(i).outer.toString() + " ");
 		System.out.println();
 	}
 	
