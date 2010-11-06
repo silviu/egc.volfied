@@ -32,7 +32,6 @@ public class Player extends Shape {
 	}
 	
 	
-	
 	public boolean isPointonTrail(Point lookup) {
 		int n = trail.size();
 		
@@ -161,6 +160,7 @@ public class Player extends Shape {
 	}
 	
 	public void trace_trail(int constant_param) {
+		
 		int prev_pos, pre_prev_pos;
 		prev_pos     = trail.size() - 1;
 		pre_prev_pos = trail.size() - 2;
@@ -215,7 +215,6 @@ public class Player extends Shape {
 				else y += pase;
 					
 				trace_trail(0);
-				
 				//print_trail();
 				break;
 				
@@ -242,7 +241,6 @@ public class Player extends Shape {
 				
 			trace_trail(1);
 			//print_trail();
-
 			break;
 		}
 	}
@@ -271,7 +269,6 @@ public class Player extends Shape {
 			case KeyEvent.VK_UP:
 				if (!Volfied.terain.isOuter(keyCode)) {
 				if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x, y - pase))) {
-					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
 					print_territory();
 					if (y - pase < 0)
 						y = 0;
@@ -279,7 +276,6 @@ public class Player extends Shape {
 				}
 				else
 					if (isValidAttack(keyCode)) {
-						//System.out.println("ATACK! " + Volfied.terain.poli.toString());
 						isAttacking = true;
 						attack(keyCode);
 					}
@@ -288,55 +284,48 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_DOWN:
 				if (!Volfied.terain.isOuter(keyCode)) {
-				if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x, y + pase))) {
-					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
-					print_territory();
-					if (y + pase > Volfied.BOARD_HEIGHT)
-						y = Volfied.BOARD_HEIGHT;
-					else y += pase;
-				}
-				else
-					if (isValidAttack(keyCode)) {
-						//System.out.println("ATACK! " + Volfied.terain.poli.toString());
-						isAttacking = true;
-						attack(keyCode);
+					if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x, y + pase))) {
+						print_territory();
+						if (y + pase > Volfied.BOARD_HEIGHT)
+							y = Volfied.BOARD_HEIGHT;
+						else y += pase;
 					}
+					else
+						if (isValidAttack(keyCode)) {
+							isAttacking = true;
+							attack(keyCode);
+						}
 				}
 				break;
 			
 			case KeyEvent.VK_LEFT:
 				if (!Volfied.terain.isOuter(keyCode)) {
-				if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x - pase, y))) {
-					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
-					print_territory();
-					if (x - pase < 0)
-						x = 0;
-					else x -= pase;
-				}
-				else
-					if (isValidAttack(keyCode)) {
-						//System.out.println("ATACK! " + Volfied.terain.poli.toString());
-						isAttacking = true;
-						attack(keyCode);
+					if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x - pase, y))) {
+						print_territory();
+						if (x - pase < 0) x = 0;
+						else x -= pase;
 					}
+					else
+						if (isValidAttack(keyCode)) {
+							isAttacking = true;
+							attack(keyCode);
+						}
 				}
 				break;
 			
 			case KeyEvent.VK_RIGHT:
 				if (!Volfied.terain.isOuter(keyCode)) {
-				if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x + pase, y))) {
-					//System.out.println("TERRIT " + Volfied.terain.poli.toString());
-					print_territory();
-					if (x + pase > Volfied.BOARD_WIDTH)
-						x = Volfied.BOARD_WIDTH;
-					else x += pase;
-				}
-				else
-					if (isValidAttack(keyCode)) {
-						//System.out.println("ATACK! " + Volfied.terain.poli.toString());
-						isAttacking = true;
-						attack(keyCode);
+					if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x + pase, y))) {
+						print_territory();
+						if (x + pase > Volfied.BOARD_WIDTH)
+							x = Volfied.BOARD_WIDTH;
+						else x += pase;
 					}
+					else
+						if (isValidAttack(keyCode)) {
+							isAttacking = true;
+							attack(keyCode);
+						}
 				}
 				break;
 		}
