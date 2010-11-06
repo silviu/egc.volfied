@@ -202,7 +202,7 @@ public class Player extends Shape {
 				else y -= pase;
 					
 				trace_trail(0);
-				//print_trail();
+				print_trail();
 				break;
 
 			case KeyEvent.VK_DOWN:
@@ -215,7 +215,7 @@ public class Player extends Shape {
 				else y += pase;
 					
 				trace_trail(0);
-				//print_trail();
+				print_trail();
 				break;
 				
 			case KeyEvent.VK_LEFT:
@@ -227,7 +227,7 @@ public class Player extends Shape {
 				else x -= pase;
 					
 				trace_trail(1);
-				//print_trail();
+				print_trail();
 				break;
 				
 		case KeyEvent.VK_RIGHT:
@@ -240,7 +240,7 @@ public class Player extends Shape {
 			else x += pase;
 				
 			trace_trail(1);
-			//print_trail();
+			print_trail();
 			break;
 		}
 	}

@@ -267,7 +267,6 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 	public boolean isOuter(int keyCode) {
 		Point start_point = new Point();
 		ArrayList<Point> line = Volfied.terain.getLinePointIsOn(new Point(Player.x, Player.y));
-		System.out.println("inrat in ISOUTER");
 		boolean special = false;
 		int outer = -9;
 		
@@ -345,6 +344,96 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 		return false;
 	}
 	
+	public void depth_outer(Point start_point, Point end_point) {
+		int i = 2;
+		int end_i = Player.trail.size() - 1;
+		int common_outer_to_use = start_point.outer.get(0);
+		
+		while (i < 7) {
+			
+			Point prev_point = Player.trail.get(i-1);
+			Point curr_point = Player.trail.get(i);
+			Point next_point = Player.trail.get(i + 1);
+			Point next_next_point = Player.trail.get(i + 2);
+			
+			
+			if (Volfied.terain.isSameLine(getLinePointIsOn(start_point), getLinePointIsOn(end_point))) {
+
+				if (i == 2) {
+					if (start_point.outer.get(0) == Point.UP) {
+						if (next_next_point.x > next_point.x)
+							start_point.outer.add(Point.RI);
+						else start_point.outer.add(Point.LE);
+					}
+					
+					if (start_point.outer.get(0) == Point.DO) {
+						if (next_next_point.x > next_point.x)
+							start_point.outer.add(Point.LE);
+						else start_point.outer.add(Point.RI);
+					}
+					
+					if (start_point.outer.get(0) == Point.LE) {
+						if (next_next_point.y > next_point.y)
+							start_point.outer.add(Point.UP);
+						else start_point.outer.add(Point.DO);
+					}
+					
+					if (start_point.outer.get(0) == Point.RI) {
+						if (next_next_point.y > next_point.y)
+							start_point.outer.add(Point.DO);
+						else start_point.outer.add(Point.UP);
+					}
+				}
+				
+				curr_point.outer.add(common_outer_to_use);
+				System.out.println("ACEEASIIIIIIIIIII LINIEEEEEEEEE");
+				if (curr_point.outer.get(0) == Point.UP) {
+					if (prev_point.x < curr_point.x)
+						curr_point.outer.add(Point.RI);
+					else curr_point.outer.add(Point.LE);
+				
+					if (next_next_point.y == next_point.y) {
+						i++;
+						common_outer_to_use = end_point.outer.get(0);
+					}
+				}
+			
+				if (curr_point.outer.get(0) == Point.DO) {
+					if (prev_point.x > curr_point.x)
+						curr_point.outer.add(Point.LE);
+					else curr_point.outer.add(Point.RI);
+					
+					if (next_next_point.y == next_point.y) {
+						i++;
+						common_outer_to_use = end_point.outer.get(0);
+					}
+				}
+			
+				if (curr_point.outer.get(0) == Point.LE) {
+					if (prev_point.y > curr_point.y)
+						curr_point.outer.add(Point.UP);
+					else curr_point.outer.add(Point.DO);
+					
+					if (next_next_point.x == next_point.x) {
+						i++;
+						common_outer_to_use = end_point.outer.get(0);
+					}
+				}
+				if (curr_point.outer.get(0) == Point.RI) {
+					if (prev_point.y < curr_point.y)
+						curr_point.outer.add(Point.DO);
+					else curr_point.outer.add(Point.UP);
+					
+					if (next_next_point.x == next_point.x) {
+						i++;
+						common_outer_to_use = end_point.outer.get(0);
+					}
+				}
+			}
+			i+=2;
+		}
+	}
+	
 	public void cutTerrain() {
 		int trail_size  = Player.trail.size();
 		
@@ -402,12 +491,20 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 		
 		Player.trail.get(start_i).addOuter(common_outer_start); // adaug proprietatile de outer pt start_point
 		Player.trail.get(end_i).addOuter(common_outer_end); // adaug proprietatile de outer pt end_point
+		
 		int individual_outer_start = -10, individual_outer_end = -10;
-		if (Player.trail.size() > 2) {
+		//tai pe acceasi linie sau pe linii adiacente
+		if (Player.trail.size() == 4 || Player.trail.size() == 3) {
+			System.out.println("TRAILSIZE == 4 sau ==3");
 			individual_outer_start = Volfied.terain.decideIndivOuter(start_point, start_i);
 			individual_outer_end = Volfied.terain.decideIndivOuter(end_point, end_i);
+			Player.trail.get(start_i).addOuter(individual_outer_start); // adaug proprietatile de outer pt start_point
+			Player.trail.get(end_i).addOuter(individual_outer_end); // adaug proprietatile de outer pt end_point
 		}
-		else {
+		//sus jos + stanga dreapta
+		if (Player.trail.size() == 2) {
+			System.out.println("TRAILSIZE == 2");
+			
 			if (start_point.outer.get(0) == Point.UP && end_point.outer.get(0) == Point.DO){
 				individual_outer_start = Point.RI;
 				individual_outer_end   = Point.RI;
@@ -425,10 +522,47 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 				individual_outer_start = Point.DO;
 				individual_outer_end   = Point.DO;
 			}
+			Player.trail.get(start_i).addOuter(individual_outer_start); // adaug proprietatile de outer pt start_point
+			Player.trail.get(end_i).addOuter(individual_outer_end); // adaug proprietatile de outer pt end_point
 		}
 		
-		Player.trail.get(start_i).addOuter(individual_outer_start); // adaug proprietatile de outer pt start_point
-		Player.trail.get(end_i).addOuter(individual_outer_end); // adaug proprietatile de outer pt end_point
+		
+		
+		if (Player.trail.size() > 4) {
+			System.out.println("TRAILSIZE > 4");
+			Point next_next_point = Player.trail.get(Player.trail.size() - 3);
+			Point next_point 	  = Player.trail.get(Player.trail.size() - 2);
+			if (end_point.outer.get(0) == Point.UP) {
+				if (next_next_point.x < next_point.x)
+					end_point.outer.add(Point.LE);
+				else end_point.outer.add(Point.RI);
+			}
+			
+			if (end_point.outer.get(0) == Point.DO) {
+				if (next_next_point.x > next_point.x)
+					end_point.outer.add(Point.RI);
+				else end_point.outer.add(Point.LE);
+			}
+			
+			if (end_point.outer.get(0) == Point.LE) {
+				if (next_next_point.y > next_point.y)
+					end_point.outer.add(Point.DO);
+				else end_point.outer.add(Point.UP);
+			}
+			
+			if (end_point.outer.get(0) == Point.RI) {
+				if (next_next_point.y > next_point.y)
+					end_point.outer.add(Point.UP);
+				else end_point.outer.add(Point.DO);
+			}
+			depth_outer(start_point, end_point);
+			
+			
+			
+			
+		}
+		
+		
 		
 		ArrayList<Point> bla = Volfied.terain.getLinePointIsOn(start_point);
 		int insert_pos = Volfied.terain.poli.indexOf(bla.get(0));
