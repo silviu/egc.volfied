@@ -160,150 +160,90 @@ public class Player extends Shape {
 		return true;
 	}
 	
+	public void trace_trail(int constant_param) {
+		int prev_pos, pre_prev_pos;
+		prev_pos     = trail.size() - 1;
+		pre_prev_pos = trail.size() - 2;
+			
+		if (pre_prev_pos >= 0) {
+			Point prev     = trail.get(prev_pos);
+			Point pre_prev = trail.get(pre_prev_pos);
+			if (constant_param == 0) {
+				if (prev.x == pre_prev.x) 
+					trail.set(prev_pos, new Point(x, y));
+				else trail.add(new Point(x, y));
+			}
+			else {
+				if (prev.y == pre_prev.y) 
+					trail.set(prev_pos, new Point(x, y));
+				else trail.add(new Point(x, y));
+			}
+		}
+		else trail.add(new Point(x, y));
+		
+		if (Volfied.terain.isPointonMyTerrain(new Point(x, y))) {
+			//finalize attack
+			isAttacking = false;
+			first_time = true;
+			Volfied.terain.cutTerrain();
+			trail.clear();
+		}
+	}
+	
 	public void attack(int keyCode) {
+		
 		switch (keyCode) {
-			case KeyEvent.VK_UP:{
-					if (first_time) {
-						trail.add(new Point(x, y));
-						first_time = false;
-					}
-					if (y - pase < 0)
-						y = 0;
-					else 
-						y -= pase;
-					
-					int prev_pos     = trail.size() - 1;
-					int pre_prev_pos = trail.size() - 2;
-					
-					if (pre_prev_pos >= 0) {
-						Point prev     = trail.get(prev_pos);
-						Point pre_prev = trail.get(pre_prev_pos);
-						if (prev.x == pre_prev.x) {
-							//System.out.println("SEEEETTT");
-							trail.set(prev_pos, new Point(x, y));
-						}
-						else 
-							trail.add(new Point(x, y));
-					}
-					else trail.add(new Point(x, y));
-					if (Volfied.terain.isPointonMyTerrain(new Point(x, y))){
-						isAttacking = false;
-						first_time = true;
-						Volfied.terain.cutTerrain();
-						trail.clear();
-						return;
-					}
-				//print_trail();
-				break;
-			}
-			case KeyEvent.VK_DOWN:{
-					if (first_time) {
-						trail.add(new Point(x, y));
-						first_time = false;
-					}
-					if (y + pase > Volfied.BOARD_HEIGHT)
-						y = Volfied.BOARD_HEIGHT;
-					else 
-						y += pase;
-					
-						int prev_pos     = trail.size() - 1;
-						int pre_prev_pos = trail.size() - 2;
-					
-						if (pre_prev_pos >= 0) {
-							Point prev     = trail.get(prev_pos);
-							Point pre_prev = trail.get(pre_prev_pos);
-							if (prev.x == pre_prev.x) {
-								//System.out.println("SEEEETTT");
-							trail.set(prev_pos, new Point(x, y));
-						}
-							else 
-								trail.add(new Point(x, y));
-						}
-						else trail.add(new Point(x, y));
-						if (Volfied.terain.isPointonMyTerrain(new Point(x, y))){
-							//finalize attack
-							isAttacking = false;
-							first_time = true;
-							Volfied.terain.cutTerrain();
-							trail.clear();
-							return;
-				}
-				//print_trail();
-
-				break;
-			}
-			case KeyEvent.VK_LEFT:{
-					if (first_time) {
-						trail.add(new Point(x, y));
-						first_time = false;
-					}
-					if (x - pase < 0)
-						x = 0;
-					else 
-						x -= pase;
-					
-						int prev_pos     = trail.size() - 1 ;
-						int pre_prev_pos = trail.size() - 2;
-					
-						if (pre_prev_pos >= 0) {
-							Point prev     = trail.get(prev_pos);
-							Point pre_prev = trail.get(pre_prev_pos);
-							if (prev.y == pre_prev.y){
-								//System.out.println("SEEEETTT");
-							trail.set(prev_pos, new Point(x, y));
-						}
-							else 
-								trail.add(new Point(x, y));
-						}
-						else trail.add(new Point(x, y));
-						if (Volfied.terain.isPointonMyTerrain(new Point(x, y))){
-							//finalize attack
-							isAttacking = false;
-							first_time = true;
-							Volfied.terain.cutTerrain();
-							trail.clear();
-							return;
-						}
-				//print_trail();
-
-				break;
-			}
-		case KeyEvent.VK_RIGHT:{
+			case KeyEvent.VK_UP:
 				if (first_time) {
 					trail.add(new Point(x, y));
 					first_time = false;
 				}
-				if (x + pase > Volfied.BOARD_WIDTH)
-					x = Volfied.BOARD_WIDTH;
-				else 
-					x += pase;
+				if (y - pase < 0) y = 0;
+				else y -= pase;
+					
+				trace_trail(0);
+				//print_trail();
+				break;
+
+			case KeyEvent.VK_DOWN:
+				if (first_time) {
+					trail.add(new Point(x, y));
+					first_time = false;
+				}
+				if (y + pase > Volfied.BOARD_HEIGHT)
+					y = Volfied.BOARD_HEIGHT;
+				else y += pase;
+					
+				trace_trail(0);
 				
-					int prev_pos     = trail.size() - 1;
-					int pre_prev_pos = trail.size() - 2;
+				//print_trail();
+				break;
 				
-					if (pre_prev_pos >= 0) {
-						Point prev     = trail.get(prev_pos);
-						Point pre_prev = trail.get(pre_prev_pos);
-						if (prev.y == pre_prev.y) {
-							//System.out.println("SEEEETTT");
-							trail.set(prev_pos, new Point(x, y));
-						}
-						else 
-							trail.add(new Point(x, y));
-					}
-					else trail.add(new Point(x, y));
-					if (Volfied.terain.isPointonMyTerrain(new Point(x, y))){
-						//finalize attack
-						isAttacking = false;
-						first_time = true;
-						Volfied.terain.cutTerrain();
-						trail.clear();
-						return;
-					}
+			case KeyEvent.VK_LEFT:
+				if (first_time) {
+					trail.add(new Point(x, y));
+					first_time = false;
+				}
+				if (x - pase < 0) x = 0;
+				else x -= pase;
+					
+				trace_trail(1);
+				//print_trail();
+				break;
+				
+		case KeyEvent.VK_RIGHT:
+			if (first_time) {
+				trail.add(new Point(x, y));
+				first_time = false;
+			}
+			if (x + pase > Volfied.BOARD_WIDTH)
+				x = Volfied.BOARD_WIDTH;
+			else x += pase;
+				
+			trace_trail(1);
 			//print_trail();
 
 			break;
-		}
 		}
 	}
 
