@@ -10,6 +10,7 @@ public class Player extends Shape {
 	int pase = 5;
 	boolean isAttacking = false;
 	boolean first_time = true;
+	int cut = 0;
 	
 	ArrayList<Point> trail  = new ArrayList<Point>();
 
@@ -436,6 +437,16 @@ public class Player extends Shape {
 		
 	}
 	
+	public void removePointsinBetween(int start_i, int end_i) {
+		
+		System.out.println("******************start_i = " + start_i);
+		System.out.println("******************end_i = " + end_i);
+		for (int i = start_i+1; i < end_i; i++ )
+		Volfied.terain.poli.remove(start_i+1);
+		
+		
+	}
+	
 	public void cutTerrain() {
 		int trail_size  = this.trail.size();
 		
@@ -447,15 +458,9 @@ public class Player extends Shape {
 		Point potential_start = trail.get(0);
 		Point potential_end   = trail.get(trail_size - 1);
 		
-		System.out.println("POT_start=[" + potential_start.x + "," + potential_start.y +"]");
-		System.out.println("POT_end=[" + potential_end.x + "," + potential_end.y +"]");
-		
-		
 		ArrayList<Point> line = getLinePointIsOn(trail.get(0));
 		
 		int outer_for_smallest = getConstantOuter(line.get(0), line.get(1));
-		System.out.println("OUTER SMALLEST=[" + outer_for_smallest + "]");
-		
 		
 		start_i = 0;
 		end_i = trail_size - 1;
@@ -497,6 +502,7 @@ public class Player extends Shape {
 		System.out.println("Start_point=[" + start_point.x + "," + start_point.y +"]");
 		System.out.println("End_point=[" + end_point.x + "," + end_point.y +"]");
 		
+		
 		trail.get(start_i).addOuter(common_outer_start); // adaug proprietatile de outer pt start_point
 		trail.get(end_i).addOuter(common_outer_end); // adaug proprietatile de outer pt end_point
 		
@@ -509,11 +515,15 @@ public class Player extends Shape {
 		ArrayList<Point> bla = getLinePointIsOn(start_point);
 		int insert_pos = Volfied.terain.poli.indexOf(bla.get(0));
 		
+		
+		removePointsinBetween(Volfied.terain.poli.indexOf(lineOfStart.get(0)), Volfied.terain.poli.indexOf(lineOfEnd.get(1)));
+		
 		//doar punctul de inceput si de final vor avea 2 outer
 		for (int j = trail_size-1; j >= 0; j--) {
 			Volfied.terain.poli.add(insert_pos+1,trail.get(j));
 		}
-						
+		cut++;
+	
 	}
 	
 	public boolean isSameLine(ArrayList<Point> line1, ArrayList<Point> line2) {
@@ -530,7 +540,7 @@ public class Player extends Shape {
 			Point curr_point = Volfied.terain.poli.get(i);
 			Point next_point = Volfied.terain.poli.get((i == n - 1) ? 0 : i + 1);
 			
-			if (this.y == curr_point.y && this.x == curr_point.x)
+			if (lookup.y == curr_point.y && lookup.x == curr_point.x)
 			{
 				Point prev_point = Volfied.terain.poli.get(i == 0 ? n - 1 : i - 1);
 				ret.add(prev_point);
@@ -539,18 +549,18 @@ public class Player extends Shape {
 				return ret;
 			}
 			
-			if ((this.y == curr_point.y) && (this.y == next_point.y))
-				if (((this.x >  curr_point.x) && (this.x <  next_point.x)) ||
-					((this.x <  curr_point.x) && (this.x >  next_point.x))) 
+			if ((lookup.y == curr_point.y) && (lookup.y == next_point.y))
+				if (((lookup.x >  curr_point.x) && (lookup.x <  next_point.x)) ||
+					((lookup.x <  curr_point.x) && (lookup.x >  next_point.x))) 
 				{
 			   		ret.add(curr_point);
 			   		ret.add(next_point);
 			   		return ret;
 				}
 			
-			if ((this.x == curr_point.x) && (this.x == next_point.x))
-				if (((this.y >  curr_point.y) && (this.y <  next_point.y)) ||
-					((this.y <  curr_point.y) && (this.y >  next_point.y))) 
+			if ((lookup.x == curr_point.x) && (lookup.x == next_point.x))
+				if (((lookup.y >  curr_point.y) && (lookup.y <  next_point.y)) ||
+					((lookup.y <  curr_point.y) && (lookup.y >  next_point.y))) 
 				{
 			   		ret.add(curr_point);
 			   		ret.add(next_point);
@@ -580,8 +590,8 @@ public class Player extends Shape {
 						Point prev     = trail.get(prev_pos);
 						Point pre_prev = trail.get(pre_prev_pos);
 						if (prev.x == pre_prev.x) {
-							System.out.println("SEEEETTT");
-						this.trail.set(prev_pos, new Point(this.x, this.y));
+							//System.out.println("SEEEETTT");
+							this.trail.set(prev_pos, new Point(this.x, this.y));
 						}
 						else 
 							this.trail.add(new Point(this.x, this.y));
@@ -594,7 +604,7 @@ public class Player extends Shape {
 						this.trail.clear();
 						return;
 					}
-				print_trail();
+				//print_trail();
 				break;
 			}
 			case KeyEvent.VK_DOWN:{
@@ -614,7 +624,7 @@ public class Player extends Shape {
 							Point prev     = trail.get(prev_pos);
 							Point pre_prev = trail.get(pre_prev_pos);
 							if (prev.x == pre_prev.x) {
-								System.out.println("SEEEETTT");
+								//System.out.println("SEEEETTT");
 							this.trail.set(prev_pos, new Point(this.x, this.y));
 						}
 							else 
@@ -629,7 +639,7 @@ public class Player extends Shape {
 							this.trail.clear();
 							return;
 				}
-				print_trail();
+				//print_trail();
 
 				break;
 			}
@@ -650,7 +660,7 @@ public class Player extends Shape {
 							Point prev     = trail.get(prev_pos);
 							Point pre_prev = trail.get(pre_prev_pos);
 							if (prev.y == pre_prev.y){
-								System.out.println("SEEEETTT");
+								//System.out.println("SEEEETTT");
 							this.trail.set(prev_pos, new Point(this.x, this.y));
 						}
 							else 
@@ -665,7 +675,7 @@ public class Player extends Shape {
 							this.trail.clear();
 							return;
 						}
-				print_trail();
+				//print_trail();
 
 				break;
 			}
@@ -686,7 +696,7 @@ public class Player extends Shape {
 						Point prev     = trail.get(prev_pos);
 						Point pre_prev = trail.get(pre_prev_pos);
 						if (prev.y == pre_prev.y) {
-							System.out.println("SEEEETTT");
+							//System.out.println("SEEEETTT");
 							this.trail.set(prev_pos, new Point(this.x, this.y));
 						}
 						else 
@@ -701,7 +711,7 @@ public class Player extends Shape {
 						this.trail.clear();
 						return;
 					}
-			print_trail();
+			//print_trail();
 
 			break;
 		}
