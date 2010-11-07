@@ -3,12 +3,13 @@ import java.util.*;
 
 public class Ship {
 	int WIDTH = 100, HEIGHT=100;
-	int x = (Volfied.BOARD_WIDTH - 2 * Volfied.GRID_X)/2;
-	int y = (Volfied.BOARD_HEIGHT -2*  Volfied.GRID_Y)/2;
-	int UPPER_LINE = y - 50;
-	int LOWER_LINE = y + 50;
-	int LEFT_LINE  = x - 50;
-	int RIGHT_LINE = x + 50;
+	int x = 50;
+	int y = 50;
+	
+	Point TOP_LEFT_EDGE  = new Point();
+	Point TOP_RIGHT_EDGE = new Point();
+	Point LOW_LEFT_EDGE  = new Point();
+	Point LOW_RIGHT_EDGE = new Point();
 	
 	int keep_direction = 0;
 	int direction = NORTH;
@@ -26,9 +27,9 @@ public class Ship {
 	
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
-		g.drawRect(x, y, WIDTH, HEIGHT);
+		g.drawRect(x + Volfied.GRID_X, y + Volfied.GRID_Y, WIDTH, HEIGHT);
 		g.setColor(Color.red);
-		g.fillRect(x+1, y+1, WIDTH-1, HEIGHT-1);
+		g.fillRect(x + 1 + Volfied.GRID_X, y + Volfied.GRID_Y + 1, WIDTH-1, HEIGHT-1);
 	}
 	
 	
@@ -42,39 +43,93 @@ public class Ship {
 	}
 	
 	public void animate() {
-		if (keep_direction == 100) {
+		//System.out.println("LEFT_EDGE = " + TOP_LEFT_EDGE.x + ", " + TOP_LEFT_EDGE.y);
+		if (keep_direction == 200) {
 			generateDirection();
 			keep_direction = 0;
 		}
 		keep_direction++;
 		switch (direction) {
 			case NORTH:
-				y--;
+				if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2, TOP_LEFT_EDGE.y + HEIGHT/2- 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x + WIDTH/2, TOP_RIGHT_EDGE.y + HEIGHT/2 - 1)))
+					y--;
+				else generateDirection();
 				break;
+				
 			case SOUTH:
-				y++;
+				if (!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x+ WIDTH/2, LOW_LEFT_EDGE.y + WIDTH/2+ 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2, LOW_RIGHT_EDGE.y + WIDTH/2+ 1)))
+					y++;
+				else generateDirection();
 				break;
+				
 			case EAST:
-				x++;
+				if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y+ WIDTH/2)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2)))
+					x++;
+				else generateDirection();
 				break;
+				
 			case WEST:
-				x--;
+				if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y+ WIDTH/2)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2 - 1, LOW_RIGHT_EDGE.y+ WIDTH/2)))
+					x--;
+				else generateDirection();
 				break;
+				
 			case NEAST:
-				x++;
-				y--;
+				if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 + 1, TOP_RIGHT_EDGE.y+ WIDTH/2 - 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y + WIDTH/2- 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2 - 1))) {
+					x++;
+					y--;
+				}
+				else generateDirection();
 				break;
+				
 			case NWEST:
-				x--;
-				y--;
+				if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y + WIDTH/2- 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2- 1, LOW_RIGHT_EDGE.y + WIDTH/2- 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 - 1, TOP_RIGHT_EDGE.y + WIDTH/2- 1))) {
+					x--;
+					y--;
+				}
+				else generateDirection();
 				break;
+				
 			case SEAST:
-				y++;
-				x++;
+				if (!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2 + 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 + 1, TOP_RIGHT_EDGE.y+ WIDTH/2 + 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x + WIDTH/2+ 1, LOW_LEFT_EDGE.y + WIDTH/2+ 1))) {
+					y++;
+					x++;
+				}
+				else generateDirection();
 				break;
+				
 			case SWEST:
-				y++;
-				x--;
+				if (!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x + WIDTH/2- 1, LOW_LEFT_EDGE.y + WIDTH/2+ 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y + WIDTH/2+ 1)) &&
+					!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2- 1, LOW_RIGHT_EDGE.y + WIDTH/2+ 1))) {
+					y++;
+					x--;
+				}
+				else generateDirection();
+				break;
+				
+			default:
+				generateDirection();
+				break;
 		}
+		
+		TOP_LEFT_EDGE.x  = x - WIDTH/2;
+		TOP_LEFT_EDGE.y  = y - HEIGHT/2;
+		TOP_RIGHT_EDGE.x = x + WIDTH/2;
+		TOP_RIGHT_EDGE.y = y - HEIGHT/2;
+		LOW_LEFT_EDGE.x  = x - WIDTH/2;
+		LOW_LEFT_EDGE.y  = y + HEIGHT/2;
+		LOW_RIGHT_EDGE.x = x + WIDTH/2;
+		LOW_RIGHT_EDGE.y = y + HEIGHT/2;
 	}
 }
