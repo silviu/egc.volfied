@@ -13,13 +13,16 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	static final int BOARD_WIDTH   = 1000;
 	static final int BOARD_HEIGHT  = 600;
 	
+	Image offscreen;
+	
 	int delay, frame;
 	
 	Player player   = new Player();
+	Ship ship = new Ship();
 	Thread animator = new Thread(this);
 	static Terrain terain  = new Terrain();
 	
-	Graphics g_main;
+	Graphics g_main, bufferGraphics;
 	public static int window_width, window_height;
 	public static int keyState;
 
@@ -27,6 +30,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		addKeyListener(this);
 		int fps = 70;
 		delay = (fps > 0) ? (1000 / fps) : 100;
+		offscreen = createImage(this.getSize().width,this.getSize().height);
+		bufferGraphics = offscreen.getGraphics();
 	}
 	
 	 /**
@@ -57,17 +62,22 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		window_width  = this.getSize().width;
 		window_height = this.getSize().height;
 		
-		g_main.setColor(Color.white);
-		g_main.fillRect(0, 0, window_width, window_height);
+		bufferGraphics.clearRect(0,0, window_width, window_height); 
 		
-		g_main.setColor(Color.black);
+		
+		
+		bufferGraphics.setColor(Color.white);
+		bufferGraphics.fillRect(0, 0, window_width, window_height);
+		
+		bufferGraphics.setColor(Color.black);
 		int n = terain.poli.size()-1;
 		for (int i = 0; i < n; i++)
-			g_main.drawLine(GRID_X + terain.poli.get(i).x, GRID_Y + terain.poli.get(i).y ,
+			bufferGraphics.drawLine(GRID_X + terain.poli.get(i).x, GRID_Y + terain.poli.get(i).y ,
 							GRID_X + terain.poli.get(i+1).x, GRID_Y + terain.poli.get(i+1).y);
 		//g_main.drawRect(GRID_X, GRID_Y, BOARD_WIDTH, BOARD_HEIGHT);
-		
-		player.draw(g_main);
+		player.draw(bufferGraphics);
+		ship.draw(bufferGraphics);
+		g_main.drawImage(offscreen,0, 0, this);
 	}
 
 	public void update(Graphics g_main) {

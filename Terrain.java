@@ -349,7 +349,7 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 		int end_i = Player.trail.size() - 1;
 		int common_outer_to_use = start_point.outer.get(0);
 		
-		while (i < 7) {
+		while (i < end_i -2) {
 			
 			Point prev_point = Player.trail.get(i-1);
 			Point curr_point = Player.trail.get(i);
@@ -367,7 +367,7 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 					}
 					
 					if (start_point.outer.get(0) == Point.DO) {
-						if (next_next_point.x > next_point.x)
+						if (next_next_point.x < next_point.x)
 							start_point.outer.add(Point.LE);
 						else start_point.outer.add(Point.RI);
 					}
@@ -379,9 +379,9 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 					}
 					
 					if (start_point.outer.get(0) == Point.RI) {
-						if (next_next_point.y > next_point.y)
-							start_point.outer.add(Point.DO);
-						else start_point.outer.add(Point.UP);
+						if (next_next_point.y < next_point.y)
+							start_point.outer.add(Point.UP);
+						else start_point.outer.add(Point.DO);
 					}
 				}
 				
@@ -552,8 +552,8 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 			
 			if (end_point.outer.get(0) == Point.RI) {
 				if (next_next_point.y > next_point.y)
-					end_point.outer.add(Point.UP);
-				else end_point.outer.add(Point.DO);
+					end_point.outer.add(Point.DO);
+				else end_point.outer.add(Point.UP);
 			}
 			depth_outer(start_point, end_point);
 			
