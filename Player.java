@@ -11,6 +11,7 @@ public class Player extends Shape {
 	boolean isAttacking = false;
 	boolean first_time = true;
 	int cut = 0;
+	int angle = 45;
 	
 	public static ArrayList<Point> trail  = new ArrayList<Point>();
 
@@ -24,6 +25,8 @@ public class Player extends Shape {
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
 		g.drawRect(Volfied.OFFSET_GRID + x, Volfied.OFFSET_GRID + y, WIDTH, HEIGHT);
+		g.setColor(Color.cyan);
+		g.fillRect(Volfied.OFFSET_GRID + x + 1, Volfied.OFFSET_GRID + y +1, WIDTH -1, HEIGHT-1);
 		g.setColor(Color.blue);
 		int trail_size = trail.size();
 		for (int i = 0; i < trail_size-1; i++)

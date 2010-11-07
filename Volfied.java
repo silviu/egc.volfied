@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
+import java.util.*;
 
 
 public class Volfied extends Applet implements KeyListener, Runnable 
@@ -13,12 +14,19 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	static final int BOARD_WIDTH   = 1000;
 	static final int BOARD_HEIGHT  = 600;
 	
+	Random rand = new Random();
+	
 	Image offscreen;
 	
 	int delay, frame;
 	
 	Player player   = new Player();
-	Ship ship = new Ship();
+	Ship ship = new Ship(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(600 - 100 + 1) + 100);
+	Critter critter1 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(600 - 100 + 1) + 100);
+	Critter critter2 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(600 - 100 + 1) + 100);
+	Critter critter3 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(600 - 100 + 1) + 100);
+
+
 	Thread animator = new Thread(this);
 	static Terrain terain  = new Terrain();
 	
@@ -28,7 +36,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 
 	public void init() {
 		addKeyListener(this);
-		int fps = 70;
+		int fps = 100;
 		delay = (fps > 0) ? (1000 / fps) : 100;
 		offscreen = createImage(this.getSize().width,this.getSize().height);
 		bufferGraphics = offscreen.getGraphics();
@@ -77,6 +85,9 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		//g_main.drawRect(GRID_X, GRID_Y, BOARD_WIDTH, BOARD_HEIGHT);
 		player.draw(bufferGraphics);
 		ship.draw(bufferGraphics);
+		critter1.draw(bufferGraphics);
+		critter2.draw(bufferGraphics);
+		critter3.draw(bufferGraphics);
 		g_main.drawImage(offscreen,0, 0, this);
 	}
 

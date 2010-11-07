@@ -25,6 +25,11 @@ public class Ship {
 	
 	Random rand = new Random();
 	
+	public Ship(int init_x, int init_y) {
+		x = init_x;
+		y = init_y;
+	}
+	
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
 		g.drawRect(x + Volfied.GRID_X, y + Volfied.GRID_Y, WIDTH, HEIGHT);
