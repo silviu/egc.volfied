@@ -21,10 +21,10 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	int delay, frame;
 	
 	Player player   = new Player();
-	Ship ship = new Ship(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(600 - 100 + 1) + 100);
-	Critter critter1 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(600 - 100 + 1) + 100);
-	Critter critter2 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(600 - 100 + 1) + 100);
-	Critter critter3 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(600 - 100 + 1) + 100);
+	Ship ship = new Ship();
+	Critter critter1 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
+	Critter critter2 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
+	Critter critter3 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
 
 
 	Thread animator = new Thread(this);
@@ -36,7 +36,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 
 	public void init() {
 		addKeyListener(this);
-		int fps = 100;
+		int fps = 50;
 		delay = (fps > 0) ? (1000 / fps) : 100;
 		offscreen = createImage(this.getSize().width,this.getSize().height);
 		bufferGraphics = offscreen.getGraphics();
@@ -63,7 +63,6 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		    } catch (InterruptedException e) {break;}
 	    	// Advance the frame
 	    	frame++;
-	    	//player.pl_move();
 		}
 	}
 	public void paint(Graphics g_main) {
