@@ -15,4 +15,4 @@ build:$(CLS)
 .java.class:
 	javac $(FLAGS) $^
 clean:
-	rm -f *.class *.o *~ *.swp
+	rm -f *.class *.o *~ *.swp *.out
