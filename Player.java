@@ -48,7 +48,7 @@ public class Player extends Shape {
 		System.out.println(nr_elem);
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
-				if (Volfied.terain.isPointonMyTerrain(new Point(x, y - pase))) {
+				if (Volfied.terain.isPointOnPerimeter(new Point(x, y - pase))) {
 				if (nr_elem == 2) {
 					if (position.get(0).x == position.get(1).x)
 						return true;
@@ -60,7 +60,7 @@ public class Player extends Shape {
 				break;
 			
 			case KeyEvent.VK_DOWN:
-				if (Volfied.terain.isPointonMyTerrain(new Point(x, y + pase))){
+				if (Volfied.terain.isPointOnPerimeter(new Point(x, y + pase))){
 				if (nr_elem == 2) {
 					if (position.get(0).x == position.get(1).x)
 						return true;
@@ -72,7 +72,7 @@ public class Player extends Shape {
 				break;
 			
 			case KeyEvent.VK_LEFT:
-				if (Volfied.terain.isPointonMyTerrain(new Point(x - pase, y))){
+				if (Volfied.terain.isPointOnPerimeter(new Point(x - pase, y))){
 				if (nr_elem == 2) {
 					if (position.get(0).y == position.get(1).y)
 						return true;
@@ -84,7 +84,7 @@ public class Player extends Shape {
 				break;
 			
 			case KeyEvent.VK_RIGHT:
-				if (Volfied.terain.isPointonMyTerrain(new Point(x + pase, y))){
+				if (Volfied.terain.isPointOnPerimeter(new Point(x + pase, y))){
 				if (nr_elem == 2) {
 					if (position.get(0).y == position.get(1).y)
 						return true;
@@ -140,7 +140,7 @@ public class Player extends Shape {
 	public void trace_trail() {
 		this.trail.addPointExteningSegment(new Point(x, y));
 		
-		if (Volfied.terain.isPointonMyTerrain(new Point(x, y))) {
+		if (Volfied.terain.isPointOnPerimeter(new Point(x, y))) {
 			//finalize attack
 			isAttacking = false;
 			first_time = true;
@@ -222,7 +222,7 @@ public class Player extends Shape {
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
 				if (!Volfied.terain.isOuter(keyCode)) {
-				if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x, y - pase))) {
+				if (canMoveNotAttack(keyCode) && Volfied.terain.isPointOnPerimeter(new Point(x, y - pase))) {
 					print_territory();
 					if (y - pase < 0)
 						y = 0;
@@ -238,7 +238,7 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_DOWN:
 				if (!Volfied.terain.isOuter(keyCode)) {
-					if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x, y + pase))) {
+					if (canMoveNotAttack(keyCode) && Volfied.terain.isPointOnPerimeter(new Point(x, y + pase))) {
 						print_territory();
 						if (y + pase > Volfied.BOARD_HEIGHT)
 							y = Volfied.BOARD_HEIGHT;
@@ -254,7 +254,7 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_LEFT:
 				if (!Volfied.terain.isOuter(keyCode)) {
-					if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x - pase, y))) {
+					if (canMoveNotAttack(keyCode) && Volfied.terain.isPointOnPerimeter(new Point(x - pase, y))) {
 						print_territory();
 						if (x - pase < 0) x = 0;
 						else x -= pase;
@@ -269,7 +269,7 @@ public class Player extends Shape {
 			
 			case KeyEvent.VK_RIGHT:
 				if (!Volfied.terain.isOuter(keyCode)) {
-					if (canMoveNotAttack(keyCode) && Volfied.terain.isPointonMyTerrain(new Point(x + pase, y))) {
+					if (canMoveNotAttack(keyCode) && Volfied.terain.isPointOnPerimeter(new Point(x + pase, y))) {
 						print_territory();
 						if (x + pase > Volfied.BOARD_WIDTH)
 							x = Volfied.BOARD_WIDTH;

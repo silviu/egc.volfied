@@ -7,6 +7,9 @@ CLS := $(patsubst %.java,%.class, $(filter %.java,$(SRC)))
 DEPS:=
 FLAGS=-g
 #FLAGS=-verbose
+
+run-gui:build
+	java Volfied
 run:build
 	nohup chromium-browser Main.htm&
 

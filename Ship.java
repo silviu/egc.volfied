@@ -55,21 +55,21 @@ public class Ship {
 		}
 		
 		if (growing) {
-			if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + (WIDTH+1)/2, TOP_LEFT_EDGE.y + (HEIGHT+1)/2- 1)) &&
-				!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x + (WIDTH+1)/2, TOP_RIGHT_EDGE.y + (HEIGHT+1)/2 - 1)) &&
-				!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x+ (WIDTH+1)/2, LOW_LEFT_EDGE.y + (WIDTH+1)/2+ 1)) &&
-				!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ (WIDTH+1)/2, LOW_RIGHT_EDGE.y + (WIDTH+1)/2+ 1)) &&
-				!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + (WIDTH+1)/2- 1, TOP_LEFT_EDGE.y+ (WIDTH+1)/2)) &&
-				!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ (WIDTH+1)/2 - 1, LOW_RIGHT_EDGE.y+ (WIDTH+1)/2)))
+			if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + (WIDTH+1)/2, TOP_LEFT_EDGE.y + (HEIGHT+1)/2- 1)) &&
+				!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x + (WIDTH+1)/2, TOP_RIGHT_EDGE.y + (HEIGHT+1)/2 - 1)) &&
+				!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x+ (WIDTH+1)/2, LOW_LEFT_EDGE.y + (WIDTH+1)/2+ 1)) &&
+				!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ (WIDTH+1)/2, LOW_RIGHT_EDGE.y + (WIDTH+1)/2+ 1)) &&
+				!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + (WIDTH+1)/2- 1, TOP_LEFT_EDGE.y+ (WIDTH+1)/2)) &&
+				!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ (WIDTH+1)/2 - 1, LOW_RIGHT_EDGE.y+ (WIDTH+1)/2)))
 				return true;
 		}
 		else 
-			if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + (WIDTH-1)/2, TOP_LEFT_EDGE.y + (HEIGHT-1)/2- 1)) &&
-					!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x + (WIDTH-1)/2, TOP_RIGHT_EDGE.y + (HEIGHT-1)/2 - 1)) &&
-					!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x+ (WIDTH-1)/2, LOW_LEFT_EDGE.y + (WIDTH-1)/2+ 1)) &&
-					!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ (WIDTH-1)/2, LOW_RIGHT_EDGE.y + (WIDTH-1)/2+ 1)) &&
-					!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + (WIDTH-1)/2- 1, TOP_LEFT_EDGE.y+ (WIDTH-1)/2)) &&
-					!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ (WIDTH-1)/2 - 1, LOW_RIGHT_EDGE.y+ (WIDTH-1)/2)))
+			if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + (WIDTH-1)/2, TOP_LEFT_EDGE.y + (HEIGHT-1)/2- 1)) &&
+					!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x + (WIDTH-1)/2, TOP_RIGHT_EDGE.y + (HEIGHT-1)/2 - 1)) &&
+					!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x+ (WIDTH-1)/2, LOW_LEFT_EDGE.y + (WIDTH-1)/2+ 1)) &&
+					!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ (WIDTH-1)/2, LOW_RIGHT_EDGE.y + (WIDTH-1)/2+ 1)) &&
+					!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + (WIDTH-1)/2- 1, TOP_LEFT_EDGE.y+ (WIDTH-1)/2)) &&
+					!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ (WIDTH-1)/2 - 1, LOW_RIGHT_EDGE.y+ (WIDTH-1)/2)))
 					return true;
 		return false;
 	}
@@ -83,37 +83,37 @@ public class Ship {
 			keep_direction++;
 			switch (direction) {
 				case NORTH:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2, TOP_LEFT_EDGE.y + HEIGHT/2- 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x + WIDTH/2, TOP_RIGHT_EDGE.y + HEIGHT/2 - 1)))
+					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + WIDTH/2, TOP_LEFT_EDGE.y + HEIGHT/2- 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x + WIDTH/2, TOP_RIGHT_EDGE.y + HEIGHT/2 - 1)))
 						y--;
 					else generateDirection();
 					break;
 					
 				case SOUTH:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x+ WIDTH/2, LOW_LEFT_EDGE.y + HEIGHT/2+ 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2, LOW_RIGHT_EDGE.y + HEIGHT/2+ 1)))
+					if (!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x+ WIDTH/2, LOW_LEFT_EDGE.y + HEIGHT/2+ 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2, LOW_RIGHT_EDGE.y + HEIGHT/2+ 1)))
 						y++;
 					else generateDirection();
 					break;
 					
 				case EAST:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y+ HEIGHT/2)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ HEIGHT/2)))
+					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y+ HEIGHT/2)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ HEIGHT/2)))
 						x++;
 					else generateDirection();
 					break;
 					
 				case WEST:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y+ HEIGHT/2)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2 - 1, LOW_RIGHT_EDGE.y+ HEIGHT/2)))
+					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y+ HEIGHT/2)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2 - 1, LOW_RIGHT_EDGE.y+ HEIGHT/2)))
 						x--;
 					else generateDirection();
 					break;
 					
 				case NEAST:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 + 1, TOP_RIGHT_EDGE.y+ WIDTH/2 - 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y + WIDTH/2- 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2 - 1))) {
+					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 + 1, TOP_RIGHT_EDGE.y+ WIDTH/2 - 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y + WIDTH/2- 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2 - 1))) {
 						x++;
 						y--;
 					}
@@ -121,9 +121,9 @@ public class Ship {
 					break;
 					
 				case NWEST:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y + WIDTH/2- 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2- 1, LOW_RIGHT_EDGE.y + WIDTH/2- 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 - 1, TOP_RIGHT_EDGE.y + WIDTH/2- 1))) {
+					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y + WIDTH/2- 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2- 1, LOW_RIGHT_EDGE.y + WIDTH/2- 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 - 1, TOP_RIGHT_EDGE.y + WIDTH/2- 1))) {
 						x--;
 						y--;
 					}
@@ -131,9 +131,9 @@ public class Ship {
 					break;
 					
 				case SEAST:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2 + 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 + 1, TOP_RIGHT_EDGE.y+ WIDTH/2 + 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x + WIDTH/2+ 1, LOW_LEFT_EDGE.y + WIDTH/2+ 1))) {
+					if (!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2 + 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 + 1, TOP_RIGHT_EDGE.y+ WIDTH/2 + 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x + WIDTH/2+ 1, LOW_LEFT_EDGE.y + WIDTH/2+ 1))) {
 						y++;
 						x++;
 					}
@@ -141,9 +141,9 @@ public class Ship {
 					break;
 					
 				case SWEST:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x + WIDTH/2- 1, LOW_LEFT_EDGE.y + WIDTH/2+ 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y + WIDTH/2+ 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2- 1, LOW_RIGHT_EDGE.y + WIDTH/2+ 1))) {
+					if (!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x + WIDTH/2- 1, LOW_LEFT_EDGE.y + WIDTH/2+ 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y + WIDTH/2+ 1)) &&
+						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2- 1, LOW_RIGHT_EDGE.y + WIDTH/2+ 1))) {
 						y++;
 						x--;
 					}

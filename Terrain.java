@@ -11,7 +11,7 @@ public class Terrain {
 
 	}
 	
-	public boolean isPointonMyTerrain(Point lookup) {
+	public boolean isPointOnPerimeter(Point lookup) {
 		int n = Volfied.terain.poli.size();
 		
 		for (int i = 0; i < n; i++) {
@@ -292,10 +292,10 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 		switch(keyCode) {
 			case KeyEvent.VK_UP:
 				System.out.println("UUUUUUUUUUP");
-				if (special && outer == Point.UP && !Volfied.terain.isPointonMyTerrain(new Point(Player.x, Player.y - Player.pase)))
+				if (special && outer == Point.UP && !Volfied.terain.isPointOnPerimeter(new Point(Player.x, Player.y - Player.pase)))
 					return true;
 				else 
-				if (!special && !Volfied.terain.isPointonMyTerrain(new Point(Player.x, Player.y - Player.pase)) && 
+				if (!special && !Volfied.terain.isPointOnPerimeter(new Point(Player.x, Player.y - Player.pase)) && 
 					(start_point.outer.get(0) == Point.UP || start_point.outer.get(1) == Point.UP)) {
 					System.out.println("UP FAIL");
 					return true;
@@ -304,10 +304,10 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 			
 			case KeyEvent.VK_DOWN:
 				System.out.println("DOOOWN");
-				if (special && outer == Point.DO && !Volfied.terain.isPointonMyTerrain(new Point(Player.x, Player.y + Player.pase)))
+				if (special && outer == Point.DO && !Volfied.terain.isPointOnPerimeter(new Point(Player.x, Player.y + Player.pase)))
 					return true;
 				
-				if (!special && !Volfied.terain.isPointonMyTerrain(new Point(Player.x, Player.y + Player.pase)) && 
+				if (!special && !Volfied.terain.isPointOnPerimeter(new Point(Player.x, Player.y + Player.pase)) && 
 						(start_point.outer.get(0) == Point.DO || start_point.outer.get(1) == Point.DO)){
 					System.out.println("DOWN FAIL");
 					return true;
@@ -317,10 +317,10 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 			
 			case KeyEvent.VK_LEFT:
 				System.out.println("LEEFT");
-				if (special && outer == Point.LE && !Volfied.terain.isPointonMyTerrain(new Point(Player.x - Player.pase, Player.y)))
+				if (special && outer == Point.LE && !Volfied.terain.isPointOnPerimeter(new Point(Player.x - Player.pase, Player.y)))
 					return true;
 				
-				if (!special && !Volfied.terain.isPointonMyTerrain(new Point(Player.x - Player.pase, Player.y)) && 
+				if (!special && !Volfied.terain.isPointOnPerimeter(new Point(Player.x - Player.pase, Player.y)) && 
 						(start_point.outer.get(0) == Point.LE || start_point.outer.get(1) == Point.LE)){
 					System.out.println("left fail");
 					return true;
@@ -329,10 +329,10 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 			
 			case KeyEvent.VK_RIGHT:
 				System.out.println("RIIGHT");
-				if (special && outer == Point.RI && !Volfied.terain.isPointonMyTerrain(new Point(Player.x + Player.pase, Player.y)))
+				if (special && outer == Point.RI && !Volfied.terain.isPointOnPerimeter(new Point(Player.x + Player.pase, Player.y)))
 					return true;
 				
-				if (!special && !Volfied.terain.isPointonMyTerrain(new Point(Player.x + Player.pase, Player.y)) && 
+				if (!special && !Volfied.terain.isPointOnPerimeter(new Point(Player.x + Player.pase, Player.y)) && 
 						(start_point.outer.get(0) == Point.RI || start_point.outer.get(1) == Point.RI)){
 					System.out.println("RIGHTTT fail");
 					return true;
@@ -432,6 +432,7 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 			i+=2;
 		}
 	}
+	
 	
 	public void cutTerrain(ArrayList<Point> points) {
 		int trail_size  = points.size();
