@@ -48,12 +48,10 @@ public class Ship {
 	public boolean canGrow() {
 		if (WIDTH == 120 || HEIGHT == 120) {
 			growing = false;
-			return true;
 		}
 		
 		if (WIDTH == 75 || HEIGHT == 75) {
 			growing = true;
-			return true;
 		}
 		
 		if (growing) {
@@ -77,8 +75,7 @@ public class Ship {
 	}
 	
 	public void animate() {
-		//System.out.println("LEFT_EDGE = " + TOP_LEFT_EDGE.x + ", " + TOP_LEFT_EDGE.y);
-		if (keep_direction == 600) {
+		if (keep_direction == 400) {
 			generateDirection();
 			keep_direction = 0;
 		}
@@ -93,22 +90,22 @@ public class Ship {
 					break;
 					
 				case SOUTH:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x+ WIDTH/2, LOW_LEFT_EDGE.y + WIDTH/2+ 1)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2, LOW_RIGHT_EDGE.y + WIDTH/2+ 1)))
+					if (!Volfied.terain.isPointonMyTerrain(new Point(LOW_LEFT_EDGE.x+ WIDTH/2, LOW_LEFT_EDGE.y + HEIGHT/2+ 1)) &&
+						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2, LOW_RIGHT_EDGE.y + HEIGHT/2+ 1)))
 						y++;
 					else generateDirection();
 					break;
 					
 				case EAST:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y+ WIDTH/2)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2)))
+					if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y+ HEIGHT/2)) &&
+						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ HEIGHT/2)))
 						x++;
 					else generateDirection();
 					break;
 					
 				case WEST:
-					if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y+ WIDTH/2)) &&
-						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2 - 1, LOW_RIGHT_EDGE.y+ WIDTH/2)))
+					if (!Volfied.terain.isPointonMyTerrain(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y+ HEIGHT/2)) &&
+						!Volfied.terain.isPointonMyTerrain(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2 - 1, LOW_RIGHT_EDGE.y+ HEIGHT/2)))
 						x--;
 					else generateDirection();
 					break;
@@ -169,7 +166,7 @@ public class Ship {
 					HEIGHT--;
 				}
 			
-			//else generateDirection();
+			else generateDirection();
 			
 			
 			TOP_LEFT_EDGE.x  = x - WIDTH/2;

@@ -160,7 +160,7 @@ public class Terrain {
 		
 	}
 	
-	public boolean isSameLine(ArrayList<Point> line1, ArrayList<Point> line2) {
+	public static boolean isSameLine(ArrayList<Point> line1, ArrayList<Point> line2) {
 		if ((line1.get(0).x == line2.get(0).x) && (line1.get(0).y == line2.get(0).y))
 			return true;
 		return false;

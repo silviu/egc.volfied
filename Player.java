@@ -23,10 +23,13 @@ public class Player extends Shape {
 	public void scale() {}
 
 	public void paint(Graphics g) {
+		
 		g.setColor(Color.black);
 		g.drawRect(Volfied.OFFSET_GRID + x, Volfied.OFFSET_GRID + y, WIDTH, HEIGHT);
 		g.setColor(Color.cyan);
 		g.fillRect(Volfied.OFFSET_GRID + x + 1, Volfied.OFFSET_GRID + y +1, WIDTH -1, HEIGHT-1);
+		g.setColor(Color.blue);
+		g.fillOval(Volfied.GRID_X + x - 4, Volfied.GRID_Y - 4 + y, 7, 7);
 		g.setColor(Color.blue);
 		int trail_size = trail.size();
 		for (int i = 0; i < trail_size-1; i++)
