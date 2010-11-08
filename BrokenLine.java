@@ -145,7 +145,7 @@ public class BrokenLine {
 				new Point(N, N),
 				new Point(0, N),						
 		};
-		BrokenLine bo   = new BrokenLine(false, points);
+		BrokenLine bo = new BrokenLine(false, points);
 		BrokenLine bc = new BrokenLine(true,  points);
 		
 
@@ -191,7 +191,7 @@ public class BrokenLine {
 				new Point(0, N),						
 		};
 
-		BrokenLine bo   = new BrokenLine(false, points);
+		BrokenLine bo = new BrokenLine(false, points);
 		BrokenLine bc = new BrokenLine(true,  points);
 		
 		assert bo.points.size() == 4;

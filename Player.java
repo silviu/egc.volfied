@@ -120,11 +120,12 @@ public class Player extends Shape {
 
 	public void key_decide(int keyCode){
 		Point curr_player_pos = new Point(this.x, this.y);
-		Point next_player_pos = Volfied.terain.roundPoint(curr_player_pos.getNewPosition(keyCode, pase), pase); 
+		Point next_player_pos = curr_player_pos.getNewPosition(keyCode, pase); 
 
 		if (Volfied.terain.isOuter(next_player_pos))
 		{
 			System.out.println("next point is outer: " + next_player_pos);
+			return;
 		}
 			
 
@@ -132,11 +133,6 @@ public class Player extends Shape {
 			print_territory();
 			this.x = next_player_pos.x;
 			this.y = next_player_pos.y;
-		/*	if (y - pase < 0)
-				y = 0;
-			else
-				y -= pase;
-				*/
 		} else if (isValidAttack(keyCode)) {
 			isAttacking = true;
 			attack(keyCode);

@@ -7,12 +7,8 @@ public class Point {
 	int x;
 	int y;
 	
-	public Point(){};
+	public Point() {}
 	public Point(int p_x, int p_y) {
-		this.x = p_x;
-		this.y = p_y;
-	}
-	public Point(int p_x, int p_y, int p_outer1, int p_outer2) {
 		this.x = p_x;
 		this.y = p_y;
 	}
