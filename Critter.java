@@ -49,8 +49,9 @@ public class Critter {
 	
 	
 	public boolean isDead() {
-		Point start_point = Player.trail.get(0);
-		Point end_point = Player.trail.get(Player.trail.size()-1);
+		//TODO: FIXME: implement me
+		//Point start_point = Player.trail.get(0);
+		//Point end_point = Player.trail.get(Player.trail.size()-1);
 		
 		return false;
 	}
