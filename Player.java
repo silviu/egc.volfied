@@ -1,26 +1,19 @@
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.*;
 
-public class Player extends Shape {
+public class Player{
 	static final int WIDTH = 30;
 	static final int HEIGHT = 30;
-	static int x = Volfied.BOARD_WIDTH/2;
-	static int y = 0;
+	int x = Volfied.BOARD_WIDTH/2;
+	int y = 0;
 	static int pase = 5;
 	boolean isAttacking = false;
 	boolean first_time = true;
-	int cut = 0;
-	int angle = 45;
 
 	BrokenLine trail = new BrokenLine(false); // an open broken line of points
 
 	public void draw(Graphics g_main){
 		this.paint(g_main);
 	}
-
-	public void changeLineThickness(Graphics g_main) {}
-	public void scale() {}
 
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
@@ -33,10 +26,6 @@ public class Player extends Shape {
 		trail.draw(g, Volfied.OFFSET_GRID + WIDTH/2, Volfied.OFFSET_GRID + HEIGHT/2);
 	}
 
-
-
-
-
 	public boolean isMovingOnPerimeter(int keyCode)
 	{
 		Point curr_player_pos = new Point(this.x, this.y);
@@ -45,46 +34,6 @@ public class Player extends Shape {
 		return  Volfied.terain.isPointOnPerimeter(curr_player_pos) &&
 				Volfied.terain.isPointOnPerimeter(next_player_pos);
 	}
-
-
-	public boolean isValidAttack(int keyCode) {
-		Point next_point;
-		switch(keyCode) {
-		case KeyEvent.VK_UP:
-			next_point = new Point(x, y - pase);
-			if (trail.isPointOnPerimeter(next_point))
-				return false;
-			if (y == 0)
-				return false;
-			break;
-
-		case KeyEvent.VK_DOWN:
-			next_point = new Point(x, y + pase);
-			if (trail.isPointOnPerimeter(next_point))
-				return false;
-			if (y == Volfied.BOARD_HEIGHT)
-				return false;
-			break;
-
-		case KeyEvent.VK_LEFT:
-			next_point = new Point(x - pase, y);
-			if (trail.isPointOnPerimeter(next_point))
-				return false;
-			if (x == 0)
-				return false;
-			break;
-
-		case KeyEvent.VK_RIGHT:
-			next_point = new Point(x + pase, y);
-			if (trail.isPointOnPerimeter(next_point))
-				return false;
-			if (x == Volfied.BOARD_WIDTH)
-				return false;
-			break;
-		}
-		return true;
-	}
-
 
 	public void attack(int keyCode) {
 
@@ -108,11 +57,7 @@ public class Player extends Shape {
 		}
 
 		System.out.println("TRAIL:" + trail);
-		
-		this.x = next_player_pos.x;
-		this.y = next_player_pos.y;
 	}
-
 
 	public void print_territory() {
 		System.out.println("TERIT:" + Volfied.terain.poli);
@@ -128,15 +73,14 @@ public class Player extends Shape {
 			return;
 		}
 			
-
 		if (isMovingOnPerimeter(keyCode)) {
 			print_territory();
-			this.x = next_player_pos.x;
-			this.y = next_player_pos.y;
-		} else if (isValidAttack(keyCode)) {
+			
+		} else {
 			isAttacking = true;
 			attack(keyCode);
 		}
-
+		this.x = next_player_pos.x;
+		this.y = next_player_pos.y;
 	}
 }

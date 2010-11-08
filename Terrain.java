@@ -1,4 +1,3 @@
-import java.awt.event.KeyEvent;
 import java.util.*;
 public class Terrain {
 
@@ -14,10 +13,6 @@ public class Terrain {
 	public boolean isPointOnPerimeter(Point lookup) {
 		return poli.isPointOnPerimeter(lookup);
 	}
-	
-		
-	
-	
 	
 	public void removePointsinBetween(int start_i, int end_i) {
 		System.out.println("******************start_i = " + start_i);
@@ -69,27 +64,6 @@ public class Terrain {
 				}
 
 		}
-		return ret;
-	}
-	
-	
-	
-	public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
-		
-		ArrayList<Point> linePointIsOn = Volfied.terain.getLinePointIsOn(new Point(Player.x, Player.y));
-		ArrayList<Point> ret = new ArrayList<Point>();
-		
-		Point start_point  = linePointIsOn.get(0);
-		Point end_point    = linePointIsOn.get(1);
-		
-		int start_point_i  = Volfied.terain.poli.points.indexOf(start_point);
-		int end_point_i    = Volfied.terain.poli.points.indexOf(end_point);
-		
-		Point left_corner  = Volfied.terain.poli.points.get(start_point_i - 1);
-		Point right_corner = Volfied.terain.poli.points.get(end_point_i + 1);
-		
-		ret.add(left_corner);
-		ret.add(right_corner);
 		return ret;
 	}
 	
