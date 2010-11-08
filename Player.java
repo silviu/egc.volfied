@@ -13,7 +13,7 @@ public class Player extends Shape {
 	int cut = 0;
 	int angle = 45;
 	
-	public static ArrayList<Point> trail  = new ArrayList<Point>();
+	BrokenLine trail = new BrokenLine(false); // an open broken line of points
 
 	public void draw(Graphics g_main){
 		this.paint(g_main);
@@ -31,42 +31,14 @@ public class Player extends Shape {
 		g.setColor(Color.blue);
 		g.fillOval(Volfied.GRID_X + x - 4, Volfied.GRID_Y - 4 + y, 7, 7);
 		g.setColor(Color.blue);
-		int trail_size = trail.size();
+		int trail_size = trail.points.size();
 		for (int i = 0; i < trail_size-1; i++)
-			g.drawLine(Volfied.OFFSET_GRID + WIDTH/2 + trail.get(i).x, Volfied.OFFSET_GRID +  trail.get(i).y + HEIGHT/2,
-					Volfied.OFFSET_GRID + trail.get(i+1).x +WIDTH/2, Volfied.OFFSET_GRID + trail.get(i+1).y+HEIGHT/2);
+			g.drawLine(Volfied.OFFSET_GRID + WIDTH/2 + trail.points.get(i).x, Volfied.OFFSET_GRID +  trail.points.get(i).y + HEIGHT/2,
+					Volfied.OFFSET_GRID + trail.points.get(i+1).x +WIDTH/2, Volfied.OFFSET_GRID + trail.points.get(i+1).y+HEIGHT/2);
 	}
 	
 	
-	public boolean isPointonTrail(Point lookup) {
-		int n = trail.size();
-		
-		for (int i = 0; i < n; i++) {
-			Point curr_point = trail.get(i);
-			Point next_point = trail.get((i == n - 1) ? 0 : i + 1);
-			
-			if (lookup.y == curr_point.y && lookup.x == curr_point.x)
-			{
-				return true;
-			}
-			
-			if ((lookup.y == curr_point.y) && (lookup.y == next_point.y))
-				if (((lookup.x >  curr_point.x) && (lookup.x <  next_point.x)) ||
-					((lookup.x <  curr_point.x) && (lookup.x >  next_point.x))) 
-				{
-			   		return true;
-				}
-			
-			if ((lookup.x == curr_point.x) && (lookup.x == next_point.x))
-				if (((lookup.y >  curr_point.y) && (lookup.y <  next_point.y)) ||
-					((lookup.y <  curr_point.y) && (lookup.y >  next_point.y))) 
-				{
-			   		return true;
-				}
 
-		}
-		return false;
-	}
 	
 	public boolean canMoveNotAttack(int keyCode) {
 		ArrayList<Point> position = Volfied.terain.onWhatLine();
@@ -132,7 +104,7 @@ public class Player extends Shape {
 		switch(keyCode) {
 			case KeyEvent.VK_UP:
 				next_point = new Point(x, y - pase);
-				if (isPointonTrail(next_point))
+				if (trail.isPointOnPerimeter(next_point))
 					return false;
 				if (y == 0)
 					return false;
@@ -140,7 +112,7 @@ public class Player extends Shape {
 	
 			case KeyEvent.VK_DOWN:
 				next_point = new Point(x, y + pase);
-				if (isPointonTrail(next_point))
+				if (trail.isPointOnPerimeter(next_point))
 					return false;
 				if (y == Volfied.BOARD_HEIGHT)
 					return false;
@@ -148,7 +120,7 @@ public class Player extends Shape {
 	
 			case KeyEvent.VK_LEFT:
 				next_point = new Point(x - pase, y);
-				if (isPointonTrail(next_point))
+				if (trail.isPointOnPerimeter(next_point))
 					return false;
 				if (x == 0)
 					return false;
@@ -156,7 +128,7 @@ public class Player extends Shape {
 	
 			case KeyEvent.VK_RIGHT:
 				next_point = new Point(x + pase, y);
-				if (isPointonTrail(next_point))
+				if (trail.isPointOnPerimeter(next_point))
 					return false;
 				if (x == Volfied.BOARD_WIDTH)
 					return false;
@@ -165,34 +137,15 @@ public class Player extends Shape {
 		return true;
 	}
 	
-	public void trace_trail(int constant_param) {
-		
-		int prev_pos, pre_prev_pos;
-		prev_pos     = trail.size() - 1;
-		pre_prev_pos = trail.size() - 2;
-			
-		if (pre_prev_pos >= 0) {
-			Point prev     = trail.get(prev_pos);
-			Point pre_prev = trail.get(pre_prev_pos);
-			if (constant_param == 0) {
-				if (prev.x == pre_prev.x) 
-					trail.set(prev_pos, new Point(x, y));
-				else trail.add(new Point(x, y));
-			}
-			else {
-				if (prev.y == pre_prev.y) 
-					trail.set(prev_pos, new Point(x, y));
-				else trail.add(new Point(x, y));
-			}
-		}
-		else trail.add(new Point(x, y));
+	public void trace_trail() {
+		this.trail.addPointExteningSegment(new Point(x, y));
 		
 		if (Volfied.terain.isPointonMyTerrain(new Point(x, y))) {
 			//finalize attack
 			isAttacking = false;
 			first_time = true;
-			Volfied.terain.cutTerrain();
-			trail.clear();
+			Volfied.terain.cutTerrain(trail.points);
+			trail.points.clear();
 		}
 	}
 	
@@ -201,51 +154,51 @@ public class Player extends Shape {
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
 				if (first_time) {
-					trail.add(new Point(x, y));
+					trail.addPointExteningSegment(new Point(x, y));
 					first_time = false;
 				}
 				if (y - pase < 0) y = 0;
 				else y -= pase;
 					
-				trace_trail(0);
+				trace_trail();
 				print_trail();
 				break;
 
 			case KeyEvent.VK_DOWN:
 				if (first_time) {
-					trail.add(new Point(x, y));
+					trail.addPointExteningSegment(new Point(x, y));
 					first_time = false;
 				}
 				if (y + pase > Volfied.BOARD_HEIGHT)
 					y = Volfied.BOARD_HEIGHT;
 				else y += pase;
 					
-				trace_trail(0);
+				trace_trail();
 				print_trail();
 				break;
 				
 			case KeyEvent.VK_LEFT:
 				if (first_time) {
-					trail.add(new Point(x, y));
+					trail.addPointExteningSegment(new Point(x, y));
 					first_time = false;
 				}
 				if (x - pase < 0) x = 0;
 				else x -= pase;
 					
-				trace_trail(1);
+				trace_trail();
 				print_trail();
 				break;
 				
 		case KeyEvent.VK_RIGHT:
 			if (first_time) {
-				trail.add(new Point(x, y));
+				trail.addPointExteningSegment(new Point(x, y));
 				first_time = false;
 			}
 			if (x + pase > Volfied.BOARD_WIDTH)
 				x = Volfied.BOARD_WIDTH;
 			else x += pase;
 				
-			trace_trail(1);
+			trace_trail();
 			print_trail();
 			break;
 		}
@@ -262,12 +215,7 @@ public class Player extends Shape {
 	}
 	
 	public void print_trail() {
-		int n = trail.size();
-		for (int i = 0; i < n; i++)
-			System.out.print("TRAIL: X=[" + trail.get(i).x +
-							   "]; Y=[" 	+ trail.get(i).y + 
-							   "]; OUTER=" + trail.get(i).outer.toString() + " ");
-		System.out.println();
+		System.out.println(trail);
 	}
 	
 	public void key_decide(int keyCode){

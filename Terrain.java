@@ -107,13 +107,13 @@ public class Terrain {
 		Point next_point = new Point();
 		Point next_next_point = new Point();
 		if (trail_i == 0) {
-			next_point	  = Player.trail.get(trail_i + 1);
-			next_next_point = Player.trail.get(trail_i + 2);
+			next_point	  = Volfied.player.trail.points.get(trail_i + 1);
+			next_next_point = Volfied.player.trail.points.get(trail_i + 2);
 		}
 		
-		if (trail_i == Player.trail.size() - 1 ) {
-			next_point	  = Player.trail.get(trail_i - 1);
-			next_next_point = Player.trail.get(trail_i -2);
+		if (trail_i == Volfied.player.trail.points.size() - 1 ) {
+			next_point	  = Volfied.player.trail.points.get(trail_i - 1);
+			next_next_point = Volfied.player.trail.points.get(trail_i -2);
 		}
 		
 		if (corner.outer.get(0) == Point.UP ||
@@ -132,12 +132,12 @@ public class Terrain {
 						return Point.DO;
 					}
 					
-					if (next_next_point.y > next_point.y && trail_i == (Player.trail.size() - 1)) {
+					if (next_next_point.y > next_point.y && trail_i == (Volfied.player.trail.points.size() - 1)) {
 						System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK`");
 						return Point.DO;
 					}
 					
-					if (next_next_point.y < next_point.y && trail_i == (Player.trail.size() - 1)) {
+					if (next_next_point.y < next_point.y && trail_i == (Volfied.player.trail.points.size() - 1)) {
 						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
 						return Point.UP;
 					}
@@ -152,9 +152,8 @@ public class Terrain {
 	}
 	
 	public void removePointsinBetween(int start_i, int end_i) {
-		
 		System.out.println("******************start_i = " + start_i);
-		System.out.println("******************end_i = " + end_i);
+		System.out.println("******************end_i   = " + end_i);
 		for (int i = start_i+1; i < end_i; i++ )
 		Volfied.terain.poli.remove(start_i+1);
 		
@@ -346,15 +345,15 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 	
 	public void depth_outer(Point start_point, Point end_point) {
 		int i = 2;
-		int end_i = Player.trail.size() - 1;
+		int end_i = Volfied.player.trail.points.size() - 1;
 		int common_outer_to_use = start_point.outer.get(0);
 		
 		while (i < end_i -2) {
 			
-			Point prev_point = Player.trail.get(i-1);
-			Point curr_point = Player.trail.get(i);
-			Point next_point = Player.trail.get(i + 1);
-			Point next_next_point = Player.trail.get(i + 2);
+			Point prev_point = Volfied.player.trail.points.get(i-1);
+			Point curr_point = Volfied.player.trail.points.get(i);
+			Point next_point = Volfied.player.trail.points.get(i + 1);
+			Point next_next_point = Volfied.player.trail.points.get(i + 2);
 			
 			
 			if (Volfied.terain.isSameLine(getLinePointIsOn(start_point), getLinePointIsOn(end_point))) {
@@ -434,19 +433,19 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 		}
 	}
 	
-	public void cutTerrain() {
-		int trail_size  = Player.trail.size();
+	public void cutTerrain(ArrayList<Point> points) {
+		int trail_size  = points.size();
 		
 		int start_i = -1, end_i = -1;
 		
 		Point start_point = new Point();
 		Point end_point = new Point();
 		
-		Point potential_start = Player.trail.get(0);
-		Point potential_end   = Player.trail.get(trail_size - 1);
+		Point potential_start = points.get(0);
+		Point potential_end   = points.get(trail_size - 1);
 		
-		ArrayList<Point> line_of_start = Volfied.terain.getLinePointIsOn(Player.trail.get(0));
-		ArrayList<Point> line_of_end = Volfied.terain.getLinePointIsOn(Player.trail.get(trail_size -1));
+		ArrayList<Point> line_of_start = Volfied.terain.getLinePointIsOn(points.get(0));
+		ArrayList<Point> line_of_end = Volfied.terain.getLinePointIsOn(points.get(trail_size -1));
 		
 		int outer_for_smallest = Volfied.terain.getConstantOuter(line_of_start.get(0), line_of_start.get(1));
 		int outer_for_biggest = Volfied.terain.getConstantOuter(line_of_end.get(0), line_of_end.get(1));
@@ -456,25 +455,25 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 		
 		if (outer_for_smallest == Point.UP && Point.UP == outer_for_biggest)
 			if (potential_start.x > potential_end.x) 
-				Collections.reverse(Player.trail);
+				Collections.reverse(points);
 		
 		if (outer_for_smallest == Point.DO && Point.DO == outer_for_biggest)
 			if (potential_start.x < potential_end.x) 
-				Collections.reverse(Player.trail);
+				Collections.reverse(points);
 		
 		if (outer_for_smallest == Point.LE && Point.LE == outer_for_biggest)
 			if (potential_start.y < potential_end.y) 
-				Collections.reverse(Player.trail);
+				Collections.reverse(points);
 		
 		if (outer_for_smallest == Point.RI && Point.RI == outer_for_biggest)
 			if (potential_start.y > potential_end.y) 
-				Collections.reverse(Player.trail);
+				Collections.reverse(points);
 		
 		if (outer_for_smallest == Point.DO && Point.UP == outer_for_biggest)
-			Collections.reverse(Player.trail);
+			Collections.reverse(points);
 		
-		start_point = Player.trail.get(0);
-		end_point	= Player.trail.get(trail_size -1);
+		start_point = points.get(0);
+		end_point	= points.get(trail_size -1);
 		
 		ArrayList<Point> lineOfStart = Volfied.terain.getLinePointIsOn(start_point);
 		ArrayList<Point> lineOfEnd = Volfied.terain.getLinePointIsOn(end_point);
@@ -489,20 +488,20 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 		System.out.println("End_point=[" + end_point.x + "," + end_point.y +"]");
 		
 		
-		Player.trail.get(start_i).addOuter(common_outer_start); // adaug proprietatile de outer pt start_point
-		Player.trail.get(end_i).addOuter(common_outer_end); // adaug proprietatile de outer pt end_point
+		points.get(start_i).addOuter(common_outer_start); // adaug proprietatile de outer pt start_point
+		points.get(end_i).addOuter(common_outer_end); // adaug proprietatile de outer pt end_point
 		
 		int individual_outer_start = -10, individual_outer_end = -10;
 		//tai pe acceasi linie sau pe linii adiacente
-		if (Player.trail.size() == 4 || Player.trail.size() == 3) {
+		if (points.size() == 4 || points.size() == 3) {
 			System.out.println("TRAILSIZE == 4 sau ==3");
 			individual_outer_start = Volfied.terain.decideIndivOuter(start_point, start_i);
 			individual_outer_end = Volfied.terain.decideIndivOuter(end_point, end_i);
-			Player.trail.get(start_i).addOuter(individual_outer_start); // adaug proprietatile de outer pt start_point
-			Player.trail.get(end_i).addOuter(individual_outer_end); // adaug proprietatile de outer pt end_point
+			points.get(start_i).addOuter(individual_outer_start); // adaug proprietatile de outer pt start_point
+			points.get(end_i).addOuter(individual_outer_end); // adaug proprietatile de outer pt end_point
 		}
 		//sus jos + stanga dreapta
-		if (Player.trail.size() == 2) {
+		if (points.size() == 2) {
 			System.out.println("TRAILSIZE == 2");
 			
 			if (start_point.outer.get(0) == Point.UP && end_point.outer.get(0) == Point.DO){
@@ -522,16 +521,16 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 				individual_outer_start = Point.DO;
 				individual_outer_end   = Point.DO;
 			}
-			Player.trail.get(start_i).addOuter(individual_outer_start); // adaug proprietatile de outer pt start_point
-			Player.trail.get(end_i).addOuter(individual_outer_end); // adaug proprietatile de outer pt end_point
+			points.get(start_i).addOuter(individual_outer_start); // adaug proprietatile de outer pt start_point
+			points.get(end_i).addOuter(individual_outer_end); // adaug proprietatile de outer pt end_point
 		}
 		
 		
 		
-		if (Player.trail.size() > 4) {
+		if (points.size() > 4) {
 			System.out.println("TRAILSIZE > 4");
-			Point next_next_point = Player.trail.get(Player.trail.size() - 3);
-			Point next_point 	  = Player.trail.get(Player.trail.size() - 2);
+			Point next_next_point = points.get(points.size() - 3);
+			Point next_point 	  = points.get(points.size() - 2);
 			if (end_point.outer.get(0) == Point.UP) {
 				if (next_next_point.x < next_point.x)
 					end_point.outer.add(Point.LE);
@@ -573,7 +572,7 @@ public ArrayList<Point> getOuterForNoCornerLine(Point pt) {
 		
 		//doar punctul de inceput si de final vor avea 2 outer
 		for (int j = trail_size-1; j >= 0; j--) {
-			Volfied.terain.poli.add(insert_pos+1, Player.trail.get(j));
+			Volfied.terain.poli.add(insert_pos+1, points.get(j));
 		}
 	}
 }
