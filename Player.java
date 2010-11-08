@@ -11,7 +11,7 @@ public class Player{
 
 	BrokenLine trail = new BrokenLine(false); // an open broken line of points
 
-	public void draw(Graphics g_main){
+	public void draw(Graphics g_main) {
 		this.paint(g_main);
 	}
 
@@ -26,60 +26,45 @@ public class Player{
 		trail.draw(g, Volfied.OFFSET_GRID + WIDTH/2, Volfied.OFFSET_GRID + HEIGHT/2);
 	}
 
-	public boolean isMovingOnPerimeter(int keyCode)
-	{
-		Point curr_player_pos = new Point(this.x, this.y);
-		Point next_player_pos = curr_player_pos.getNewPosition(keyCode, pase); 
-
-		return  Volfied.terain.isPointOnPerimeter(curr_player_pos) &&
-				Volfied.terain.isPointOnPerimeter(next_player_pos);
+	public boolean isMovingOnPerimeter(Point curr_player_pos, Point next_player_pos) {
+		return Volfied.terain.isPointOnPerimeter(curr_player_pos)
+				&& Volfied.terain.isPointOnPerimeter(next_player_pos);
 	}
 
-	public void attack(int keyCode) {
-
-		Point curr_player_pos = new Point(this.x, this.y);
-		Point next_player_pos = curr_player_pos.getNewPosition(keyCode, pase); 
+	public void attack(Point curr_player_pos, Point next_player_pos) {
+		isAttacking = true;
 
 		if (first_time) {
 			trail.addPointExtdeningSegment(curr_player_pos);
 			first_time = false;
 		}
 
-		
 		this.trail.addPointExtdeningSegment(next_player_pos);
+		System.out.println("TRAIL:" + trail);
 
 		if (Volfied.terain.isPointOnPerimeter(next_player_pos)) {
 			// finalize attack
 			isAttacking = false;
-			first_time = true;
+			first_time = true; // reset first_time
 			Volfied.terain.cutTerrain(trail.points);
 			trail.points.clear();
 		}
-
-		System.out.println("TRAIL:" + trail);
 	}
 
-	public void print_territory() {
-		System.out.println("TERIT:" + Volfied.terain.poli);
-	}
-
-	public void key_decide(int keyCode){
+	public void key_decide(int keyCode) {
 		Point curr_player_pos = new Point(this.x, this.y);
-		Point next_player_pos = curr_player_pos.getNewPosition(keyCode, pase); 
+		Point next_player_pos = curr_player_pos.getNewPosition(keyCode, pase);
 
-		if (Volfied.terain.isOuter(next_player_pos))
-		{
+		if (Volfied.terain.isOuter(next_player_pos)) {
 			System.out.println("next point is outer: " + next_player_pos);
 			return;
 		}
-			
-		if (isMovingOnPerimeter(keyCode)) {
-			print_territory();
-			
-		} else {
-			isAttacking = true;
-			attack(keyCode);
-		}
+
+		if (isMovingOnPerimeter(curr_player_pos, next_player_pos))
+			System.out.println("TERIT:" + Volfied.terain.poli);
+		else
+			attack(curr_player_pos, next_player_pos);
+
 		this.x = next_player_pos.x;
 		this.y = next_player_pos.y;
 	}

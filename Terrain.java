@@ -4,10 +4,10 @@ public class Terrain {
 	BrokenLine poli = new BrokenLine(true);
 	
 	public Terrain() {
-		poli.addPointExtdeningSegment(new Point(0, 					0));
+		poli.addPointExtdeningSegment(new Point(0, 					 0));
 		poli.addPointExtdeningSegment(new Point(Volfied.BOARD_WIDTH, 0));
 		poli.addPointExtdeningSegment(new Point(Volfied.BOARD_WIDTH, Volfied.BOARD_HEIGHT));
-		poli.addPointExtdeningSegment(new Point(0, 					Volfied.BOARD_HEIGHT));
+		poli.addPointExtdeningSegment(new Point(0, 					 Volfied.BOARD_HEIGHT));
 	}
 	
 	public boolean isPointOnPerimeter(Point lookup) {
@@ -22,11 +22,6 @@ public class Terrain {
 		
 	}
 	
-	public static boolean isSameLine(ArrayList<Point> line1, ArrayList<Point> line2) {
-		if ((line1.get(0).x == line2.get(0).x) && (line1.get(0).y == line2.get(0).y))
-			return true;
-		return false;
-	}
 	
 	public ArrayList<Point> getLinePointIsOn(Point lookup) {
 		ArrayList<Point> ret = new ArrayList<Point>();
