@@ -1,3 +1,5 @@
+import java.awt.Graphics;
+import java.awt.Polygon;
 import java.util.ArrayList;
 
 public class BrokenLine {
@@ -10,19 +12,20 @@ public class BrokenLine {
 		this.isClosedLine = isClosedLine;
 	}
 
+	
 	public BrokenLine(boolean isClosedLine, Point [] arr) {
 		this.isClosedLine = isClosedLine;
 		for (Point p:arr)
-			this.addPointExteningSegment(p);
+			this.addPointExtdeningSegment(p);
 	}
+
 
 	public BrokenLine(boolean isClosedLine, ArrayList<Point> arr) {
 		this.isClosedLine = isClosedLine;
 		for (Point p:arr)
-			this.addPointExteningSegment(p);
+			this.addPointExtdeningSegment(p);
 	}
 
-	
 	
 	public boolean isPointOnSegment(Point lookup, Point p1, Point p2)
 	{
@@ -51,7 +54,8 @@ public class BrokenLine {
 	}
 
 	
-	public boolean isPointOnPerimeter(Point lookup) {
+	public boolean isPointOnPerimeter(Point lookup)
+	{
 		int n = points.size();
 
 		for (int i = 0; i < n - 1; i++) {
@@ -69,20 +73,31 @@ public class BrokenLine {
 	}
 
 	
+	public void draw(Graphics g, int off_x, int off_y)
+	{
+		int n = points.size();
+		
+		for (int i = 0; i < n - 1; i++)
+			g.drawLine(off_x + points.get(i).x,   off_y + points.get(i).y,
+					   off_x + points.get(i+1).x, off_y + points.get(i+1).y);
+		
+		if (isClosedLine)
+			g.drawLine(off_x + points.get(0).x,   off_y + points.get(0).y,
+					   off_x + points.get(n-1).x, off_y + points.get(n-1).y);
+	}
+	
+	
 	public String toString()
 	{
 		String ret = "";
-		int n = this.points.size();
-		for (int i = 0; i < n; i++)
-			ret += "TRAIL: X=[" + this.points.get(i).x +
-							 "]; Y=["   + this.points.get(i).y + 
-							 "]; OUTER=" + this.points.get(i).outer.toString() + " ";
+		for (Point p : this.points)			
+			ret += p + " ";
 		ret += "\n";
 		return ret;
 	}
 
 
-	public void addPointExteningSegment(Point p)
+	public void addPointExtdeningSegment(Point p)
 	{
 		int prev_pos     = this.points.size() - 1;
 		int pre_prev_pos = this.points.size() - 2;
@@ -101,6 +116,24 @@ public class BrokenLine {
 		else
 			this.points.add(p);
 	}
+	
+	
+	public Polygon toPolygon()
+	{
+		int n = this.points.size();
+		int x[] = new int[n];
+		int y[] = new int[n];
+		for (int i = 0; i < n; i++)
+		{
+			Point p = this.points.get(i);
+			x[i] = p.x;
+			y[i] = p.y;
+		}
+		return new Polygon(x, y, n);
+	}
+	
+	
+	
 	
 	
 	static void test_isPointOnPerimeter()

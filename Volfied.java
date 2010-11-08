@@ -20,7 +20,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	
 	int delay, frame;
 	
-	static Player player   = new Player();
+	static Player player = new Player();
 	Ship ship = new Ship();
 	Critter critter1 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
 	Critter critter2 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
@@ -69,19 +69,13 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		window_width  = this.getSize().width;
 		window_height = this.getSize().height;
 		
-		bufferGraphics.clearRect(0,0, window_width, window_height); 
-		
-		
+		bufferGraphics.clearRect(0,0, window_width, window_height); 		
 		
 		bufferGraphics.setColor(Color.white);
 		bufferGraphics.fillRect(0, 0, window_width, window_height);
 		
 		bufferGraphics.setColor(Color.black);
-		int n = terain.poli.size()-1;
-		for (int i = 0; i < n; i++)
-			bufferGraphics.drawLine(GRID_X + terain.poli.get(i).x, GRID_Y + terain.poli.get(i).y ,
-							GRID_X + terain.poli.get(i+1).x, GRID_Y + terain.poli.get(i+1).y);
-		//g_main.drawRect(GRID_X, GRID_Y, BOARD_WIDTH, BOARD_HEIGHT);
+		terain.poli.draw(bufferGraphics, GRID_X, GRID_Y);
 		player.draw(bufferGraphics);
 		ship.draw(bufferGraphics);
 		critter1.draw(bufferGraphics);
