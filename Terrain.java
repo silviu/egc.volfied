@@ -118,23 +118,4 @@ public class Terrain {
 		}
 	}
 
-	/*
-	 * Rotunjeste un punct la o pozitie de pe poligon.
-	 * Rotunjirea se face doar daca 'pase' e mai mic decat diferenta de la punctul curent la
-	 */
-	public Point roundPoint(Point p, int pase) {
-		
-		/*
-		if (p.y - pase < 0)
-			p.y = 0;
-		else
-			p.y -= pase;
-		
-		if (p.x - pase < 0)
-			p.x = 0;
-		else
-			p.x -= pase;
-		*/
-		return p;
-	}
 }

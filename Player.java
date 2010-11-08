@@ -38,7 +38,7 @@ public class Player{
 	public void attack(int keyCode) {
 
 		Point curr_player_pos = new Point(this.x, this.y);
-		Point next_player_pos = Volfied.terain.roundPoint(curr_player_pos.getNewPosition(keyCode, pase), pase); 
+		Point next_player_pos = curr_player_pos.getNewPosition(keyCode, pase); 
 
 		if (first_time) {
 			trail.addPointExtdeningSegment(curr_player_pos);
