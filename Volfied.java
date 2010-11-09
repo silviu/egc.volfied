@@ -14,14 +14,14 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	static final int BOARD_WIDTH   = 1000;
 	static final int BOARD_HEIGHT  = 600;
 
-	Random rand = new Random();
+	static Random rand = new Random();
 
 	Image offscreen;
 
 	int delay, frame;
 
 	static Player player = new Player();
-	static Ship ship = new Ship();
+	static Ship ship = new Ship(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
 	Critter critter1 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
 	Critter critter2 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
 	Critter critter3 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);

@@ -1,31 +1,46 @@
 import java.awt.*;
 
 public class Player{
-	static final int WIDTH = 30;
-	static final int HEIGHT = 30;
+	static final int WIDTH = 45;
+	static final int HEIGHT = 25;
 	int x = Volfied.BOARD_WIDTH*9/10;
 	int y = 0;
 	static int pase = 5;
 	boolean isAttacking = false;
 	boolean first_time = true;
 
+	int lives = 3;
 	BrokenLine trail = new BrokenLine(false); // an open broken line of points
+	Polygon poli = new Polygon();
+	
+	public Player() {
+		poli.addPoint(0, 0);
+		poli.addPoint(WIDTH/2, -5);
+		poli.addPoint(WIDTH, 12);
+		poli.addPoint(WIDTH/2, 28);
+		poli.addPoint(0, HEIGHT);
+	}
 
 	public void draw(Graphics g_main) {
 		this.paint(g_main);
 	}
 
 	public void paint(Graphics g) {
-		g.setColor(Color.black);
-		g.drawRect(Volfied.OFFSET_GRID + x, Volfied.OFFSET_GRID + y, WIDTH, HEIGHT);
-		g.setColor(Color.cyan);
-		g.fillRect(Volfied.OFFSET_GRID + x + 1, Volfied.OFFSET_GRID + y +1, WIDTH -1, HEIGHT-1);
-		g.setColor(Color.blue);
-		g.fillOval(Volfied.GRID_X + x - 4, Volfied.GRID_Y - 4 + y, 7, 7);
 		g.setColor(Color.blue);
 		trail.draw(g, Volfied.OFFSET_GRID + WIDTH/2, Volfied.OFFSET_GRID + HEIGHT/2);
+		g.setColor(Color.CYAN);
+		g.fillPolygon(getPaintable());
+		
+	}
+	
+	public Polygon getPaintable() {
+		Polygon ret = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
+		ret.translate(x + Volfied.GRID_X - WIDTH/2, y + Volfied.GRID_Y - HEIGHT/2);
+		return ret;
 	}
 
+	
+	
 	public boolean isMovingOnPerimeter(Point curr_player_pos, Point next_player_pos) {
 		return Volfied.terain.isPointOnPerimeter(curr_player_pos)
 		&& Volfied.terain.isPointOnPerimeter(next_player_pos);
@@ -53,6 +68,16 @@ public class Player{
 			trail = new BrokenLine(false);
 			Volfied.terain.poli = polys[monsterPosition];
 		}
+	}
+	
+	public boolean isAlive() {
+		if (this.lives > 0)
+			return true;
+		return false;
+	}
+	
+	public int getLives() {
+		return lives;
 	}
 
 	public void key_decide(int keyCode) {
