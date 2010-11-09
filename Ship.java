@@ -45,10 +45,28 @@ public class Ship {
 		this.paint(g_main);
 	}
 	
+	public String toString() {
+		String ret = "SHIP position=" + x + ", " + y + "\n";
+		for (int i = 0; i < poli.npoints; i++)
+			ret += "P[" + i + "]=[" + poli.xpoints[i] + ", " + poli.ypoints[i] + "] ";
+		ret += "\n";
+		return ret;
+	}
+	
 	public Polygon getPaintable() {
 		Polygon ret = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
 		ret.translate(x + Volfied.GRID_X, y + Volfied.GRID_Y);
 		return ret;
+	}
+	
+	public Polygon getFactorisedPolygon() {
+		Polygon cp_poly = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
+		int n = cp_poly.npoints;
+		for (int i = 0; i < n; i++) {
+			cp_poly.xpoints[i] += x;
+			cp_poly.ypoints[i] += y;
+		}
+		return cp_poly;
 	}
 	
 	public int getPosition(BrokenLine[] polys) {
