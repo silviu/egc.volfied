@@ -180,6 +180,10 @@ public class BrokenLine {
 		return len;
 	}
 
+	/*
+	 * Returns the two BrokenLine representing two polygons that result from
+	 * cutting this BrokenLine by the given trail.
+	 */
 	public BrokenLine[] cutTerrain(BrokenLine trail) {
 		int n = this.points.size();
 
@@ -318,8 +322,6 @@ public class BrokenLine {
 		}
 
 		return new BrokenLine[] {be.rotate(), bi.rotate()};
-
-		//this.addPointsExtdeningSegment(b.points);
 	}
 
 	private BrokenLine rotate() {
