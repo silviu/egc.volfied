@@ -6,11 +6,6 @@ public class Ship {
 	int x = 50;
 	int y = 50;
 	
-	Point TOP_LEFT_EDGE  = new Point();
-	Point TOP_RIGHT_EDGE = new Point();
-	Point LOW_LEFT_EDGE  = new Point();
-	Point LOW_RIGHT_EDGE = new Point();
-	
 	int keep_direction = 0;
 	int direction = NORTH;
 	
@@ -26,12 +21,22 @@ public class Ship {
 	Random rand = new Random();
 	
 	boolean growing = true;
+	int pase = 5;
+	
+	Polygon poli = new Polygon();
+	
+	public Ship(int init_x, int init_y) {
+		this.x = init_x;
+		this.y = init_y;
+		poli.addPoint(0, 0);
+		poli.addPoint(0, WIDTH);
+		poli.addPoint(WIDTH, HEIGHT);
+		poli.addPoint(HEIGHT, 0);
+	}
 	
 	public void paint(Graphics g) {
-		g.setColor(Color.black);
-		g.drawRect(x + Volfied.GRID_X, y + Volfied.GRID_Y, WIDTH, HEIGHT);
-		g.setColor(Color.red);
-		g.fillRect(x + 1 + Volfied.GRID_X, y + Volfied.GRID_Y + 1, WIDTH-1, HEIGHT-1);
+		g.setColor(Color.RED);
+		g.fillPolygon(this.getPaintable());
 	}
 	
 	
@@ -39,6 +44,22 @@ public class Ship {
 		animate();
 		this.paint(g_main);
 	}
+	
+	public Polygon getPaintable() {
+		Polygon ret = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
+		ret.translate(x + Volfied.GRID_X, y + Volfied.GRID_Y);
+		return ret;
+	}
+	
+	public int getPosition(BrokenLine[] polys) {
+		
+		if (polys[0].toPolygon().contains(this.x, this.y))
+			return 0;
+		if (polys[1].toPolygon().contains(this.x, this.y))
+			return 1;
+		return 1;
+	}
+	
 	
 	public void generateDirection() {
 		direction = rand.nextInt(SWEST - NORTH + 1) + NORTH;
@@ -53,24 +74,14 @@ public class Ship {
 		if (WIDTH == 75 || HEIGHT == 75) {
 			growing = true;
 		}
-		
-		if (growing) {
-			if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + (WIDTH+1)/2, TOP_LEFT_EDGE.y + (HEIGHT+1)/2- 1)) &&
-				!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x + (WIDTH+1)/2, TOP_RIGHT_EDGE.y + (HEIGHT+1)/2 - 1)) &&
-				!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x+ (WIDTH+1)/2, LOW_LEFT_EDGE.y + (WIDTH+1)/2+ 1)) &&
-				!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ (WIDTH+1)/2, LOW_RIGHT_EDGE.y + (WIDTH+1)/2+ 1)) &&
-				!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + (WIDTH+1)/2- 1, TOP_LEFT_EDGE.y+ (WIDTH+1)/2)) &&
-				!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ (WIDTH+1)/2 - 1, LOW_RIGHT_EDGE.y+ (WIDTH+1)/2)))
+		return false;
+	}
+	
+	public boolean isOuter(Point nex_ship_pos) {
+		int n = this.poli.npoints;
+		for (int i = 0; i < n; i++)
+			if (Volfied.terain.isOuter(new Point(poli.xpoints[i] + nex_ship_pos.x, poli.ypoints[i] + nex_ship_pos.y)))
 				return true;
-		}
-		else 
-			if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + (WIDTH-1)/2, TOP_LEFT_EDGE.y + (HEIGHT-1)/2- 1)) &&
-					!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x + (WIDTH-1)/2, TOP_RIGHT_EDGE.y + (HEIGHT-1)/2 - 1)) &&
-					!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x+ (WIDTH-1)/2, LOW_LEFT_EDGE.y + (WIDTH-1)/2+ 1)) &&
-					!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ (WIDTH-1)/2, LOW_RIGHT_EDGE.y + (WIDTH-1)/2+ 1)) &&
-					!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + (WIDTH-1)/2- 1, TOP_LEFT_EDGE.y+ (WIDTH-1)/2)) &&
-					!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ (WIDTH-1)/2 - 1, LOW_RIGHT_EDGE.y+ (WIDTH-1)/2)))
-					return true;
 		return false;
 	}
 	
@@ -79,104 +90,17 @@ public class Ship {
 			generateDirection();
 			keep_direction = 0;
 		}
+		Point curr_ship_pos = new Point(this.x, this.y);
+		Point nex_shipp_pos = curr_ship_pos.getShipNewPosition(direction, pase);
+		
+		if(isOuter(nex_shipp_pos))
+			generateDirection();
+		else {
+			this.x = nex_shipp_pos.x;
+			this.y = nex_shipp_pos.y;
+		}
 			
-			keep_direction++;
-			switch (direction) {
-				case NORTH:
-					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + WIDTH/2, TOP_LEFT_EDGE.y + HEIGHT/2- 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x + WIDTH/2, TOP_RIGHT_EDGE.y + HEIGHT/2 - 1)))
-						y--;
-					else generateDirection();
-					break;
-					
-				case SOUTH:
-					if (!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x+ WIDTH/2, LOW_LEFT_EDGE.y + HEIGHT/2+ 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2, LOW_RIGHT_EDGE.y + HEIGHT/2+ 1)))
-						y++;
-					else generateDirection();
-					break;
-					
-				case EAST:
-					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y+ HEIGHT/2)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ HEIGHT/2)))
-						x++;
-					else generateDirection();
-					break;
-					
-				case WEST:
-					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y+ HEIGHT/2)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x+ WIDTH/2 - 1, LOW_RIGHT_EDGE.y+ HEIGHT/2)))
-						x--;
-					else generateDirection();
-					break;
-					
-				case NEAST:
-					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 + 1, TOP_RIGHT_EDGE.y+ WIDTH/2 - 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x+ WIDTH/2 + 1, TOP_LEFT_EDGE.y + WIDTH/2- 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2 - 1))) {
-						x++;
-						y--;
-					}
-					else generateDirection();
-					break;
-					
-				case NWEST:
-					if (!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y + WIDTH/2- 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2- 1, LOW_RIGHT_EDGE.y + WIDTH/2- 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 - 1, TOP_RIGHT_EDGE.y + WIDTH/2- 1))) {
-						x--;
-						y--;
-					}
-					else generateDirection();
-					break;
-					
-				case SEAST:
-					if (!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2+ 1, LOW_RIGHT_EDGE.y+ WIDTH/2 + 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(TOP_RIGHT_EDGE.x+ WIDTH/2 + 1, TOP_RIGHT_EDGE.y+ WIDTH/2 + 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x + WIDTH/2+ 1, LOW_LEFT_EDGE.y + WIDTH/2+ 1))) {
-						y++;
-						x++;
-					}
-					else generateDirection();
-					break;
-					
-				case SWEST:
-					if (!Volfied.terain.isPointOnPerimeter(new Point(LOW_LEFT_EDGE.x + WIDTH/2- 1, LOW_LEFT_EDGE.y + WIDTH/2+ 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(TOP_LEFT_EDGE.x + WIDTH/2- 1, TOP_LEFT_EDGE.y + WIDTH/2+ 1)) &&
-						!Volfied.terain.isPointOnPerimeter(new Point(LOW_RIGHT_EDGE.x + WIDTH/2- 1, LOW_RIGHT_EDGE.y + WIDTH/2+ 1))) {
-						y++;
-						x--;
-					}
-					else generateDirection();
-					break;
-					
-				default:
-					generateDirection();
-					break;
-			}
-
-			
-			if (canGrow())
-				if (growing) {
-					WIDTH++;
-					HEIGHT++;
-				}
-				else {
-					WIDTH--;
-					HEIGHT--;
-				}
-			
-			else generateDirection();
-			
-			
-			TOP_LEFT_EDGE.x  = x - WIDTH/2;
-			TOP_LEFT_EDGE.y  = y - HEIGHT/2;
-			TOP_RIGHT_EDGE.x = x + WIDTH/2;
-			TOP_RIGHT_EDGE.y = y - HEIGHT/2;
-			LOW_LEFT_EDGE.x  = x - WIDTH/2;
-			LOW_LEFT_EDGE.y  = y + HEIGHT/2;
-			LOW_RIGHT_EDGE.x = x + WIDTH/2;
-			LOW_RIGHT_EDGE.y = y + HEIGHT/2;			
+		keep_direction++;
 		
 	}
 }

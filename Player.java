@@ -1,58 +1,97 @@
 import java.awt.*;
 
+
 public class Player{
-	static final int WIDTH = 30;
-	static final int HEIGHT = 30;
+	static final int WIDTH = 45;
+	static final int HEIGHT = 25;
 	int x = Volfied.BOARD_WIDTH*9/10;
 	int y = 0;
 	static int pase = 5;
-	boolean isAttacking = false;
 	boolean first_time = true;
+	boolean dead = false;
 
+	int lives = 3;
 	BrokenLine trail = new BrokenLine(false); // an open broken line of points
+	public static Polygon poli = new Polygon();
+	
+	public Player() {
+		poli.addPoint(0, 0);
+		poli.addPoint(WIDTH/2, -5);
+		poli.addPoint(WIDTH, 12);
+		poli.addPoint(WIDTH/2, 28);
+		poli.addPoint(0, HEIGHT);
+	}
 
 	public void draw(Graphics g_main) {
 		this.paint(g_main);
 	}
 
 	public void paint(Graphics g) {
-		g.setColor(Color.black);
-		g.drawRect(Volfied.OFFSET_GRID + x, Volfied.OFFSET_GRID + y, WIDTH, HEIGHT);
-		g.setColor(Color.cyan);
-		g.fillRect(Volfied.OFFSET_GRID + x + 1, Volfied.OFFSET_GRID + y +1, WIDTH -1, HEIGHT-1);
-		g.setColor(Color.blue);
-		g.fillOval(Volfied.GRID_X + x - 4, Volfied.GRID_Y - 4 + y, 7, 7);
-		g.setColor(Color.blue);
-		trail.draw(g, Volfied.OFFSET_GRID + WIDTH/2, Volfied.OFFSET_GRID + HEIGHT/2);
+		if (!dead) {
+			g.setColor(Color.blue);
+			trail.draw(g, Volfied.OFFSET_GRID + WIDTH/2, Volfied.OFFSET_GRID + HEIGHT/2);
+			g.setColor(Color.CYAN);
+			g.fillPolygon(getPaintable());
+		}
+		else g.drawString("Dead!", x + Volfied.GRID_X, y + Volfied.GRID_Y);
+	}
+	
+	public Polygon getPaintable() {
+		Polygon ret = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
+		ret.translate(x + Volfied.GRID_X - WIDTH/2, y + Volfied.GRID_Y - HEIGHT/2);
+		return ret;
 	}
 
+	public static void rotate(int degrees) {
+		int n = poli.npoints;
+		for (int i = 0; i < n; i++) {
+			poli.xpoints[i] = (int) (poli.xpoints[i] * Math.cos(degrees) - poli.ypoints[i] * Math.sin(degrees));
+			poli.ypoints[i] = (int) (poli.xpoints[i] * Math.sin(degrees) + poli.ypoints[i] * Math.cos(degrees));
+		}
+	}
+	
 	public boolean isMovingOnPerimeter(Point curr_player_pos, Point next_player_pos) {
 		return Volfied.terain.isPointOnPerimeter(curr_player_pos)
 		&& Volfied.terain.isPointOnPerimeter(next_player_pos);
 	}
 
 	public void attack(Point curr_player_pos, Point next_player_pos) {
-		isAttacking = true;
-
+		
 		if (first_time) {
 			trail.addPointExtdeningSegment(curr_player_pos);
 			first_time = false;
 		}
-
 		this.trail.addPointExtdeningSegment(next_player_pos);
 		System.out.println("TRAIL:" + trail);
 
 		if (Volfied.terain.isPointOnPerimeter(next_player_pos)) {
 			// finalize attack
-			isAttacking = false;
 			first_time = true; // reset first_time
 			BrokenLine polys[] = Volfied.terain.poli.cutTerrain(trail);
-			//TODO: determine where's the monster and keep that poly only
-			int monsterPosition = 1;//FIXME: XXX: WTF!
+			int monsterPosition = Volfied.ship.getPosition(polys);
 
 			trail = new BrokenLine(false);
 			Volfied.terain.poli = polys[monsterPosition];
 		}
+		else
+			if (isDead())
+				dead = true;
+	}
+	
+	public boolean hasMoreLives() {
+		if (this.lives > 0)
+			return true;
+		return false;
+	}
+	
+	public int getLives() {
+		return lives;
+	}
+	
+	public boolean isDead() {
+		if (poli.intersects(Volfied.ship.poli.getBounds2D()))
+			return true;
+		return false;
 	}
 
 	public void key_decide(int keyCode) {
@@ -66,8 +105,11 @@ public class Player{
 
 		if (isMovingOnPerimeter(curr_player_pos, next_player_pos))
 			System.out.println("TERIT:" + Volfied.terain.poli);
-		else
+		else {
 			attack(curr_player_pos, next_player_pos);
+			if (isDead())
+				dead = true;
+		}
 
 		this.x = next_player_pos.x;
 		this.y = next_player_pos.y;
