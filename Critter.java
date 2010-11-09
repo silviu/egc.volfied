@@ -2,7 +2,8 @@ import java.awt.*;
 import java.util.*;
 
 public class Critter {
-	int WIDTH = 40, HEIGHT=40;
+	final static int CRITTER_SIZE = 40;
+	final static int MOVEMENT_PASE = 2;
 	int x = 50;
 	int y = 50;
 	String name = "";
@@ -22,7 +23,6 @@ public class Critter {
 	Random rand = new Random();
 	
 	boolean growing = true;
-	int pase = 2;
 	
 	Polygon poli = new Polygon();
 
@@ -35,9 +35,9 @@ public class Critter {
 		this.x = init_x;
 		this.y = init_y;
 		poli.addPoint(0, 0);
-		poli.addPoint(0, WIDTH);
-		poli.addPoint(WIDTH, HEIGHT);
-		poli.addPoint(HEIGHT, 0);
+		poli.addPoint(0, CRITTER_SIZE);
+		poli.addPoint(CRITTER_SIZE, CRITTER_SIZE);
+		poli.addPoint(CRITTER_SIZE, 0);
 	}
 	
 	public void paint(Graphics g) {
@@ -92,7 +92,7 @@ public class Critter {
 		else if (keep_direction == 0)
 			generateDirection();
 		Point curr_ship_pos = new Point(this.x, this.y);
-		Point nex_shipp_pos = curr_ship_pos.getShipNewPosition(direction, pase);
+		Point nex_shipp_pos = curr_ship_pos.getShipNewPosition(direction, MOVEMENT_PASE);
 		
 		if(isOuter(nex_shipp_pos))
 			generateDirection();
