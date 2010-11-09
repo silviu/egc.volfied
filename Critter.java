@@ -25,7 +25,7 @@ public class Critter {
 	
 	boolean growing = true;
 	
-	float angle = 90;
+	float angle = 45;
 
 	public Critter(int init_x, int init_y, String name) {
 		this(init_x, init_y);
@@ -54,7 +54,7 @@ public class Critter {
 	}
 	
 	public int rotate_y(int old_x, int old_y) {
-		return (int) (old_x * Math.sin(Math.toRadians(angle) + old_y * Math.cos(Math.toRadians(angle)))); 
+		return (int) (old_x * Math.sin(Math.toRadians(angle)) + old_y * Math.cos(Math.toRadians(angle))); 
 	}
 	
 	public Polygon getPolygon() {
@@ -63,6 +63,9 @@ public class Critter {
 		p.addPoint(rotate_x(-CRITTER_SIZE/2,  CRITTER_SIZE/2), rotate_y(-CRITTER_SIZE/2,  CRITTER_SIZE/2));
 		p.addPoint(rotate_x( CRITTER_SIZE/2,  CRITTER_SIZE/2), rotate_y( CRITTER_SIZE/2,  CRITTER_SIZE/2));
 		p.addPoint(rotate_x( CRITTER_SIZE/2, -CRITTER_SIZE/2), rotate_y( CRITTER_SIZE/2, -CRITTER_SIZE/2));
+		if (angle == 90)
+			angle = 0;
+		angle += ROTATION_PASE;
 		return p;
 	}
 
