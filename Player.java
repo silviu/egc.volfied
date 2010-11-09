@@ -111,8 +111,14 @@ public class Player{
 	public boolean isDead() {
 		Polygon cp_ship   = Volfied.ship.getFactorisedPolygon();
 		Polygon cp_player = getFactorisedPolygon();
+		Polygon cp_critter1 = Volfied.critter1.getFactorisedPolygon();
+		Polygon cp_critter2 = Volfied.critter2.getFactorisedPolygon();
+		Polygon cp_critter3 = Volfied.critter3.getFactorisedPolygon();
 		
-		if (isAttacking && cp_player.intersects(cp_ship.getBounds()))
+		if (isAttacking && (cp_player.intersects(cp_ship.getBounds()) 	  || 
+							cp_player.intersects(cp_critter1.getBounds()) ||
+							cp_player.intersects(cp_critter2.getBounds()) ||
+							cp_player.intersects(cp_critter3.getBounds())))
 			return true;
 		return false;
 	}
