@@ -115,21 +115,21 @@ public class Player{
 	public boolean isDead() {
 		Polygon cp_ship     = Volfied.ship.getTranslatedPolygon();
 		Polygon cp_player   = getTranslatedPolygon();
-		Polygon cp_critter1 = Volfied.critter1.getTranslatedPolygon();
-		Polygon cp_critter2 = Volfied.critter2.getTranslatedPolygon();
-		Polygon cp_critter3 = Volfied.critter3.getTranslatedPolygon();
 		
-		if (isAttacking && (cp_player.intersects(cp_ship.getBounds()) 	  || 
-							cp_player.intersects(cp_critter1.getBounds()) ||
-							cp_player.intersects(cp_critter2.getBounds()) ||
-							cp_player.intersects(cp_critter3.getBounds())))
+		if (isAttacking && (cp_player.intersects(cp_ship.getBounds()))) 
 			return true;
 		
-		if (isAttacking && (isTrailOnPoly(cp_ship) 	   ||
-							isTrailOnPoly(cp_critter1) ||
-							isTrailOnPoly(cp_critter2) ||
-							isTrailOnPoly(cp_critter3)))
+		for (int i = 0; i < Volfied.n_critter; i++) {
+			if (isAttacking && cp_player.intersects(Volfied.critters.get(i).poli.getBounds()))
+				return true;
+			
+			if (isAttacking && isTrailOnPoly(Volfied.critters.get(i).getTranslatedPolygon()))
+				return true;
+		}
+		
+		if (isAttacking && (isTrailOnPoly(cp_ship)))
 			return true;
+		
 		return false;
 	}
 

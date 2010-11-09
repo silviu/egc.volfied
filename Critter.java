@@ -7,7 +7,7 @@ public class Critter {
 	int y = 50;
 	
 	int keep_direction = 0;
-	int direction = NORTH;
+	int direction;
 	
 	static final int NORTH = 1;
 	static final int EAST  = 2;
@@ -46,7 +46,6 @@ public class Critter {
 	}
 	
 	public boolean isDead() {
-		//TODO: FIXME: implement me
 		if (!Volfied.terain.poli.toPolygon().contains(this.x, this.y))
 			return true;
 		return false;
@@ -64,31 +63,11 @@ public class Critter {
 		return cp_poly;
 	}
 	
-	public int getPosition(BrokenLine[] polys) {
-		
-		if (polys[0].toPolygon().contains(this.x, this.y))
-			return 0;
-		if (polys[1].toPolygon().contains(this.x, this.y))
-			return 1;
-		return 1;
-	}
-	
 	
 	public void generateDirection() {
 		direction = rand.nextInt(SWEST - NORTH + 1) + NORTH;
 	}
 	
-	
-	public boolean canGrow() {
-		if (WIDTH == 120 || HEIGHT == 120) {
-			growing = false;
-		}
-		
-		if (WIDTH == 75 || HEIGHT == 75) {
-			growing = true;
-		}
-		return false;
-	}
 	
 	public boolean isOuter(Point nex_ship_pos) {
 		int n = this.poli.npoints;
@@ -103,6 +82,8 @@ public class Critter {
 			generateDirection();
 			keep_direction = 0;
 		}
+		else if (keep_direction == 0)
+			generateDirection();
 		Point curr_ship_pos = new Point(this.x, this.y);
 		Point nex_shipp_pos = curr_ship_pos.getShipNewPosition(direction, pase);
 		

@@ -19,12 +19,12 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	Image offscreen;
 
 	int delay, frame;
-
+	static ArrayList<Critter> critters = new ArrayList<Critter>();
+	static int n_critter = 3;
+	
 	static Player player = new Player();
 	static Ship ship = new Ship(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
-	static Critter critter1 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
-	static Critter critter2 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
-	static Critter critter3 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
+	
 
 
 	Thread animator = new Thread(this);
@@ -41,6 +41,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		delay = fps > 0 ? 1000 / fps : 100;
 		offscreen = createImage(this.getSize().width,this.getSize().height);
 		bufferGraphics = offscreen.getGraphics();
+		for (int i = 0; i < n_critter; i++)
+			critters.add(new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100));
 	}
 
 	/**
@@ -82,15 +84,10 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		terain.poli.draw(bufferGraphics, GRID_X, GRID_Y);
 		player.draw(bufferGraphics);
 		ship.draw(bufferGraphics);
-		if (!critter1.isDead())
-			critter1.draw(bufferGraphics);
-		else bufferGraphics.drawString("Dead!", critter1.x, critter1.y);
-		if (!critter2.isDead())
-			critter2.draw(bufferGraphics);
-		else bufferGraphics.drawString("Dead!", critter2.x, critter2.y);
-		if (!critter3.isDead())
-			critter3.draw(bufferGraphics);
-		else bufferGraphics.drawString("Dead!", critter3.x, critter3.y);
+		for (int i = 0; i < n_critter; i++)
+		if (!critters.get(i).isDead())
+			critters.get(i).draw(bufferGraphics);
+		else bufferGraphics.drawString("Dead!", critters.get(i).x, critters.get(i).y);
 		g_main.drawImage(offscreen,0, 0, this);
 	}
 
