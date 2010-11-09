@@ -63,53 +63,35 @@ public class Terrain {
 	}
 	
 	public boolean isOuter(Point p) {
-		return !this.poli.toPolygon().contains(p.x, p.y);
+		return !(this.poli.toPolygon().contains(p.x, p.y) ||
+				 this.poli.isPointOnPerimeter(p));
 	}
 	
 	
-	public void cutTerrain(ArrayList<Point> points) {
-		int trail_size  = points.size();
+	public void cutTerrain(ArrayList<Point> trail_points) {
+		int trail_size  = trail_points.size();
+		Point start_point = trail_points.get(0);
+		Point end_point   = trail_points.get(trail_size -1);
 		
-		int start_i = -1, end_i = -1;
+		int start_i = 0, end_i = trail_size - 1;		
 		
-		Point start_point = new Point();
-		Point end_point = new Point();
-		
-
-		start_i = 0;
-		end_i = trail_size - 1;
-		
-		
-		start_point = points.get(0);
-		end_point	= points.get(trail_size -1);
 		
 		ArrayList<Point> lineOfStart = Volfied.terain.getLinePointIsOn(start_point);
-		ArrayList<Point> lineOfEnd = Volfied.terain.getLinePointIsOn(end_point);
-		
-		
-		System.out.println("Start_i=[" + start_i +"]");
-		System.out.println("End_i=[" + end_i +"]");
-		
-		System.out.println("Start_point=[" + start_point.x + "," + start_point.y +"]");
-		System.out.println("End_point=[" + end_point.x + "," + end_point.y +"]");
+		ArrayList<Point> lineOfEnd   = Volfied.terain.getLinePointIsOn(end_point);
 		
 		
 		
-		
-		
-		
-		
-		
-		ArrayList<Point> bla = Volfied.terain.getLinePointIsOn(start_point);
-		int insert_pos = Volfied.terain.poli.points.indexOf(bla.get(0));
+		int insert_pos = Volfied.terain.poli.points.indexOf(lineOfStart.get(0));
 		
 		int start_deletable_zone = Volfied.terain.poli.points.indexOf(lineOfStart.get(0));
 		int end_deletable_zone   = Volfied.terain.poli.points.indexOf(lineOfEnd.get(1));
-		Volfied.terain.removePointsinBetween(start_deletable_zone, end_deletable_zone);
+		Volfied.terain.removePointsinBetween(start_deletable_zone, end_deletable_zone); //TODO
+		
+		
 		
 		//doar punctul de inceput si de final vor avea 2 outer
 		for (int j = trail_size-1; j >= 0; j--) {
-			Volfied.terain.poli.points.add(insert_pos+1, points.get(j));
+			Volfied.terain.poli.points.add(insert_pos+1, trail_points.get(j));
 		}
 	}
 
