@@ -2,33 +2,17 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 import java.util.ArrayList;
 
-public class BrokenLine {
+class Segment {
 
-	boolean isClosedLine;
-	public ArrayList<Point> points = new ArrayList<Point>();
+	private Point p2;
+	private Point p1;
 
-	
-	public BrokenLine(boolean isClosedLine) {
-		this.isClosedLine = isClosedLine;
+	public Segment(Point p1, Point p2) {
+		this.p1 = p1;
+		this.p2 = p2;
 	}
-
 	
-	public BrokenLine(boolean isClosedLine, Point [] arr) {
-		this.isClosedLine = isClosedLine;
-		for (Point p:arr)
-			this.addPointExtdeningSegment(p);
-	}
-
-
-	public BrokenLine(boolean isClosedLine, ArrayList<Point> arr) {
-		this.isClosedLine = isClosedLine;
-		for (Point p:arr)
-			this.addPointExtdeningSegment(p);
-	}
-
-	
-	public boolean isPointOnSegment(Point lookup, Point p1, Point p2)
-	{
+	public boolean isPointOnSegment(Point lookup) {
 		// the point we're looking for identical to a margin of the segment 
 		if (lookup.y == p1.y && lookup.x == p1.x)
 			return true;
@@ -54,6 +38,35 @@ public class BrokenLine {
 	}
 
 	
+}
+
+public class BrokenLine {
+
+	boolean isClosedLine;
+	public ArrayList<Point> points = new ArrayList<Point>();
+
+	
+	public BrokenLine(boolean isClosedLine) {
+		this.isClosedLine = isClosedLine;
+	}
+
+	
+	public BrokenLine(boolean isClosedLine, Point [] arr) {
+		this.isClosedLine = isClosedLine;
+		for (Point p:arr)
+			this.addPointExtdeningSegment(p);
+	}
+
+
+	public BrokenLine(boolean isClosedLine, ArrayList<Point> arr) {
+		this.isClosedLine = isClosedLine;
+		for (Point p:arr)
+			this.addPointExtdeningSegment(p);
+	}
+
+	
+
+	
 	public boolean isPointOnPerimeter(Point lookup)
 	{
 		int n = points.size();
@@ -61,17 +74,21 @@ public class BrokenLine {
 		for (int i = 0; i < n - 1; i++) {
 			Point p1 = points.get(i);
 			Point p2 = points.get(i + 1);
-			if (isPointOnSegment(lookup, p1, p2))
+			Segment seg = new Segment(p1, p2);
+			if (seg.isPointOnSegment(lookup))
 				return true;
 		}
 		
 		if (!isClosedLine)
 			return false;
 	
-		// in closed lines there is a line from the last to the first point 
-		return isPointOnSegment(lookup, points.get(0), points.get(n-1));
+		// in closed lines there is a line from the last to the first point
+		Segment seg = new Segment(points.get(0), points.get(n-1));
+		return seg.isPointOnSegment(lookup);
 	}
 
+	
+	
 	
 	public void draw(Graphics g, int off_x, int off_y)
 	{

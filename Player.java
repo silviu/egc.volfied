@@ -3,7 +3,7 @@ import java.awt.*;
 public class Player{
 	static final int WIDTH = 30;
 	static final int HEIGHT = 30;
-	int x = Volfied.BOARD_WIDTH/2;
+	int x = Volfied.BOARD_WIDTH*9/10;
 	int y = 0;
 	static int pase = 5;
 	boolean isAttacking = false;
