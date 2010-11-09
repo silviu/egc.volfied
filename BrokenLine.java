@@ -93,7 +93,7 @@ public class BrokenLine {
 			return null;
 
 		// in closed lines there is a line from the last to the first point
-		Segment seg = new Segment(points.get(0), points.get(n - 1));
+		Segment seg = new Segment(points.get(n - 1), points.get(0));
 		if (seg.isPointOnSegment(lookup))
 			return seg;
 
@@ -110,12 +110,13 @@ public class BrokenLine {
 		int n = points.size();
 
 		for (int i = 0; i < n - 1; i++)
-			g.drawLine(off_x + points.get(i).x, off_y + points.get(i).y, off_x
-					+ points.get(i + 1).x, off_y + points.get(i + 1).y);
+			g.drawLine(off_x + points.get(i).x, off_y + points.get(i).y,
+					off_x + points.get(i + 1).x, off_y + points.get(i + 1).y);
 
 		if (isClosedLine)
-			g.drawLine(off_x + points.get(0).x, off_y + points.get(0).y, off_x
-					+ points.get(n - 1).x, off_y + points.get(n - 1).y);
+			g.drawLine(off_x + points.get(n - 1).x, off_y + points.get(n - 1).y,
+					off_x + points.get(0).x, off_y + points.get(0).y);
+
 	}
 
 	@Override
@@ -172,7 +173,7 @@ public class BrokenLine {
 
 		if (isClosedLine) {
 			// in closed lines there is a line from the last to the first point
-			Segment seg = new Segment(points.get(0), points.get(n - 1));
+			Segment seg = new Segment(points.get(n - 1), points.get(0));
 			len += seg.length();
 		}
 
@@ -207,7 +208,7 @@ public class BrokenLine {
 			 * 
 			 *   Case I) Normalized
 			 *   Resulting polygons:
-			 *     - BE: 0 ABCD 123
+			 *     - BE: ABCD 1230
 			 *     - BI: DCBA
 			 *
 			 *   0-----A---D---1
@@ -219,7 +220,7 @@ public class BrokenLine {
 			 *
 			 *   Case II) Unnormalized
 			 *   Resulting polygons:
-			 *     - BE: 0 DCBA 123
+			 *     - BE: DCBA 1230
 			 *     - BI: ABCD
 			 * 
 			 *   0-----D---A---1
@@ -250,7 +251,7 @@ public class BrokenLine {
 			 * 
 			 *   Case I) Normalized
 			 *   Resulting polygons:
-			 *     - BE: 0 ABC 123
+			 *     - BE: ABC 230
 			 *     - BI: 1CBA
 			 *
 			 *   0-----A-------1
@@ -262,7 +263,7 @@ public class BrokenLine {
 			 *
 			 *   Case II) Unnormalized
 			 *   Resulting polygons:
-			 *     - BE: 0 CBA 123
+			 *     - BE: CBA 230
 			 *     - BI: 1ABC
 			 * 
 			 *   0-----C-------1
@@ -296,23 +297,39 @@ public class BrokenLine {
 
 		BrokenLine be = new BrokenLine(true);
 		BrokenLine bi = new BrokenLine(true);
-		for(int i = 0; i <= i1; i++)
-			be.addPointExtdeningSegment(this.points.get(i));
 
-		for(int i = i1; i < i2; i++)
-			bi.addPointExtdeningSegment(this.points.get(i));
+
+		int off_e = i1 < i2 ? n : 0;
+		for (int i = i2; i != i1 + 1 + off_e; i++)
+		{
+			be.addPointExtdeningSegment(this.points.get(i % n));
+		}
 
 		for(int i = 0; i < trail_size; i++) {
 			be.addPointExtdeningSegment(trail_points.get(i));
-			bi.addPointExtdeningSegment(trail_points.get(i));
+			bi.addPointExtdeningSegment(trail_points.get(trail_size - 1 - i));
 		}
 
-		for(int i = i2; i < n; i++)
-			be.addPointExtdeningSegment(this.points.get(i));
 
-		return new BrokenLine[] {be, bi};
+		int off_i = n - off_e;
+		for (int i = i1 + 1; i != i2 + off_i; i++)
+		{
+			bi.addPointExtdeningSegment(this.points.get(i % n));
+		}
+
+		return new BrokenLine[] {be.rotate(), bi.rotate()};
 
 		//this.addPointsExtdeningSegment(b.points);
+	}
+
+	private BrokenLine rotate() {
+		int n = points.size();
+		if (points.get(0).y == points.get(1).y &&
+				points.get(0).x <  points.get(1).x)
+			return this;
+		Point last = points.remove(n-1);
+		points.add(0, last);
+		return this.rotate();
 	}
 
 	public void addPointsExtdeningSegment(ArrayList<Point> pts) {

@@ -48,7 +48,7 @@ public class Player{
 			first_time = true; // reset first_time
 			BrokenLine polys[] = Volfied.terain.poli.cutTerrain(trail);
 			//TODO: determine where's the monster and keep that poly only
-			int monsterPosition = 0;//FIXME: XXX: WTF!
+			int monsterPosition = 1;//FIXME: XXX: WTF!
 
 			trail = new BrokenLine(false);
 			Volfied.terain.poli = polys[monsterPosition];
