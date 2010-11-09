@@ -22,9 +22,9 @@ public class Volfied extends Applet implements KeyListener, Runnable
 
 	static Player player = new Player();
 	static Ship ship = new Ship(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
-	static Critter critter1 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
-	static Critter critter2 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
-	static Critter critter3 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
+	static Critter critter1 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100, "A");
+	static Critter critter2 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100, "B");
+	static Critter critter3 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100, "C");
 
 
 	Thread animator = new Thread(this);

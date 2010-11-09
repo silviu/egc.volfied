@@ -5,7 +5,8 @@ public class Critter {
 	int WIDTH = 40, HEIGHT=40;
 	int x = 50;
 	int y = 50;
-	
+	String name = "";
+
 	int keep_direction = 0;
 	int direction = NORTH;
 	
@@ -24,7 +25,12 @@ public class Critter {
 	int pase = 2;
 	
 	Polygon poli = new Polygon();
-	
+
+	public Critter(int init_x, int init_y, String name) {
+		this(init_x, init_y);
+		this.name = name;
+	}
+
 	public Critter(int init_x, int init_y) {
 		this.x = init_x;
 		this.y = init_y;
@@ -37,6 +43,7 @@ public class Critter {
 	public void paint(Graphics g) {
 		g.setColor(Color.ORANGE);
 		g.fillPolygon(this.getPaintable());
+		g.drawString(name, x, y);
 	}
 	
 	
