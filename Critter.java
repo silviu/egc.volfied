@@ -54,15 +54,15 @@ public class Critter {
 	}
 	
 	public int rotate_y(int old_x, int old_y) {
-		return (int) (old_x * Math.sin(angle) + old_y * Math.cos(angle)); 
+		return (int) (old_x * Math.sin(Math.toRadians(angle) + old_y * Math.cos(Math.toRadians(angle)))); 
 	}
 	
 	public Polygon getPolygon() {
 		Polygon p = new Polygon();
 		p.addPoint(rotate_x(-CRITTER_SIZE/2, -CRITTER_SIZE/2), rotate_y(-CRITTER_SIZE/2, -CRITTER_SIZE/2));
-		p.addPoint(rotate_x(-CRITTER_SIZE/2, CRITTER_SIZE/2), rotate_y(-CRITTER_SIZE/2, CRITTER_SIZE/2));
-		p.addPoint(rotate_x(CRITTER_SIZE/2, CRITTER_SIZE/2), rotate_y(CRITTER_SIZE/2, CRITTER_SIZE/2));
-		p.addPoint(rotate_x(CRITTER_SIZE/2, -CRITTER_SIZE/2), rotate_y(CRITTER_SIZE/2, -CRITTER_SIZE/2));
+		p.addPoint(rotate_x(-CRITTER_SIZE/2,  CRITTER_SIZE/2), rotate_y(-CRITTER_SIZE/2,  CRITTER_SIZE/2));
+		p.addPoint(rotate_x( CRITTER_SIZE/2,  CRITTER_SIZE/2), rotate_y( CRITTER_SIZE/2,  CRITTER_SIZE/2));
+		p.addPoint(rotate_x( CRITTER_SIZE/2, -CRITTER_SIZE/2), rotate_y( CRITTER_SIZE/2, -CRITTER_SIZE/2));
 		return p;
 	}
 
