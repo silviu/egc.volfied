@@ -50,7 +50,17 @@ public class Player{
 		ret.translate(x + Volfied.GRID_X - WIDTH/2, y + Volfied.GRID_Y - HEIGHT/2);
 		return ret;
 	}
-
+	
+	public Polygon getFactorisedPolygon() {
+		Polygon cp_poly = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
+		int n = cp_poly.npoints;
+		for (int i = 0; i < n; i++) {
+			cp_poly.xpoints[i] += x;
+			cp_poly.ypoints[i] += y;
+		}
+		return cp_poly;
+	}
+	
 	public void rotate(int degrees) {
 		int n = poli.npoints;
 		for (int i = 0; i < n; i++) {
@@ -99,23 +109,11 @@ public class Player{
 	}
 
 	public boolean isDead() {
-
-		System.out.println(Volfied.ship);
-		System.out.println(this);
-		Polygon cp_ship   = new Polygon(Volfied.ship.poli.xpoints, Volfied.ship.poli.ypoints, Volfied.ship.poli.npoints);
-		Polygon cp_player = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
-		for (int i = 0; i < cp_ship.npoints; i++) {
-			cp_ship.xpoints[i] += Volfied.ship.x;
-			cp_ship.ypoints[i] += Volfied.ship.y;
-		}
-
-		for (int i = 0; i < cp_player.npoints; i++) {
-			cp_player.xpoints[i] += x;
-			cp_player.ypoints[i] += y;
-		}
-		if (isAttacking && cp_player.intersects(cp_ship.getBounds())) {
+		Polygon cp_ship   = Volfied.ship.getFactorisedPolygon();
+		Polygon cp_player = getFactorisedPolygon();
+		
+		if (isAttacking && cp_player.intersects(cp_ship.getBounds()))
 			return true;
-		}
 		return false;
 	}
 
