@@ -107,10 +107,18 @@ public class Player{
 	public int getLives() {
 		return lives;
 	}
+	
+	public boolean isTrailOnPoly(Polygon enemy) {
+		int n = enemy.npoints;
+		for (int i = 0; i < n; i++)
+			if (trail.isPointOnPerimeter(new Point(enemy.xpoints[i], enemy.ypoints[i])))
+				return true;
+		return false;
+	}
 
 	public boolean isDead() {
-		Polygon cp_ship   = Volfied.ship.getFactorisedPolygon();
-		Polygon cp_player = getFactorisedPolygon();
+		Polygon cp_ship     = Volfied.ship.getFactorisedPolygon();
+		Polygon cp_player   = getFactorisedPolygon();
 		Polygon cp_critter1 = Volfied.critter1.getFactorisedPolygon();
 		Polygon cp_critter2 = Volfied.critter2.getFactorisedPolygon();
 		Polygon cp_critter3 = Volfied.critter3.getFactorisedPolygon();
@@ -119,6 +127,12 @@ public class Player{
 							cp_player.intersects(cp_critter1.getBounds()) ||
 							cp_player.intersects(cp_critter2.getBounds()) ||
 							cp_player.intersects(cp_critter3.getBounds())))
+			return true;
+		
+		if (isAttacking && (isTrailOnPoly(cp_ship) 	   ||
+							isTrailOnPoly(cp_critter1) ||
+							isTrailOnPoly(cp_critter2) ||
+							isTrailOnPoly(cp_critter3)))
 			return true;
 		return false;
 	}
