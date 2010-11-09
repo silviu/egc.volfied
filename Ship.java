@@ -40,6 +40,16 @@ public class Ship {
 		this.paint(g_main);
 	}
 	
+	public int getPosition(BrokenLine[] polys) {
+		
+		if (polys[0].toPolygon().contains(this.x, this.y))
+			return 0;
+		if (polys[1].toPolygon().contains(this.x, this.y))
+			return 1;
+		return 1;
+	}
+	
+	
 	public void generateDirection() {
 		direction = rand.nextInt(SWEST - NORTH + 1) + NORTH;
 	}

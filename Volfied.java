@@ -21,7 +21,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	int delay, frame;
 
 	static Player player = new Player();
-	Ship ship = new Ship();
+	static Ship ship = new Ship();
 	Critter critter1 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
 	Critter critter2 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
 	Critter critter3 = new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
