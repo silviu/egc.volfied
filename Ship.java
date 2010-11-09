@@ -89,16 +89,14 @@ public class Ship {
 
 	public Polygon getPaintable() {
 		Polygon poli = getPolygon();
-		Polygon ret = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
-		ret.translate(x + Volfied.GRID_X, y + Volfied.GRID_Y);
-		return ret;
+		poli.translate(x + Volfied.GRID_X, y + Volfied.GRID_Y);
+		return poli;
 	}
 
 	public Polygon getTranslatedPolygon() {
 		Polygon poli = getPolygon();
-		Polygon cp_poly = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
-		cp_poly.translate(x, y);
-		return cp_poly;
+		poli.translate(x, y);
+		return poli;
 	}
 
 	public int getPosition(BrokenLine[] polys) {
