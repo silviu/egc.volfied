@@ -25,7 +25,7 @@ public class Critter {
 	
 	boolean growing = true;
 	
-	int angle = 90;
+	float angle = 90;
 
 	public Critter(int init_x, int init_y, String name) {
 		this(init_x, init_y);
@@ -49,15 +49,23 @@ public class Critter {
 		this.paint(g_main);
 	}
 	
-	public Polygon getPolygon() {
-		Polygon p = new Polygon();
-		p.addPoint(0, 0);
-		p.addPoint(0, CRITTER_SIZE);
-		p.addPoint(CRITTER_SIZE, CRITTER_SIZE);
-		p.addPoint(CRITTER_SIZE, 0);
-		return p;
+	public int rotate_x(int old_x, int old_y) {
+		return (int) (old_x * Math.cos(Math.toRadians(angle)) - old_y * Math.sin(Math.toRadians(angle))); 
 	}
 	
+	public int rotate_y(int old_x, int old_y) {
+		return (int) (old_x * Math.sin(angle) + old_y * Math.cos(angle)); 
+	}
+	
+	public Polygon getPolygon() {
+		Polygon p = new Polygon();
+		p.addPoint(rotate_x(-CRITTER_SIZE/2, -CRITTER_SIZE/2), rotate_y(-CRITTER_SIZE/2, -CRITTER_SIZE/2));
+		p.addPoint(rotate_x(-CRITTER_SIZE/2, CRITTER_SIZE/2), rotate_y(-CRITTER_SIZE/2, CRITTER_SIZE/2));
+		p.addPoint(rotate_x(CRITTER_SIZE/2, CRITTER_SIZE/2), rotate_y(CRITTER_SIZE/2, CRITTER_SIZE/2));
+		p.addPoint(rotate_x(CRITTER_SIZE/2, -CRITTER_SIZE/2), rotate_y(CRITTER_SIZE/2, -CRITTER_SIZE/2));
+		return p;
+	}
+
 	public boolean isDead() {
 		if (!Volfied.terain.poli.toPolygon().contains(this.x, this.y))
 			return true;
