@@ -37,7 +37,7 @@ class Segment {
 		return false;
 	}
 
-
+	//TODO: add tests.
 }
 
 public class BrokenLine {

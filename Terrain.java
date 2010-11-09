@@ -1,4 +1,4 @@
-import java.util.*;
+
 public class Terrain {
 
 	BrokenLine poli = new BrokenLine(true);
@@ -30,10 +30,10 @@ public class Terrain {
 	}
 
 
-	public void cutTerrain(ArrayList<Point> trail_points) {
-		int trail_size  = trail_points.size();
-		Point start_point = trail_points.get(0);
-		Point end_point   = trail_points.get(trail_size -1);
+	public void cutTerrain(BrokenLine trail) {
+		int trail_size  = trail.points.size();
+		Point start_point = trail.points.get(0);
+		Point end_point   = trail.points.get(trail_size -1);
 
 		Segment lineOfStart = Volfied.terain.poli.getLinePointIsOn(start_point);
 		Segment lineOfEnd   = Volfied.terain.poli.getLinePointIsOn(end_point);
@@ -50,7 +50,7 @@ public class Terrain {
 
 		//doar punctul de inceput si de final vor avea 2 outer
 		for (int j = trail_size-1; j >= 0; j--) {
-			Volfied.terain.poli.points.add(insert_pos+1, trail_points.get(j));
+			Volfied.terain.poli.points.add(insert_pos+1, trail.points.get(j));
 		}
 	}
 

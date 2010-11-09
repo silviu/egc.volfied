@@ -46,7 +46,7 @@ public class Player{
 			// finalize attack
 			isAttacking = false;
 			first_time = true; // reset first_time
-			Volfied.terain.cutTerrain(trail.points);
+			Volfied.terain.cutTerrain(trail);
 			trail.points.clear();
 		}
 	}
