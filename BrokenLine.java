@@ -230,4 +230,38 @@ public class BrokenLine {
 		test_addPointExteningSegment();
 		System.out.println("All tests succeeded!");
 	}
+
+
+	public void removePointsinBetween(int start_i, int end_i) {
+		System.out.println("******************start_i = " + start_i);
+		System.out.println("******************end_i   = " + end_i);
+		for (int i = start_i+1; i < end_i; i++ )
+			points.remove(start_i+1);
+	}
+
+
+	public void cutTerrain(BrokenLine trail) {
+		int trail_size    = trail.points.size();
+		Point start_point = trail.points.get(0);
+		Point end_point   = trail.points.get(trail_size - 1);
+
+		Segment lineOfStart = this.getLinePointIsOn(start_point);
+		Segment lineOfEnd   = this.getLinePointIsOn(end_point);
+
+
+
+		int insert_pos = this.points.indexOf(lineOfStart.p1);
+
+		int start_deletable_zone = this.points.indexOf(lineOfStart.p1);
+		int end_deletable_zone   = this.points.indexOf(lineOfEnd.p2);
+		this.removePointsinBetween(start_deletable_zone, end_deletable_zone); //TODO
+
+
+
+		//doar punctul de inceput si de final vor avea 2 outer
+		for (int j = trail_size-1; j >= 0; j--) {
+			this.points.add(insert_pos+1, trail.points.get(j));
+		}
+
+	}
 }

@@ -14,13 +14,6 @@ public class Terrain {
 		return poli.isPointOnPerimeter(lookup);
 	}
 
-	public void removePointsinBetween(int start_i, int end_i) {
-		System.out.println("******************start_i = " + start_i);
-		System.out.println("******************end_i   = " + end_i);
-		for (int i = start_i+1; i < end_i; i++ )
-			Volfied.terain.poli.points.remove(start_i+1);
-
-	}
 
 
 
@@ -31,27 +24,7 @@ public class Terrain {
 
 
 	public void cutTerrain(BrokenLine trail) {
-		int trail_size  = trail.points.size();
-		Point start_point = trail.points.get(0);
-		Point end_point   = trail.points.get(trail_size -1);
-
-		Segment lineOfStart = Volfied.terain.poli.getLinePointIsOn(start_point);
-		Segment lineOfEnd   = Volfied.terain.poli.getLinePointIsOn(end_point);
-
-
-
-		int insert_pos = Volfied.terain.poli.points.indexOf(lineOfStart.p1);
-
-		int start_deletable_zone = Volfied.terain.poli.points.indexOf(lineOfStart.p1);
-		int end_deletable_zone   = Volfied.terain.poli.points.indexOf(lineOfEnd.p2);
-		Volfied.terain.removePointsinBetween(start_deletable_zone, end_deletable_zone); //TODO
-
-
-
-		//doar punctul de inceput si de final vor avea 2 outer
-		for (int j = trail_size-1; j >= 0; j--) {
-			Volfied.terain.poli.points.add(insert_pos+1, trail.points.get(j));
-		}
+		this.poli.cutTerrain(trail);
 	}
 
 }
