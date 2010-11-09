@@ -23,8 +23,5 @@ public class Terrain {
 	}
 
 
-	public void cutTerrain(BrokenLine trail) {
-		this.poli.cutTerrain(trail);
-	}
 
 }

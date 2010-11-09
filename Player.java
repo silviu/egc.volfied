@@ -46,8 +46,12 @@ public class Player{
 			// finalize attack
 			isAttacking = false;
 			first_time = true; // reset first_time
-			Volfied.terain.cutTerrain(trail);
-			trail.points.clear();
+			BrokenLine polys[] = Volfied.terain.poli.cutTerrain(trail);
+			//TODO: determine where's the monster and keep that poly only
+			int monsterPosition = 0;//FIXME: XXX: WTF!
+
+			trail = new BrokenLine(false);
+			Volfied.terain.poli = polys[monsterPosition];
 		}
 	}
 

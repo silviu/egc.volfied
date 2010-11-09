@@ -51,4 +51,18 @@ public class Point {
 		return new Point(this.x + diff_x, this.y + diff_y);
 	}
 
+	public boolean equals(Point p)
+	{
+		return p.x == x && p.y == y;
+	}
+
+
+	public int dist(Point p)
+	{
+		// this is only valid for horizontal/vertical lines
+		// This works because one coord. is constant =>
+		// the length is the difference of the other two coords.
+		return Math.abs(this.x - p.x) + Math.abs(this.y - p.y);
+
+	}
 }
