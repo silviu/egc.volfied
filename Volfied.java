@@ -82,9 +82,15 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		terain.poli.draw(bufferGraphics, GRID_X, GRID_Y);
 		player.draw(bufferGraphics);
 		ship.draw(bufferGraphics);
-		critter1.draw(bufferGraphics);
-		critter2.draw(bufferGraphics);
-		critter3.draw(bufferGraphics);
+		if (!critter1.isDead())
+			critter1.draw(bufferGraphics);
+		else bufferGraphics.drawString("Dead!", critter1.x, critter1.y);
+		if (!critter2.isDead())
+			critter2.draw(bufferGraphics);
+		else bufferGraphics.drawString("Dead!", critter2.x, critter2.y);
+		if (!critter3.isDead())
+			critter3.draw(bufferGraphics);
+		else bufferGraphics.drawString("Dead!", critter3.x, critter3.y);
 		g_main.drawImage(offscreen,0, 0, this);
 	}
 

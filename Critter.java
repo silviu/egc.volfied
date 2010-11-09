@@ -50,9 +50,8 @@ public class Critter {
 
 	public boolean isDead() {
 		//TODO: FIXME: implement me
-		//Point start_point = Player.trail.get(0);
-		//Point end_point = Player.trail.get(Player.trail.size()-1);
-
+		if (!Volfied.terain.poli.toPolygon().contains(this.x, this.y))
+			return true;
 		return false;
 	}
 
