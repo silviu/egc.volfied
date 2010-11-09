@@ -4,6 +4,7 @@ import java.util.*;
 public class Critter {
 	final static int CRITTER_SIZE = 40;
 	final static int MOVEMENT_PASE = 2;
+	final static int ROTATION_PASE = 1;
 	int x = 50;
 	int y = 50;
 	String name = "";
@@ -24,7 +25,7 @@ public class Critter {
 	
 	boolean growing = true;
 	
-	Polygon poli = new Polygon();
+	int angle = 90;
 
 	public Critter(int init_x, int init_y, String name) {
 		this(init_x, init_y);
@@ -34,10 +35,6 @@ public class Critter {
 	public Critter(int init_x, int init_y) {
 		this.x = init_x;
 		this.y = init_y;
-		poli.addPoint(0, 0);
-		poli.addPoint(0, CRITTER_SIZE);
-		poli.addPoint(CRITTER_SIZE, CRITTER_SIZE);
-		poli.addPoint(CRITTER_SIZE, 0);
 	}
 	
 	public void paint(Graphics g) {
@@ -52,6 +49,15 @@ public class Critter {
 		this.paint(g_main);
 	}
 	
+	public Polygon getPolygon() {
+		Polygon p = new Polygon();
+		p.addPoint(0, 0);
+		p.addPoint(0, CRITTER_SIZE);
+		p.addPoint(CRITTER_SIZE, CRITTER_SIZE);
+		p.addPoint(CRITTER_SIZE, 0);
+		return p;
+	}
+	
 	public boolean isDead() {
 		if (!Volfied.terain.poli.toPolygon().contains(this.x, this.y))
 			return true;
@@ -59,13 +65,13 @@ public class Critter {
 	}
 	
 	public Polygon getPaintable() {
-		Polygon ret = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
+		Polygon ret = getPolygon();
 		ret.translate(x + Volfied.GRID_X, y + Volfied.GRID_Y);
 		return ret;
 	}
 	
 	public Polygon getTranslatedPolygon() {
-		Polygon cp_poly = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
+		Polygon cp_poly = getPolygon();
 		cp_poly.translate(x, y);
 		return cp_poly;
 	}
@@ -77,9 +83,10 @@ public class Critter {
 	
 	
 	public boolean isOuter(Point nex_ship_pos) {
-		int n = this.poli.npoints;
+		Polygon cp_poly = getPolygon();
+		int n = cp_poly.npoints;
 		for (int i = 0; i < n; i++)
-			if (Volfied.terain.isOuter(new Point(poli.xpoints[i] + nex_ship_pos.x, poli.ypoints[i] + nex_ship_pos.y)))
+			if (Volfied.terain.isOuter(new Point(cp_poly.xpoints[i] + nex_ship_pos.x, cp_poly.ypoints[i] + nex_ship_pos.y)))
 				return true;
 		return false;
 	}

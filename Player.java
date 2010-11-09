@@ -120,7 +120,8 @@ public class Player{
 			return true;
 		
 		for (int i = 0; i < Volfied.n_critter; i++) {
-			if (isAttacking && cp_player.intersects(Volfied.critters.get(i).poli.getBounds()))
+			Volfied.critters.get(i);
+			if (isAttacking && cp_player.intersects(Volfied.critters.get(i).getPolygon().getBounds()))
 				return true;
 			
 			if (isAttacking && isTrailOnPoly(Volfied.critters.get(i).getTranslatedPolygon()))
