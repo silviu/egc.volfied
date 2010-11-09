@@ -23,44 +23,6 @@ public class Terrain {
 	}
 	
 	
-	public ArrayList<Point> getLinePointIsOn(Point lookup) {
-		ArrayList<Point> ret = new ArrayList<Point>();
-		int n = Volfied.terain.poli.points.size();
-		
-		for (int i = 0; i < n; i++) {
-			Point curr_point = Volfied.terain.poli.points.get(i);
-			Point next_point = Volfied.terain.poli.points.get((i == n - 1) ? 0 : i + 1);
-			
-			if (lookup.y == curr_point.y && lookup.x == curr_point.x)
-			{
-				Point prev_point = Volfied.terain.poli.points.get(i == 0 ? n - 1 : i - 1);
-				ret.add(prev_point);
-				ret.add(curr_point);
-				ret.add(next_point);
-				return ret;
-			}
-			
-			if ((lookup.y == curr_point.y) && (lookup.y == next_point.y))
-				if (((lookup.x >  curr_point.x) && (lookup.x <  next_point.x)) ||
-					((lookup.x <  curr_point.x) && (lookup.x >  next_point.x))) 
-				{
-			   		ret.add(curr_point);
-			   		ret.add(next_point);
-			   		return ret;
-				}
-			
-			if ((lookup.x == curr_point.x) && (lookup.x == next_point.x))
-				if (((lookup.y >  curr_point.y) && (lookup.y <  next_point.y)) ||
-					((lookup.y <  curr_point.y) && (lookup.y >  next_point.y))) 
-				{
-			   		ret.add(curr_point);
-			   		ret.add(next_point);
-			   		return ret;
-				}
-
-		}
-		return ret;
-	}
 	
 	public boolean isOuter(Point p) {
 		return !(this.poli.toPolygon().contains(p.x, p.y) ||
@@ -76,15 +38,15 @@ public class Terrain {
 		int start_i = 0, end_i = trail_size - 1;		
 		
 		
-		ArrayList<Point> lineOfStart = Volfied.terain.getLinePointIsOn(start_point);
-		ArrayList<Point> lineOfEnd   = Volfied.terain.getLinePointIsOn(end_point);
+		Segment lineOfStart = Volfied.terain.poli.getLinePointIsOn(start_point);
+		Segment lineOfEnd   = Volfied.terain.poli.getLinePointIsOn(end_point);
 		
 		
 		
-		int insert_pos = Volfied.terain.poli.points.indexOf(lineOfStart.get(0));
+		int insert_pos = Volfied.terain.poli.points.indexOf(lineOfStart.p1);
 		
-		int start_deletable_zone = Volfied.terain.poli.points.indexOf(lineOfStart.get(0));
-		int end_deletable_zone   = Volfied.terain.poli.points.indexOf(lineOfEnd.get(1));
+		int start_deletable_zone = Volfied.terain.poli.points.indexOf(lineOfStart.p1);
+		int end_deletable_zone   = Volfied.terain.poli.points.indexOf(lineOfEnd.p2);
 		Volfied.terain.removePointsinBetween(start_deletable_zone, end_deletable_zone); //TODO
 		
 		

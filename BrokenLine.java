@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 class Segment {
 
-	private Point p2;
-	private Point p1;
+	public final Point p2;
+	public final Point p1;
 
 	public Segment(Point p1, Point p2) {
 		this.p1 = p1;
@@ -65,31 +65,39 @@ public class BrokenLine {
 	}
 
 	
-
-	
-	public boolean isPointOnPerimeter(Point lookup)
-	{
+	public Segment getLinePointIsOn(Point lookup) {
 		int n = points.size();
-
+		
 		for (int i = 0; i < n - 1; i++) {
 			Point p1 = points.get(i);
-			Point p2 = points.get(i + 1);
+			Point p2 = points.get((i == n - 1) ? 0 : i + 1);
+			
 			Segment seg = new Segment(p1, p2);
 			if (seg.isPointOnSegment(lookup))
-				return true;
+				return seg;
 		}
 		
 		if (!isClosedLine)
-			return false;
-	
+			return null;
+
 		// in closed lines there is a line from the last to the first point
 		Segment seg = new Segment(points.get(0), points.get(n-1));
-		return seg.isPointOnSegment(lookup);
+		if (seg.isPointOnSegment(lookup))
+			return seg;
+
+		return null;
 	}
 
 	
 	
-	
+	public boolean isPointOnPerimeter(Point lookup)
+	{
+		// if there exists a segment on which this point resides then
+		// the point is on the perimeter of the broken line 
+		return getLinePointIsOn(lookup) != null;
+	}
+
+
 	public void draw(Graphics g, int off_x, int off_y)
 	{
 		int n = points.size();
