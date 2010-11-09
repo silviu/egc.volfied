@@ -28,7 +28,7 @@ public class Player{
 
 	public boolean isMovingOnPerimeter(Point curr_player_pos, Point next_player_pos) {
 		return Volfied.terain.isPointOnPerimeter(curr_player_pos)
-				&& Volfied.terain.isPointOnPerimeter(next_player_pos);
+		&& Volfied.terain.isPointOnPerimeter(next_player_pos);
 	}
 
 	public void attack(Point curr_player_pos, Point next_player_pos) {
