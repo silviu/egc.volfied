@@ -51,13 +51,9 @@ public class Player{
 		return ret;
 	}
 	
-	public Polygon getFactorisedPolygon() {
+	public Polygon getTranslatedPolygon() {
 		Polygon cp_poly = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
-		int n = cp_poly.npoints;
-		for (int i = 0; i < n; i++) {
-			cp_poly.xpoints[i] += x;
-			cp_poly.ypoints[i] += y;
-		}
+		cp_poly.translate(x, y);
 		return cp_poly;
 	}
 	
@@ -117,11 +113,11 @@ public class Player{
 	}
 
 	public boolean isDead() {
-		Polygon cp_ship     = Volfied.ship.getFactorisedPolygon();
-		Polygon cp_player   = getFactorisedPolygon();
-		Polygon cp_critter1 = Volfied.critter1.getFactorisedPolygon();
-		Polygon cp_critter2 = Volfied.critter2.getFactorisedPolygon();
-		Polygon cp_critter3 = Volfied.critter3.getFactorisedPolygon();
+		Polygon cp_ship     = Volfied.ship.getTranslatedPolygon();
+		Polygon cp_player   = getTranslatedPolygon();
+		Polygon cp_critter1 = Volfied.critter1.getTranslatedPolygon();
+		Polygon cp_critter2 = Volfied.critter2.getTranslatedPolygon();
+		Polygon cp_critter3 = Volfied.critter3.getTranslatedPolygon();
 		
 		if (isAttacking && (cp_player.intersects(cp_ship.getBounds()) 	  || 
 							cp_player.intersects(cp_critter1.getBounds()) ||

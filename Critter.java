@@ -58,13 +58,9 @@ public class Critter {
 		return ret;
 	}
 	
-	public Polygon getFactorisedPolygon() {
+	public Polygon getTranslatedPolygon() {
 		Polygon cp_poly = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
-		int n = cp_poly.npoints;
-		for (int i = 0; i < n; i++) {
-			cp_poly.xpoints[i] += x;
-			cp_poly.ypoints[i] += y;
-		}
+		cp_poly.translate(x, y);
 		return cp_poly;
 	}
 	
