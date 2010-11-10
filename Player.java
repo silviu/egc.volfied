@@ -150,6 +150,16 @@ public class Player{
 		return false;
 	}
 	
+	public boolean isPacket(Point next_player_pos) {
+		for (int i = 0; i < Volfied.packets.size(); i++) {
+			Polygon next_player = getPolygon();
+			next_player.translate(next_player_pos.x, next_player_pos.y);
+			if (next_player.intersects(Volfied.packets.get(i).getTranslatedPolygon().getBounds2D()))
+				return true;
+		}
+		return false;
+	}
+	
 	public void key_decide(int keyCode) {
 		Point curr_player_pos = new Point(this.x, this.y);
 		Point next_player_pos = curr_player_pos.getNewPosition(keyCode, pase);
@@ -159,14 +169,18 @@ public class Player{
 			return;
 		}
 
-		if (isMovingOnPerimeter(curr_player_pos, next_player_pos))
+		if (isMovingOnPerimeter(curr_player_pos, next_player_pos)) {
+			this.x = next_player_pos.x;
+			this.y = next_player_pos.y;
 			System.out.println("TERIT:" + Volfied.terain.poli);
-		else {
+		}
+		else if (!isPacket(next_player_pos)) {
 			isAttacking = true;
 			attack(curr_player_pos, next_player_pos);
+			this.x = next_player_pos.x;
+			this.y = next_player_pos.y;
 		}
 
-		this.x = next_player_pos.x;
-		this.y = next_player_pos.y;
+		
 	}
 }

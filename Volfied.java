@@ -151,7 +151,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		
 		bufferGraphics.setColor(Color.black);
 		terain.poli.draw(bufferGraphics, GRID_X, GRID_Y);
-		player.draw(bufferGraphics);
+		
 		ship.draw(bufferGraphics);
 		for (int i = 0; i < n_critter; i++)
 		if (!critters.get(i).isDead())
@@ -162,6 +162,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		for (int i = 0; i < packets.size(); i++)
 			packets.get(i).draw(bufferGraphics);
 		
+		player.draw(bufferGraphics);
 		
 		bufferGraphics.setColor(Color.black);
 		int life_x = 10, life_y = 10;
