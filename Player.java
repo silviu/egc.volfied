@@ -10,17 +10,23 @@ public class Player{
 	boolean first_time = true;
 	boolean dead = false;
 	boolean isAttacking = false;
-
-	int lives = 3;
+	
+	double angle = 108;
+	static int lives = 3;
 	BrokenLine trail = new BrokenLine(false); // an open broken line of points
 	public Polygon poli = new Polygon();
-
-	public Player() {
-		poli.addPoint(0, 0);
-		poli.addPoint(WIDTH/2, -5);
-		poli.addPoint(WIDTH, 12);
-		poli.addPoint(WIDTH/2, 28);
-		poli.addPoint(0, HEIGHT);
+	
+	public Polygon getPolygon() {
+		Polygon p = new Polygon();
+		
+		Point point = new Point(30, 0);
+		p.addPoint(point.x, point.y);
+		
+		for (int i = 0; i < 3; i++) {
+			point.rotatePoint(angle);
+			p.addPoint(point.x, point.y);
+		}
+		return p;
 	}
 
 	public void draw(Graphics g_main) {
@@ -46,25 +52,17 @@ public class Player{
 	}
 
 	public Polygon getPaintable() {
-		Polygon ret = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
+		Polygon ret = getPolygon();
 		ret.translate(x + Volfied.GRID_X - WIDTH/2, y + Volfied.GRID_Y - HEIGHT/2);
 		return ret;
 	}
 	
 	public Polygon getTranslatedPolygon() {
-		Polygon cp_poly = new Polygon(poli.xpoints, poli.ypoints, poli.npoints);
+		Polygon cp_poly = getPolygon();
 		cp_poly.translate(x, y);
 		return cp_poly;
 	}
 	
-	public void rotate(int degrees) {
-		int n = poli.npoints;
-		for (int i = 0; i < n; i++) {
-			poli.xpoints[i] = (int) (poli.xpoints[i] * Math.cos(degrees) - poli.ypoints[i] * Math.sin(degrees));
-			poli.ypoints[i] = (int) (poli.xpoints[i] * Math.sin(degrees) + poli.ypoints[i] * Math.cos(degrees));
-		}
-	}
-
 	public boolean isMovingOnPerimeter(Point curr_player_pos, Point next_player_pos) {
 		return Volfied.terain.isPointOnPerimeter(curr_player_pos)
 		&& Volfied.terain.isPointOnPerimeter(next_player_pos);
@@ -133,7 +131,7 @@ public class Player{
 		
 		return false;
 	}
-
+	
 	public void key_decide(int keyCode) {
 		Point curr_player_pos = new Point(this.x, this.y);
 		Point next_player_pos = curr_player_pos.getNewPosition(keyCode, pase);

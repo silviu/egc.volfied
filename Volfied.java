@@ -78,7 +78,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 
 		bufferGraphics.setColor(Color.white);
 		bufferGraphics.fillRect(0, 0, window_width, window_height);
-
+		
+		
 		bufferGraphics.setColor(Color.black);
 		terain.poli.draw(bufferGraphics, GRID_X, GRID_Y);
 		player.draw(bufferGraphics);
@@ -87,6 +88,16 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		if (!critters.get(i).isDead())
 			critters.get(i).draw(bufferGraphics);
 		else bufferGraphics.drawString("Dead!", critters.get(i).x, critters.get(i).y);
+		
+		bufferGraphics.setColor(Color.black);
+		int life_x = 10, life_y = 10;
+		bufferGraphics.drawString("Lives", life_x, life_y);
+		life_x += 20;
+		life_y -= 10;
+		for (int i = 0; i < Player.lives; i++) {
+			life_x += 15;
+			bufferGraphics.fillOval(life_x, life_y, 11, 11);
+		}
 		g_main.drawImage(offscreen,0, 0, this);
 	}
 

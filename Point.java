@@ -11,6 +11,13 @@ public class Point {
 		this.x = p_x;
 		this.y = p_y;
 	}
+	
+	public void rotatePoint(double angle) {
+		int old_x = x;
+		int old_y = y;
+		x = (int) (old_x * Math.cos(Math.toRadians(angle)) - old_y * Math.sin(Math.toRadians(angle))); 
+		y = (int) (old_x * Math.sin(Math.toRadians(angle)) + old_y * Math.cos(Math.toRadians(angle)));
+	}
 
 	@Override
 	public String toString()

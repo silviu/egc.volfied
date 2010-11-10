@@ -25,7 +25,7 @@ public class Critter {
 	
 	boolean growing = true;
 	
-	float angle = 45;
+	double angle = 45;
 
 	public Critter(int init_x, int init_y, String name) {
 		this(init_x, init_y);
@@ -49,20 +49,25 @@ public class Critter {
 		this.paint(g_main);
 	}
 	
-	public int rotate_x(int old_x, int old_y) {
-		return (int) (old_x * Math.cos(Math.toRadians(angle)) - old_y * Math.sin(Math.toRadians(angle))); 
-	}
-	
-	public int rotate_y(int old_x, int old_y) {
-		return (int) (old_x * Math.sin(Math.toRadians(angle)) + old_y * Math.cos(Math.toRadians(angle))); 
-	}
-	
 	public Polygon getPolygon() {
 		Polygon p = new Polygon();
-		p.addPoint(rotate_x(-CRITTER_SIZE/2, -CRITTER_SIZE/2), rotate_y(-CRITTER_SIZE/2, -CRITTER_SIZE/2));
-		p.addPoint(rotate_x(-CRITTER_SIZE/2,  CRITTER_SIZE/2), rotate_y(-CRITTER_SIZE/2,  CRITTER_SIZE/2));
-		p.addPoint(rotate_x( CRITTER_SIZE/2,  CRITTER_SIZE/2), rotate_y( CRITTER_SIZE/2,  CRITTER_SIZE/2));
-		p.addPoint(rotate_x( CRITTER_SIZE/2, -CRITTER_SIZE/2), rotate_y( CRITTER_SIZE/2, -CRITTER_SIZE/2));
+		
+		Point pnt = new Point(-CRITTER_SIZE/2, -CRITTER_SIZE/2);
+		pnt.rotatePoint(angle);
+		p.addPoint(pnt.x, pnt.y);
+		
+		pnt = new Point(-CRITTER_SIZE/2, CRITTER_SIZE/2);
+		pnt.rotatePoint(angle);
+		p.addPoint(pnt.x, pnt.y);
+		
+		pnt = new Point(CRITTER_SIZE/2, CRITTER_SIZE/2);
+		pnt.rotatePoint(angle);
+		p.addPoint(pnt.x, pnt.y);
+		
+		pnt = new Point(CRITTER_SIZE/2, -CRITTER_SIZE/2);
+		pnt.rotatePoint(angle);
+		p.addPoint(pnt.x, pnt.y);
+		
 		if (angle == 90)
 			angle = 0;
 		angle += ROTATION_PASE;
