@@ -160,7 +160,9 @@ public class Volfied extends Applet implements KeyListener, Runnable
 
 		
 		for (int i = 0; i < packets.size(); i++)
-			packets.get(i).draw(bufferGraphics);
+			if (!packets.get(i).checkIfTaken())
+				packets.get(i).draw(bufferGraphics);
+			else bufferGraphics.drawString("Taken!", packets.get(i).x, packets.get(i).y);
 		
 		player.draw(bufferGraphics);
 		
