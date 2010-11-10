@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.util.ArrayList;
@@ -111,6 +112,11 @@ public class BrokenLine {
 	public void draw(Graphics g, int off_x, int off_y) {
 		int n = points.size();
 
+		g.setColor(Volfied.LEVEL_1_BOARD_COLOR);
+		Polygon teren = toPolygon();
+		teren.translate(off_x+1, off_y+1);
+		g.fillPolygon(teren);
+		g.setColor(Color.black);
 		for (int i = 0; i < n - 1; i++)
 			g.drawLine(off_x + points.get(i).x, off_y + points.get(i).y,
 					off_x + points.get(i + 1).x, off_y + points.get(i + 1).y);
@@ -118,7 +124,8 @@ public class BrokenLine {
 		if (isClosedLine)
 			g.drawLine(off_x + points.get(n - 1).x, off_y + points.get(n - 1).y,
 					off_x + points.get(0).x, off_y + points.get(0).y);
-
+		
+		
 	}
 
 	@Override

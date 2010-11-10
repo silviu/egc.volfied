@@ -13,6 +13,10 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	static final int GRID_Y 	   = OFFSET_GRID + Player.HEIGHT/2;
 	static final int BOARD_WIDTH   = 1000;
 	static final int BOARD_HEIGHT  = 600;
+	
+	static final int PERCENTAGE_TO_WIN = 80;
+	static final Color LEVEL_1_BG_COLOR = Color.getHSBColor(100, 100, 99);
+	static final Color LEVEL_1_BOARD_COLOR = Color.getHSBColor(45, 45, 45);
 
 	static Random rand = new Random();
 
@@ -95,10 +99,9 @@ public class Volfied extends Applet implements KeyListener, Runnable
 
 		bufferGraphics.clearRect(0,0, window_width, window_height);
 
-		bufferGraphics.setColor(Color.white);
+		bufferGraphics.setColor(LEVEL_1_BG_COLOR);
 		bufferGraphics.fillRect(0, 0, window_width, window_height);
 		
-		System.out.println("Percentage=" + terain.percentage());
 		if (terain.percentage() <= 20) {
 			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
 			g_main.drawImage(offscreen,0, 0, this);
