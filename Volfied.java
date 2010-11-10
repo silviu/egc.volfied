@@ -14,7 +14,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	static final int BOARD_WIDTH   = 1000;
 	static final int BOARD_HEIGHT  = 600;
 	
-	static final int PERCENTAGE_TO_WIN = 10;
+	static final int PERCENTAGE_TO_WIN = 30;
 	static final Color LEVEL_1_BG_COLOR = Color.getHSBColor(100, 100, 99);
 	static final Color LEVEL_1_BOARD_COLOR = Color.getHSBColor(45, 45, 45);
 	
