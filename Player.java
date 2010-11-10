@@ -1,42 +1,43 @@
 import java.awt.*;
 
 
-public class Player{
-	static final int WIDTH = 45;
-	static final int HEIGHT = 25;
+public class Player {
+	static final int SIZE = 40; // the pentagon's side size
+	final static int pase = 10;
+	
+	// initial positions
 	int x = Volfied.BOARD_WIDTH*9/10;
 	int y = 0;
-	static int pase = 10;
+	
+	
 	boolean first_time = true;
 	boolean dead = false;
 	boolean isAttacking = false;
 	
-	double angle = 108;
 	static int lives = 3;
 	BrokenLine trail = new BrokenLine(false); // an open broken line of points
-	public Polygon poli = new Polygon();
+
 	
 	public Polygon getPolygon() {
 		Polygon p = new Polygon();
+		int n = 5; // pentagon has 5 points.
+		double angle = 2 * Math.PI / n;
+		int r = SIZE;
 		
-		Point point = new Point(30, 0);
-		p.addPoint(point.x, point.y);
-		
-		for (int i = 0; i < 4; i++) {
-			point.rotatePoint(angle);
-			p.addPoint(point.x, point.y);
+		for(int i=0; i < n; i++) {
+			double v = i * angle;
+			int x, y;
+			x = (int) Math.round(r * Math.cos(v));
+			y = (int) Math.round(r * Math.sin(v));
+			p.addPoint(x, y);
 		}
 		return p;
 	}
 
-	public void draw(Graphics g_main) {
-		this.paint(g_main);
-	}
-
-	public void paint(Graphics g) {
+	public void draw(Graphics g) {
 		if (!isDead()) {
 			g.setColor(Color.blue);
-			trail.draw(g, Volfied.OFFSET_GRID + WIDTH/2, Volfied.OFFSET_GRID + HEIGHT/2);
+			trail.draw(g, Volfied.GRID_X, Volfied.GRID_Y);
 			g.setColor(Color.CYAN);
 			g.fillPolygon(getPaintable());
 		}
@@ -47,7 +48,9 @@ public class Player{
 		}
 	}
 
+	
 	public String toString() {
+		Polygon poli = getPolygon();
 		String ret = "Player position=" + x + ", " + y + "\n";
 		for (int i = 0; i < poli.npoints; i++)
 			ret += "P[" + i + "]=[" + poli.xpoints[i] + ", " + poli.ypoints[i] + "] ";
@@ -57,7 +60,7 @@ public class Player{
 
 	public Polygon getPaintable() {
 		Polygon ret = getPolygon();
-		ret.translate(x + Volfied.GRID_X - WIDTH/2, y + Volfied.GRID_Y - HEIGHT/2);
+		ret.translate(x + Volfied.GRID_X, y + Volfied.GRID_Y);
 		return ret;
 	}
 	

@@ -9,8 +9,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	private static final long serialVersionUID = 1L;
 
 	static final int OFFSET_GRID   = 10;
-	static final int GRID_X 	   = OFFSET_GRID + Player.WIDTH/2;
-	static final int GRID_Y 	   = OFFSET_GRID + Player.HEIGHT/2;
+	static final int GRID_X 	   = OFFSET_GRID + Player.SIZE;
+	static final int GRID_Y 	   = OFFSET_GRID + Player.SIZE;
 	static final int BOARD_WIDTH   = 1000;
 	static final int BOARD_HEIGHT  = 600;
 	
