@@ -73,6 +73,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		n_critter++;
 		bg_color = LEVEL_2_BG_COLOR;
 		board_color = LEVEL_2_BOARD_COLOR;
+		level_start = true;
 	}
 	
 	@Override
@@ -126,6 +127,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		bufferGraphics.setColor(bg_color);
 		bufferGraphics.fillRect(0, 0, window_width, window_height);
 		
+		
 		if (terain.percentageOccupied() >= PERCENTAGE_TO_WIN && level == 1) {
 			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
 			change_level();
@@ -140,14 +142,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 			animator.stop();
 		}
 		
-		if (level_start) {
-			level_start = false;
-			bufferGraphics.setColor(Color.black);
-			terain.poli.draw(bufferGraphics, GRID_X, GRID_Y);
-			bufferGraphics.drawString("Level 1", BOARD_WIDTH/2, BOARD_HEIGHT/2);
-			g_main.drawImage(offscreen,0, 0, this);
-			waiting(1);
-		}
+		
 		
 		bufferGraphics.setColor(Color.black);
 		terain.poli.draw(bufferGraphics, GRID_X, GRID_Y);
@@ -179,6 +174,16 @@ public class Volfied extends Applet implements KeyListener, Runnable
 			life_x += 15;
 			bufferGraphics.fillOval(life_x, life_y, 11, 11);
 		}
+		
+		if(level_start) {
+			Font f = new Font("monospaced", Font.BOLD, 20);
+			bufferGraphics.setFont(f);
+			bufferGraphics.drawString("Level " + level, BOARD_WIDTH/2, BOARD_HEIGHT/2);
+			level_start = false;
+			g_main.drawImage(offscreen,0, 0, this);
+			waiting(1);
+		}
+		
 		g_main.drawImage(offscreen,0, 0, this);
 	}
 
