@@ -6,7 +6,7 @@ public class Player{
 	static final int HEIGHT = 25;
 	int x = Volfied.BOARD_WIDTH*9/10;
 	int y = 0;
-	static int pase = 5;
+	static int pase = 10;
 	boolean first_time = true;
 	boolean dead = false;
 	boolean isAttacking = false;
@@ -71,6 +71,19 @@ public class Player{
 		return Volfied.terain.isPointOnPerimeter(curr_player_pos)
 		&& Volfied.terain.isPointOnPerimeter(next_player_pos);
 	}
+	
+	public int getLives() {
+		return lives;
+	}
+	
+	public static void waiting (int n){
+		long t0, t1;
+		t0 =  System.currentTimeMillis();
+		do{
+			t1 = System.currentTimeMillis();
+		}
+		while ((t1 - t0) < (n * 1000));
+	}
 
 	public void manageDeath() {
 		this.x = trail.points.get(0).x;
@@ -105,10 +118,6 @@ public class Player{
 		if (lives > 0)
 			return true;
 		return false;
-	}
-
-	public int getLives() {
-		return lives;
 	}
 	
 	public boolean isTrailOnPoly(Polygon enemy) {

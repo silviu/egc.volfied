@@ -21,6 +21,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	int delay, frame;
 	static ArrayList<Critter> critters = new ArrayList<Critter>();
 	static int n_critter = 3;
+	boolean level_start = true;
 	
 	static Player player = new Player();
 	static Ship ship = new Ship(rand.nextInt(700 - 100 + 1) + 100, rand.nextInt(400 - 100 + 1) + 100);
@@ -32,6 +33,16 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	public static int window_width, window_height;
 	public static int keyState;
 
+	
+	public static void waiting (int n){
+		long t0, t1;
+		t0 =  System.currentTimeMillis();
+		do{
+			t1 = System.currentTimeMillis();
+		}
+		while ((t1 - t0) < (n * 1000));
+	}
+	
 	@Override
 	public void init() {
 		addKeyListener(this);
@@ -39,6 +50,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		delay = fps > 0 ? 1000 / fps : 100;
 		offscreen = createImage(this.getSize().width,this.getSize().height);
 		bufferGraphics = offscreen.getGraphics();
+		System.out.println("TERAIN AREA=" + terain.calcArea());
+		System.out.println("PRCENTAGE = " + terain.percentage());
 		String critter_names[] = {"A", "B", "C"};
 		for (int i = 0; i < n_critter; i++)
 			critters.add(new Critter(rand.nextInt(700 - 100 + 1) + 100, rand.nextInt(400 - 100 + 1) + 100, critter_names[i]));
@@ -74,6 +87,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 			frame++;
 		}
 	}
+	@SuppressWarnings("deprecation")
 	@Override
 	public void paint(Graphics g_main) {
 		window_width  = this.getSize().width;
@@ -84,6 +98,20 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		bufferGraphics.setColor(Color.white);
 		bufferGraphics.fillRect(0, 0, window_width, window_height);
 		
+		System.out.println("Percentage=" + terain.percentage());
+		if (terain.percentage() <= 20) {
+			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
+			g_main.drawImage(offscreen,0, 0, this);
+			animator.stop();
+		}
+		if (level_start) {
+			level_start = false;
+			bufferGraphics.setColor(Color.black);
+			terain.poli.draw(bufferGraphics, GRID_X, GRID_Y);
+			bufferGraphics.drawString("Level 1", BOARD_WIDTH/2, BOARD_HEIGHT/2);
+			g_main.drawImage(offscreen,0, 0, this);
+			waiting(1);
+		}
 		
 		bufferGraphics.setColor(Color.black);
 		terain.poli.draw(bufferGraphics, GRID_X, GRID_Y);
@@ -99,7 +127,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		bufferGraphics.drawString("Lives", life_x, life_y);
 		life_x += 20;
 		life_y -= 10;
-		if (player.lives == 0) {
+		if (player.getLives() == 0) {
 			bufferGraphics.drawString("GAME OVER!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
 			stop();
 		}

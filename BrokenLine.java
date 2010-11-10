@@ -76,6 +76,8 @@ public class BrokenLine {
 		for (Point p : arr)
 			this.addPointExtdeningSegment(p);
 	}
+	
+	
 
 	public Segment getLinePointIsOn(Point lookup) {
 		int n = points.size();
