@@ -14,29 +14,51 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	static final int BOARD_WIDTH   = 1000;
 	static final int BOARD_HEIGHT  = 600;
 	
-	static final int PERCENTAGE_TO_WIN = 80;
+	static final int PERCENTAGE_TO_WIN = 10;
 	static final Color LEVEL_1_BG_COLOR = Color.getHSBColor(100, 100, 99);
 	static final Color LEVEL_1_BOARD_COLOR = Color.getHSBColor(45, 45, 45);
-
+	
+	static final Color LEVEL_2_BG_COLOR = Color.getHSBColor(90, 170, 60);
+	static final Color LEVEL_2_BOARD_COLOR = Color.getHSBColor(45, 45, 45);
+	
+	static Color bg_color = LEVEL_1_BG_COLOR;
+	static Color board_color = LEVEL_1_BOARD_COLOR;
+	
+	int level = 1;
+	
 	static Random rand = new Random();
 
 	Image offscreen;
 
 	int delay, frame;
-	static ArrayList<Critter> critters = new ArrayList<Critter>();
-	static int n_critter = 3;
+	
+	static int n_critter = 2;
 	boolean level_start = true;
 	
 	static Player player = new Player();
-	static Ship ship = new Ship(rand.nextInt(700 - 100 + 1) + 100, rand.nextInt(400 - 100 + 1) + 100);
-
+	static Ship ship;
+	static ArrayList<Critter> critters = new ArrayList<Critter>();
 	Thread animator = new Thread(this);
 	static Terrain terain  = new Terrain();
-
+	static ArrayList<Packet> packets = new ArrayList<Packet>();
+	
 	Graphics g_main, bufferGraphics;
 	public static int window_width, window_height;
 	public static int keyState;
 
+	
+	
+	public void create_stuff() {
+		terain = new Terrain();
+		ship = new Ship(rand.nextInt(700 - 100 + 1) + 100, rand.nextInt(400 - 100 + 1) + 100);
+		for (int i = 0; i < n_critter; i++)
+			critters.add(new Critter(rand.nextInt(700 - 100 + 1) + 100, rand.nextInt(400 - 100 + 1) + 100));
+		
+		packets.add(new Packet(1, BOARD_HEIGHT-Packet.SIZE, Packet.INCREASE_SPEED));
+		packets.add(new Packet(BOARD_WIDTH-Packet.SIZE, BOARD_HEIGHT-Packet.SIZE, Packet.DECREASE_SPEED));
+		packets.add(new Packet(1, 1, Packet.STOP_TIME));
+		packets.add(new Packet(BOARD_WIDTH-Packet.SIZE, 1, Packet.BOMBS));
+	}
 	
 	public static void waiting (int n){
 		long t0, t1;
@@ -47,6 +69,12 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		while ((t1 - t0) < (n * 1000));
 	}
 	
+	public void change_level() {
+		n_critter++;
+		bg_color = LEVEL_2_BG_COLOR;
+		board_color = LEVEL_2_BOARD_COLOR;
+	}
+	
 	@Override
 	public void init() {
 		addKeyListener(this);
@@ -54,11 +82,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		delay = fps > 0 ? 1000 / fps : 100;
 		offscreen = createImage(this.getSize().width,this.getSize().height);
 		bufferGraphics = offscreen.getGraphics();
-		System.out.println("TERAIN AREA=" + terain.calcArea());
-		System.out.println("PRCENTAGE = " + terain.percentage());
-		String critter_names[] = {"A", "B", "C"};
-		for (int i = 0; i < n_critter; i++)
-			critters.add(new Critter(rand.nextInt(700 - 100 + 1) + 100, rand.nextInt(400 - 100 + 1) + 100, critter_names[i]));
+		create_stuff();
 	}
 
 	/**
@@ -99,14 +123,23 @@ public class Volfied extends Applet implements KeyListener, Runnable
 
 		bufferGraphics.clearRect(0,0, window_width, window_height);
 
-		bufferGraphics.setColor(LEVEL_1_BG_COLOR);
+		bufferGraphics.setColor(bg_color);
 		bufferGraphics.fillRect(0, 0, window_width, window_height);
 		
-		if (terain.percentage() <= 20) {
+		if (terain.percentageOccupied() >= PERCENTAGE_TO_WIN && level == 1) {
+			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
+			change_level();
+			level++;
+			create_stuff();
+			g_main.drawImage(offscreen,0, 0, this);
+		}
+		
+		if (terain.percentageOccupied() >= PERCENTAGE_TO_WIN && level == 2) {
 			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
 			g_main.drawImage(offscreen,0, 0, this);
 			animator.stop();
 		}
+		
 		if (level_start) {
 			level_start = false;
 			bufferGraphics.setColor(Color.black);
@@ -124,6 +157,11 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		if (!critters.get(i).isDead())
 			critters.get(i).draw(bufferGraphics);
 		else bufferGraphics.drawString("Dead!", critters.get(i).x, critters.get(i).y);
+
+		
+		for (int i = 0; i < packets.size(); i++)
+			packets.get(i).draw(bufferGraphics);
+		
 		
 		bufferGraphics.setColor(Color.black);
 		int life_x = 10, life_y = 10;

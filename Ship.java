@@ -119,6 +119,12 @@ public class Ship {
 		for (int i = 0; i < n; i++)
 			if (Volfied.terain.isOuter(new Point(poli.xpoints[i] + nex_ship_pos.x, poli.ypoints[i] + nex_ship_pos.y)))
 				return true;
+		for (int i = 0; i < Volfied.packets.size(); i++) {
+			Polygon next_ship = getPolygon();
+			next_ship.translate(nex_ship_pos.x, nex_ship_pos.y);
+			if (next_ship.intersects(Volfied.packets.get(i).getTranslatedPolygon().getBounds2D()))
+				return true;
+		}
 		return false;
 	}
 

@@ -112,7 +112,7 @@ public class BrokenLine {
 	public void draw(Graphics g, int off_x, int off_y) {
 		int n = points.size();
 
-		g.setColor(Volfied.LEVEL_1_BOARD_COLOR);
+		g.setColor(Volfied.board_color);
 		Polygon teren = toPolygon();
 		teren.translate(off_x+1, off_y+1);
 		g.fillPolygon(teren);

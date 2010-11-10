@@ -29,8 +29,8 @@ public class Terrain {
 		return area/2;
 	}
 	
-	public int percentage() {
-		return (int) ((calcArea()/initial_area) * 100);
+	public int percentageOccupied() {
+		return (int) (100 - ((calcArea()/initial_area) * 100));
 	}
 	
 	public boolean isOuter(Point p) {
