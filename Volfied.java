@@ -23,7 +23,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	static int n_critter = 3;
 	
 	static Player player = new Player();
-	static Ship ship = new Ship(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100);
+	static Ship ship = new Ship(rand.nextInt(700 - 100 + 1) + 100, rand.nextInt(400 - 100 + 1) + 100);
 
 	Thread animator = new Thread(this);
 	static Terrain terain  = new Terrain();
@@ -41,7 +41,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		bufferGraphics = offscreen.getGraphics();
 		String critter_names[] = {"A", "B", "C"};
 		for (int i = 0; i < n_critter; i++)
-			critters.add(new Critter(rand.nextInt(900 - 100 + 1) + 100, rand.nextInt(500 - 100 + 1) + 100, critter_names[i]));
+			critters.add(new Critter(rand.nextInt(700 - 100 + 1) + 100, rand.nextInt(400 - 100 + 1) + 100, critter_names[i]));
 	}
 
 	/**
@@ -51,6 +51,11 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	@Override
 	public void start() {
 		animator.start();
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void stop() {
+		animator.stop();
 	}
 
 	@Override
@@ -94,6 +99,10 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		bufferGraphics.drawString("Lives", life_x, life_y);
 		life_x += 20;
 		life_y -= 10;
+		if (player.lives == 0) {
+			bufferGraphics.drawString("GAME OVER!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
+			stop();
+		}
 		for (int i = 0; i < Player.lives; i++) {
 			life_x += 15;
 			bufferGraphics.fillOval(life_x, life_y, 11, 11);

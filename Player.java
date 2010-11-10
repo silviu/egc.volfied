@@ -22,7 +22,7 @@ public class Player{
 		Point point = new Point(30, 0);
 		p.addPoint(point.x, point.y);
 		
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			point.rotatePoint(angle);
 			p.addPoint(point.x, point.y);
 		}
@@ -40,7 +40,11 @@ public class Player{
 			g.setColor(Color.CYAN);
 			g.fillPolygon(getPaintable());
 		}
-		else g.drawString("Dead!", x + Volfied.GRID_X, y + Volfied.GRID_Y);
+		else  {
+			g.drawString("Dead!", x + Volfied.GRID_X, y + Volfied.GRID_Y);
+			manageDeath();
+			lives--;
+		}
 	}
 
 	public String toString() {
@@ -68,6 +72,14 @@ public class Player{
 		&& Volfied.terain.isPointOnPerimeter(next_player_pos);
 	}
 
+	public void manageDeath() {
+		this.x = trail.points.get(0).x;
+		this.y = trail.points.get(0).y;
+		isAttacking = false;
+		first_time = true;
+		trail.points.clear();
+	}
+	
 	public void attack(Point curr_player_pos, Point next_player_pos) {
 
 		if (first_time) {
@@ -87,13 +99,10 @@ public class Player{
 			trail = new BrokenLine(false);
 			Volfied.terain.poli = polys[monsterPosition];
 		}
-		else
-			if (isDead())
-				dead = true;
 	}
 
 	public boolean hasMoreLives() {
-		if (this.lives > 0)
+		if (lives > 0)
 			return true;
 		return false;
 	}
