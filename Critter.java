@@ -104,6 +104,12 @@ public class Critter {
 		for (int i = 0; i < n; i++)
 			if (Volfied.terain.isOuter(new Point(cp_poly.xpoints[i] + nex_ship_pos.x, cp_poly.ypoints[i] + nex_ship_pos.y)))
 				return true;
+		for (int i = 0; i < Volfied.packets.size(); i++) {
+			Polygon next_critter = getPolygon();
+			next_critter.translate(nex_ship_pos.x, nex_ship_pos.y);
+			if (next_critter.intersects(Volfied.packets.get(i).getTranslatedPolygon().getBounds2D()))
+				return true;
+		}
 		return false;
 	}
 	
