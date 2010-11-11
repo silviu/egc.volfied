@@ -14,7 +14,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	static final int BOARD_WIDTH   = 1000;
 	static final int BOARD_HEIGHT  = 600;
 	
-	static final int PERCENTAGE_TO_WIN = 80;
+	static final int PERCENTAGE_TO_WIN = 30;
 	static final Color LEVEL_1_BG_COLOR = Color.getHSBColor(100, 160, 99);
 	static final Color LEVEL_1_BOARD_COLOR = Color.getHSBColor(45, 45, 45);
 	
@@ -74,6 +74,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		bg_color = LEVEL_2_BG_COLOR;
 		board_color = LEVEL_2_BOARD_COLOR;
 		level_start = true;
+		player.x = BOARD_WIDTH/2;
+		player.y = BOARD_HEIGHT;
 	}
 	
 	@Override
@@ -138,11 +140,6 @@ public class Volfied extends Applet implements KeyListener, Runnable
 			g_main.drawImage(offscreen,0, 0, this);
 		}
 		
-		if (terain.percentageOccupied() >= PERCENTAGE_TO_WIN && level == 2) {
-			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
-			g_main.drawImage(offscreen,0, 0, this);
-			animator.stop();
-		}
 		
 		
 		
@@ -184,6 +181,14 @@ public class Volfied extends Applet implements KeyListener, Runnable
 			level_start = false;
 			g_main.drawImage(offscreen,0, 0, this);
 			waiting(1);
+		}
+		
+		if (terain.percentageOccupied() >= PERCENTAGE_TO_WIN && level == 2) {
+			f = new Font("monospaced", Font.BOLD, 30);
+			bufferGraphics.setFont(f);
+			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
+			g_main.drawImage(offscreen,0, 0, this);
+			animator.stop();
 		}
 		
 		g_main.drawImage(offscreen,0, 0, this);

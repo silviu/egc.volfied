@@ -3,16 +3,25 @@ import java.awt.*;
 
 public class Player {
 	static final int SIZE = 20; // the pentagon's side size
-	int pase = 20;
+	int pase = 10;
 	
 	// initial positions
 	int x = Volfied.BOARD_WIDTH/2;
 	int y = Volfied.BOARD_HEIGHT;
 	
+	final static int RIGHT = 0;
+	final static int DOWN  = 1;
+	final static int LEFT  = 2;
+	final static int UP    = 3;
 	
 	boolean first_time = true;
 	boolean dead = false;
 	boolean isAttacking = false;
+	boolean speed_changed = false;
+	int time_to_normal = 0;
+	static int orientation = RIGHT;
+	static double angle = 0;
+	
 	
 	static int lives = 3;
 	BrokenLine trail = new BrokenLine(false); // an open broken line of points
@@ -29,13 +38,22 @@ public class Player {
 			int x, y;
 			x = (int) Math.round(r * Math.cos(v));
 			y = (int) Math.round(r * Math.sin(v));
-			p.addPoint(x, y);
+			Point point = new Point(x, y);
+			point.rotatePoint(angle);
+			p.addPoint(point.x, point.y);
 		}
 		return p;
 	}
 
 	public void draw(Graphics g) {
 		if (!isDead()) {
+			if (speed_changed && time_to_normal == 600) {
+				setSpeed(10);
+				speed_changed = false;
+				time_to_normal = 0;
+			}
+			else
+				time_to_normal++;
 			g.setColor(Color.blue);
 			trail.draw(g, Volfied.GRID_X, Volfied.GRID_Y);
 			g.setColor(Color.CYAN);
@@ -60,6 +78,7 @@ public class Player {
 	
 	public void setSpeed(int new_speed) {
 		this.pase = new_speed;
+		speed_changed = true;
 	}
 
 	public Polygon getPaintable() {
@@ -171,6 +190,7 @@ public class Player {
 		return false;
 	}
 	
+	
 	public void key_decide(int keyCode) {
 		Point curr_player_pos = new Point(this.x, this.y);
 
@@ -181,7 +201,8 @@ public class Player {
 		while (p > 0)
 		{
 			next_player_pos = curr_player_pos.getNewPosition(keyCode, p);
-
+			angle = Point.getPlayerRotationAngle(keyCode, orientation);
+			
 			if (!Volfied.terain.isOuter(next_player_pos))
 				break;
 			// when nearing an edge we might not have enough space to do a full pase
