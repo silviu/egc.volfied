@@ -63,6 +63,7 @@ public class Packet {
 			
 		case BOMBS:
 			message = "B";
+			Volfied.player.hasBombs = true;
 			break;
 		}
 	}

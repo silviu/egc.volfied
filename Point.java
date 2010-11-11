@@ -38,19 +38,25 @@ public class Point {
 		case KeyEvent.VK_UP:
 			diff_x = 0;
 			diff_y = -pase;
+			Volfied.player.orientation = Volfied.player.UP;
 			break;
 		case KeyEvent.VK_DOWN:
 			diff_x = 0;
 			diff_y = pase;
+			Volfied.player.orientation = Volfied.player.DOWN;
 			break;
 		case KeyEvent.VK_LEFT:
 			diff_x = -pase;
 			diff_y = 0;
+			Volfied.player.orientation = Volfied.player.LEFT;
 			break;
 		case KeyEvent.VK_RIGHT:
 			diff_x = pase;
 			diff_y = 0;
+			Volfied.player.orientation = Volfied.player.RIGHT;
 			break;
+		case KeyEvent.VK_SPACE:
+			Volfied.player.shoot();
 		default:
 			/* ignore random key presses: the new position is the same as the current one */
 			break;

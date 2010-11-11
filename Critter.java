@@ -27,6 +27,7 @@ public class Critter {
 	boolean growing = true;
 	
 	double angle = 45;
+	boolean dead = false;
 
 	public Critter(int init_x, int init_y, String name) {
 		this(init_x, init_y);
@@ -85,8 +86,17 @@ public class Critter {
 	}
 
 	public boolean isDead() {
-		if (!Volfied.terain.poli.toPolygon().contains(this.x, this.y))
+		if (dead)
 			return true;
+		
+		if (!Volfied.terain.poli.toPolygon().contains(this.x, this.y)) {
+			dead = true;
+			return true;
+		}
+		if (Volfied.player.bomb.getTranslated().intersects(getTranslatedPolygon().getBounds2D())) {
+			dead = true;
+			return true;
+		}
 		return false;
 	}
 	

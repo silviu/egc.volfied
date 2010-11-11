@@ -21,7 +21,10 @@ public class Player {
 	boolean speed_changed = false;
 	int time_to_normal = 0;
 	double pentagon_rotation_angle = 0;
+	boolean hasBombs = false;
+	int orientation = RIGHT;
 	
+	Bomb bomb = new Bomb(x, y, RIGHT);
 	
 	static int lives = 3;
 	BrokenLine trail = new BrokenLine(false); // an open broken line of points
@@ -52,6 +55,10 @@ public class Player {
 			}
 			else
 				time_to_normal++;
+			if (hasBombs) {
+				bomb.draw(g);
+				bomb.animate();
+			}
 			g.setColor(Color.blue);
 			trail.draw(g, Volfied.GRID_X, Volfied.GRID_Y);
 			g.setColor(Color.CYAN);
@@ -64,6 +71,24 @@ public class Player {
 		}
 	}
 
+	public void shoot() {
+		int direction = 0;
+		switch (orientation) {
+		case UP:
+			direction = Volfied.ship.NORTH;
+			break;
+		case DOWN:
+			direction = Volfied.ship.SOUTH;
+			break;
+		case LEFT:
+			direction = Volfied.ship.WEST;
+			break;
+		case RIGHT:
+			direction = Volfied.ship.EAST;
+			break;
+		}
+		bomb = new Bomb(x, y, direction);
+	}
 	
 	public String toString() {
 		Polygon poli = getPolygon();
