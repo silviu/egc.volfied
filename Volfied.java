@@ -14,8 +14,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	static final int BOARD_WIDTH   = 1000;
 	static final int BOARD_HEIGHT  = 600;
 	
-	static final int PERCENTAGE_TO_WIN = 30;
-	static final Color LEVEL_1_BG_COLOR = Color.getHSBColor(100, 100, 99);
+	static final int PERCENTAGE_TO_WIN = 80;
+	static final Color LEVEL_1_BG_COLOR = Color.getHSBColor(100, 160, 99);
 	static final Color LEVEL_1_BOARD_COLOR = Color.getHSBColor(45, 45, 45);
 	
 	static final Color LEVEL_2_BG_COLOR = Color.getHSBColor(90, 170, 60);
@@ -127,6 +127,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		bufferGraphics.setColor(bg_color);
 		bufferGraphics.fillRect(0, 0, window_width, window_height);
 		
+		Font f = new Font("monospaced", Font.BOLD, 10);
+		bufferGraphics.setFont(f);
 		
 		if (terain.percentageOccupied() >= PERCENTAGE_TO_WIN && level == 1) {
 			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
@@ -155,9 +157,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 
 		
 		for (int i = 0; i < packets.size(); i++)
-			if (!packets.get(i).checkIfTaken())
-				packets.get(i).draw(bufferGraphics);
-			else bufferGraphics.drawString("Taken!", packets.get(i).x, packets.get(i).y);
+			packets.get(i).draw(bufferGraphics);
 		
 		player.draw(bufferGraphics);
 		
@@ -167,6 +167,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		life_x += 20;
 		life_y -= 10;
 		if (player.getLives() == 0) {
+			f = new Font("monospaced", Font.BOLD, 20);
+			bufferGraphics.setFont(f);
 			bufferGraphics.drawString("GAME OVER!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
 			stop();
 		}
@@ -176,7 +178,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		}
 		
 		if(level_start) {
-			Font f = new Font("monospaced", Font.BOLD, 20);
+			f = new Font("monospaced", Font.BOLD, 20);
 			bufferGraphics.setFont(f);
 			bufferGraphics.drawString("Level " + level, BOARD_WIDTH/2, BOARD_HEIGHT/2);
 			level_start = false;

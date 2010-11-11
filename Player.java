@@ -2,12 +2,12 @@ import java.awt.*;
 
 
 public class Player {
-	static final int SIZE = 40; // the pentagon's side size
-	final static int pase = 10;
+	static final int SIZE = 20; // the pentagon's side size
+	int pase = 10;
 	
 	// initial positions
-	int x = Volfied.BOARD_WIDTH*9/10;
-	int y = 0;
+	int x = Volfied.BOARD_WIDTH/2;
+	int y = Volfied.BOARD_HEIGHT;
 	
 	
 	boolean first_time = true;
@@ -56,6 +56,10 @@ public class Player {
 			ret += "P[" + i + "]=[" + poli.xpoints[i] + ", " + poli.ypoints[i] + "] ";
 		ret += "\n";
 		return ret;
+	}
+	
+	public void setSpeed(int new_speed) {
+		this.pase = new_speed;
 	}
 
 	public Polygon getPaintable() {
@@ -149,6 +153,10 @@ public class Player {
 		
 		if (isAttacking && (isTrailOnPoly(cp_ship)))
 			return true;
+		
+		for (int i = 0; i < Volfied.ship.bombs.size(); i++)
+			if (isAttacking && Volfied.ship.bombs.get(i).getTranslated().intersects(cp_player.getBounds2D()))
+				return true;
 		
 		return false;
 	}

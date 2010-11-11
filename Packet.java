@@ -6,7 +6,7 @@ import java.awt.Polygon;
 public class Packet {
 	final static int SIZE = 50;
 	
-	final static int INCREASE_SPEED = 1;
+	final static int INCREASE_SPEED = 0;
 	final static int DECREASE_SPEED = 1;
 	final static int STOP_TIME = 2;
 	final static int BOMBS = 3;
@@ -14,7 +14,7 @@ public class Packet {
 	int x;
 	int y;
 	int trait;
-	boolean tacken = false;
+	boolean taken = false;
 	
 	public Packet(int init_x, int init_y, int trait) {
 		this.x = init_x;
@@ -23,13 +23,52 @@ public class Packet {
 	}
 	
 	public void paint(Graphics g) {
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillPolygon(this.getPaintable());
+		if (!checkIfTaken()) {
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillPolygon(this.getPaintable());
+		}
+		else {
+			String message = "";
+			switch(trait) {
+			case INCREASE_SPEED:
+				message = "S";
+				break;
+			case DECREASE_SPEED:
+				message = "D";
+				break;
+			case STOP_TIME:
+				message = "T";
+				break;
+			case BOMBS:
+				message = "B";
+				break;
+			}
+			g.setColor(Color.green);
+			g.fillOval(x + Volfied.GRID_X, y + Volfied.GRID_Y, 50, 50);
+			g.setColor(Color.black);
+			g.drawString(message, x + 2*(Volfied.GRID_X-4), y + 2*Volfied.GRID_Y);
+		}
 	}
 
 
 	public void draw(Graphics g_main){
 		this.paint(g_main);
+	}
+	
+	public void actOnPacket() {
+		switch (trait) {
+		case INCREASE_SPEED:
+			Volfied.player.setSpeed(20);
+			break;
+		case DECREASE_SPEED:
+			Volfied.player.setSpeed(5);
+			break;
+		case STOP_TIME:
+			break;
+		case BOMBS:
+			break;
+		}
+		taken = false;
 	}
 
 	public boolean checkIfTaken() {

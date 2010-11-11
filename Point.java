@@ -104,6 +104,31 @@ public class Point {
 		return new Point(this.x + diff_x, this.y + diff_y);
 	}
 	
+	public Point getBombNewPosition(int direction, int pase) {
+		int diff_x = 0;
+		int diff_y = 0;
+
+		switch (direction) {
+		case Ship.NORTH:
+			diff_x = 0;
+			diff_y = -pase;
+			break;
+		case Ship.SOUTH:
+			diff_x = 0;
+			diff_y = pase;
+			break;
+		case Ship.WEST:
+			diff_x = -pase;
+			diff_y = 0;
+			break;
+		case Ship.EAST:
+			diff_x = pase;
+			diff_y = 0;
+			break;
+		}
+		return new Point(this.x + diff_x, this.y + diff_y);
+	}
+	
 	public boolean equals(Point p)
 	{
 		return p.x == x && p.y == y;

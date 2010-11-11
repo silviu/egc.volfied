@@ -20,12 +20,13 @@ public class Ship {
 	int x = 50;
 	int y = 50;
 	int size = MAX_SIZE;
+	int time_to_bombs = 200;
 
 	int keep_direction = 0;
 	int direction = NORTH;
 	boolean growing = true;
 
-
+	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
 	Random rand = new Random();
 
@@ -37,12 +38,30 @@ public class Ship {
 	public void paint(Graphics g) {
 		g.setColor(Color.RED);
 		g.fillPolygon(this.getPaintable());
+		for (int i = 0; i < bombs.size(); i++)
+			bombs.get(i).draw(g);
 	}
 
 
 	public void draw(Graphics g_main){
 		animate();
 		this.paint(g_main);
+	}
+	
+	public void init_boms(Point next_ship_pos) {
+		bombs.clear();
+		bombs.add(new Bomb(next_ship_pos.x, next_ship_pos.y, NORTH));
+		bombs.add(new Bomb(next_ship_pos.x, next_ship_pos.y, WEST));
+		
+		bombs.add(new Bomb(next_ship_pos.x + size, next_ship_pos.y, NORTH));
+		bombs.add(new Bomb(next_ship_pos.x + size, next_ship_pos.y, EAST));
+		
+		bombs.add(new Bomb(next_ship_pos.x + size, next_ship_pos.y + size, SOUTH));
+		bombs.add(new Bomb(next_ship_pos.x + size, next_ship_pos.y + size, EAST));
+		
+		bombs.add(new Bomb(next_ship_pos.x, next_ship_pos.y + size, SOUTH));
+		bombs.add(new Bomb(next_ship_pos.x, next_ship_pos.y + size, WEST));
+		
 	}
 
 	@Override
@@ -136,6 +155,12 @@ public class Ship {
 		}
 		Point curr_ship_pos = new Point(this.x, this.y);
 		Point nex_shipp_pos = curr_ship_pos.getShipNewPosition(direction, MOVEMENT_PASE);
+		
+		if (time_to_bombs == 200) {
+			init_boms(nex_shipp_pos);
+			time_to_bombs = 0;
+		}
+		
 
 		if(isOuter(nex_shipp_pos))
 			generateDirection();
@@ -145,6 +170,7 @@ public class Ship {
 		}
 
 		keep_direction++;
+		time_to_bombs++;
 
 	}
 }
