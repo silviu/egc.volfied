@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 
 public class Player {
@@ -19,8 +20,7 @@ public class Player {
 	boolean isAttacking = false;
 	boolean speed_changed = false;
 	int time_to_normal = 0;
-	static int orientation = RIGHT;
-	static double angle = 0;
+	double pentagon_rotation_angle = 0;
 	
 	
 	static int lives = 3;
@@ -30,17 +30,15 @@ public class Player {
 	public Polygon getPolygon() {
 		Polygon p = new Polygon();
 		int n = 5; // pentagon has 5 points.
-		double angle = 2 * Math.PI / n;
+		double angle_between_poligon_points = 2 * Math.PI / n;
 		int r = SIZE;
 		
 		for(int i=0; i < n; i++) {
-			double v = i * angle;
+			double v = i * angle_between_poligon_points + pentagon_rotation_angle;
 			int x, y;
 			x = (int) Math.round(r * Math.cos(v));
 			y = (int) Math.round(r * Math.sin(v));
-			Point point = new Point(x, y);
-			point.rotatePoint(angle);
-			p.addPoint(point.x, point.y);
+			p.addPoint(x, y);
 		}
 		return p;
 	}
@@ -190,10 +188,30 @@ public class Player {
 		return false;
 	}
 	
+	private void updatePlayerRotationAngle(int keyCode) {
+		switch (keyCode) {
+		case KeyEvent.VK_UP:
+			pentagon_rotation_angle = 3 * Math.PI / 2;
+			break;
+		case KeyEvent.VK_DOWN:
+			pentagon_rotation_angle = Math.PI / 2;
+			break;
+		case KeyEvent.VK_LEFT:
+			pentagon_rotation_angle = Math.PI;
+			break;
+		case KeyEvent.VK_RIGHT:
+			pentagon_rotation_angle = 0;
+			break;
+		default:
+			break;
+		}
+	}
+
 	
 	public void key_decide(int keyCode) {
+		updatePlayerRotationAngle(keyCode);
+		
 		Point curr_player_pos = new Point(this.x, this.y);
-
 
 		Point next_player_pos = null;
 
@@ -201,8 +219,6 @@ public class Player {
 		while (p > 0)
 		{
 			next_player_pos = curr_player_pos.getNewPosition(keyCode, p);
-			angle = Point.getPlayerRotationAngle(keyCode, orientation);
-			
 			if (!Volfied.terain.isOuter(next_player_pos))
 				break;
 			// when nearing an edge we might not have enough space to do a full pase

@@ -58,56 +58,6 @@ public class Point {
 		return new Point(this.x + diff_x, this.y + diff_y);
 	}
 	
-	public static double getPlayerRotationAngle(int keyCode, int curr_orient) {
-		switch (keyCode) {
-		case KeyEvent.VK_UP:
-			Player.orientation = Player.UP;
-			if (curr_orient == Player.RIGHT)
-				return 270;
-			if (curr_orient == Player.DOWN)
-				return 90;
-			if (curr_orient == Player.LEFT)
-				return 180;
-			if (curr_orient == Player.UP)
-				return 0;
-			break;
-		case KeyEvent.VK_DOWN:
-			Player.orientation = Player.DOWN;
-			if (curr_orient == Player.RIGHT)
-				return 90;
-			if (curr_orient == Player.DOWN)
-				return 0;
-			if (curr_orient == Player.LEFT)
-				return 180;
-			if (curr_orient == Player.UP)
-				return 270;
-			break;
-		case KeyEvent.VK_LEFT:
-			Player.orientation = Player.LEFT;
-			if (curr_orient == Player.RIGHT)
-				return 180;
-			if (curr_orient == Player.DOWN)
-				return 90;
-			if (curr_orient == Player.LEFT)
-				return 0;
-			if (curr_orient == Player.UP)
-				return 270;
-			break;
-		case KeyEvent.VK_RIGHT:
-			Player.orientation = Player.RIGHT;
-			if (curr_orient == Player.RIGHT)
-				return 0;
-			if (curr_orient == Player.DOWN)
-				return 270;
-			if (curr_orient == Player.LEFT)
-				return 180;
-			if (curr_orient == Player.UP)
-				return 90;
-			break;
-			default: return 0;
-		}
-		return 0;
-	}
 
 	public Point getShipNewPosition(int direction, int pase)
 	{
