@@ -21,7 +21,8 @@ public class Player {
 	boolean speed_changed = false;
 	int time_to_normal = 0;
 	double pentagon_rotation_angle = 0;
-	boolean hasBombs = false;
+	boolean hasCritterBombs = false;
+	boolean hasShipBombs = false;
 	int orientation = RIGHT;
 	
 	Bomb bomb = new Bomb(x, y, RIGHT);
@@ -55,7 +56,7 @@ public class Player {
 			}
 			else
 				time_to_normal++;
-			if (hasBombs) {
+			if (hasCritterBombs || hasShipBombs) {
 				bomb.draw(g);
 				bomb.animate();
 			}

@@ -45,7 +45,6 @@ public class Volfied extends Applet implements KeyListener, Runnable
 	Graphics g_main, bufferGraphics;
 	public static int window_width, window_height;
 	public static int keyState;
-
 	
 	
 	public void create_stuff() {
@@ -57,7 +56,8 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		packets.add(new Packet(1, BOARD_HEIGHT-Packet.SIZE, Packet.INCREASE_SPEED));
 		packets.add(new Packet(BOARD_WIDTH-Packet.SIZE, BOARD_HEIGHT-Packet.SIZE, Packet.DECREASE_SPEED));
 		packets.add(new Packet(1, 1, Packet.STOP_TIME));
-		packets.add(new Packet(BOARD_WIDTH-Packet.SIZE, 1, Packet.BOMBS));
+		packets.add(new Packet(BOARD_WIDTH-Packet.SIZE, 1, Packet.CRITTER_BOMBS));
+		packets.add(new Packet(BOARD_WIDTH/2 - Packet.SIZE, 1, Packet.SHIP_BOMBS));
 	}
 	
 	public static void waiting (int n){
@@ -76,6 +76,10 @@ public class Volfied extends Applet implements KeyListener, Runnable
 		level_start = true;
 		player.x = BOARD_WIDTH/2;
 		player.y = BOARD_HEIGHT;
+		player.hasCritterBombs = false;
+		player.hasShipBombs = false;
+		packets.clear();
+		critters.clear();
 	}
 	
 	@Override
@@ -140,7 +144,13 @@ public class Volfied extends Applet implements KeyListener, Runnable
 			g_main.drawImage(offscreen,0, 0, this);
 		}
 		
-		
+		if (ship.isDead() && level == 1) {
+			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);
+			change_level();
+			level++;
+			create_stuff();
+			g_main.drawImage(offscreen,0, 0, this);
+		}
 		
 		
 		bufferGraphics.setColor(Color.black);
@@ -183,7 +193,7 @@ public class Volfied extends Applet implements KeyListener, Runnable
 			waiting(1);
 		}
 		
-		if (terain.percentageOccupied() >= PERCENTAGE_TO_WIN && level == 2) {
+		if ((terain.percentageOccupied() >= PERCENTAGE_TO_WIN && level == 2)||(ship.isDead() && level == 2)) {
 			f = new Font("monospaced", Font.BOLD, 30);
 			bufferGraphics.setFont(f);
 			bufferGraphics.drawString("YOU WON!", BOARD_WIDTH/2, BOARD_HEIGHT/2);

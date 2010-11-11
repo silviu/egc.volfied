@@ -93,7 +93,7 @@ public class Critter {
 			dead = true;
 			return true;
 		}
-		if (Volfied.player.bomb.getTranslated().intersects(getTranslatedPolygon().getBounds2D())) {
+		if (Volfied.player.hasCritterBombs && Volfied.player.bomb.getTranslated().intersects(getTranslatedPolygon().getBounds2D())) {
 			dead = true;
 			return true;
 		}

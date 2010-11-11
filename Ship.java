@@ -73,6 +73,12 @@ public class Ship {
 		bombs.add(new Bomb(next_ship_pos.x, next_ship_pos.y + size, WEST));
 		
 	}
+	
+	public boolean isDead() {
+		if (Volfied.player.hasShipBombs && Volfied.player.bomb.getTranslated().intersects(getTranslatedPolygon().getBounds2D()))
+			return true;
+		return false;
+	}
 
 	@Override
 	public String toString() {

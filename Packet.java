@@ -9,7 +9,8 @@ public class Packet {
 	final static int INCREASE_SPEED = 0;
 	final static int DECREASE_SPEED = 1;
 	final static int STOP_TIME = 2;
-	final static int BOMBS = 3;
+	final static int CRITTER_BOMBS = 3;
+	final static int SHIP_BOMBS = 4;
 	
 	int x;
 	int y;
@@ -61,9 +62,14 @@ public class Packet {
 			time_stopped = true;
 			break;
 			
-		case BOMBS:
+		case CRITTER_BOMBS:
 			message = "B";
-			Volfied.player.hasBombs = true;
+			Volfied.player.hasCritterBombs = true;
+			break;
+			
+		case SHIP_BOMBS:
+			message = "R";
+			Volfied.player.hasShipBombs = true;
 			break;
 		}
 	}
