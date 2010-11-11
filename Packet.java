@@ -15,6 +15,9 @@ public class Packet {
 	int y;
 	int trait;
 	boolean taken = false;
+	static boolean time_stopped = false;
+	String message = "";
+	boolean acted = false;
 	
 	public Packet(int init_x, int init_y, int trait) {
 		this.x = init_x;
@@ -28,25 +31,13 @@ public class Packet {
 			g.fillPolygon(this.getPaintable());
 		}
 		else {
-			String message = "";
-			switch(trait) {
-			case INCREASE_SPEED:
-				message = "S";
-				break;
-			case DECREASE_SPEED:
-				message = "D";
-				break;
-			case STOP_TIME:
-				message = "T";
-				break;
-			case BOMBS:
-				message = "B";
-				break;
-			}
+			if (!acted)
+				actOnPacket();
 			g.setColor(Color.green);
 			g.fillOval(x + Volfied.GRID_X, y + Volfied.GRID_Y, 50, 50);
 			g.setColor(Color.black);
 			g.drawString(message, x + 2*(Volfied.GRID_X-4), y + 2*Volfied.GRID_Y);
+			acted = true;
 		}
 	}
 
@@ -59,16 +50,21 @@ public class Packet {
 		switch (trait) {
 		case INCREASE_SPEED:
 			Volfied.player.setSpeed(20);
+			message = "S";
 			break;
 		case DECREASE_SPEED:
 			Volfied.player.setSpeed(5);
+			message = "D";
 			break;
 		case STOP_TIME:
+			message = "T";
+			time_stopped = true;
 			break;
+			
 		case BOMBS:
+			message = "B";
 			break;
 		}
-		taken = false;
 	}
 
 	public boolean checkIfTaken() {

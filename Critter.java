@@ -11,6 +11,7 @@ public class Critter {
 
 	int keep_direction = 0;
 	int direction;
+	int time_to_wait = 0;
 	
 	static final int NORTH = 1;
 	static final int EAST  = 2;
@@ -45,6 +46,15 @@ public class Critter {
 	
 	
 	public void draw(Graphics g_main){
+		if (Packet.time_stopped && time_to_wait < 300) {
+			time_to_wait++;
+			this.paint(g_main);
+			return;
+		}
+		else {
+			time_to_wait = 0;
+			Packet.time_stopped = false;
+		}
 		animate();
 		this.paint(g_main);
 	}

@@ -25,6 +25,7 @@ public class Ship {
 	int keep_direction = 0;
 	int direction = NORTH;
 	boolean growing = true;
+	int time_to_wait = 0;
 
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
@@ -44,6 +45,15 @@ public class Ship {
 
 
 	public void draw(Graphics g_main){
+		if (Packet.time_stopped && time_to_wait < 300) {
+			time_to_wait++;
+			this.paint(g_main);
+			return;
+		}
+		else {
+			time_to_wait = 0;
+			Packet.time_stopped = false;
+		}
 		animate();
 		this.paint(g_main);
 	}
