@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Player {
 	static final int SIZE = 20; // the pentagon's side size
-	int pase = 10;
+	int pase = 20;
 	
 	// initial positions
 	int x = Volfied.BOARD_WIDTH/2;
@@ -173,9 +173,26 @@ public class Player {
 	
 	public void key_decide(int keyCode) {
 		Point curr_player_pos = new Point(this.x, this.y);
-		Point next_player_pos = curr_player_pos.getNewPosition(keyCode, pase);
 
-		if (Volfied.terain.isOuter(next_player_pos)) {
+
+		Point next_player_pos = null;
+
+		int p = pase;
+		while (p > 0)
+		{
+			next_player_pos = curr_player_pos.getNewPosition(keyCode, p);
+
+			if (!Volfied.terain.isOuter(next_player_pos))
+				break;
+			// when nearing an edge we might not have enough space to do a full pase
+			// in that case retry with a smaller pase.
+			p--;
+		}
+
+		if (p == 0) {
+			// if moving a single pixel from the current position in the direction
+			// indicated by keyCode will get us out of the terrain, then we
+			// surely cannot move in that direction.
 			System.out.println("next point is outer: " + next_player_pos);
 			return;
 		}
