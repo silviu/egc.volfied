@@ -204,6 +204,14 @@ public class BrokenLine {
 		Point trail_start = trail_points.get(0);
 		Point trail_stop  = trail_points.get(trail_size - 1);
 
+		if (trail_start.equals(trail_stop)) {
+			// if we move up attacking into the terrain and then go down to the perimeter 
+			// the start and stop of the trail will be the same point.
+			// in this case there's not cutting to be done.
+			// Just return the same broken line to the caller in both cuts.
+			return new BrokenLine[] {this, this};
+		}
+		
 		Segment start_seg = this.getLinePointIsOn(trail_start);
 		Segment end_seg   = this.getLinePointIsOn(trail_stop);
 
