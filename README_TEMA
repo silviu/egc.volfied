@@ -1,0 +1,27 @@
+Grijincu Silviu
+334CB
+
+Tema 1 - Volfied
+
+
+Volfied.java :
+	In clasa Volfied se afla metoda main, care creeaza appletul si porneste 
+	threadul care se va ocupa cu animatiile si desenarile in general.
+	Am folosit doublebuffering pentru a nu avea flashuri la fiecare frame.
+	
+Am folosit obiectul "Polygon" pentru a creea playerul, navele inamic, 
+pentru a usura verificarile de intersectie ale acestora prin metoda "intersects".
+
+BrokenLine.java :
+	Cu ajutorul acestei clase implementez atat teritoriul, cat si "trail-ul" lasat
+	in urma de player cand taie din teritoriu.
+	Clasa are un camp intern care este initializat la creare si se refera la proprietatea
+	poligonului pe care il voi desena (deschis sau inchis).
+	Cand se traseaza "trail-ul" facut de player se adauga douar punctele de cotitura
+	in vecorul de puncte pentru a nu se ajunge la timpi mari pentru parcurgerea vectorului.
+	
+Am implementat 2 niveluri.	
+Am facut atat bonusul 1 in care nava principala trage cu proiectile, cat si bonusul 2 in 
+care exista pachete in teritoriu care ii pot mari/micsora viteza playerului, pot opri timpul
+pentru navele inamic sau dau posibilitatea playerului sa traga cu proiectile care pot ucide
+fie navele secundare, fie nava principala.

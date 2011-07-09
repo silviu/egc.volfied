@@ -1,0 +1,120 @@
+Volfied
+
+Folosing Java Applet, implementati un joc tinand cont de urmatoarea descriere:
+Elementele componente:
+- Jucatorul va controla o “nava spatiala”, desenata ca un pentagon, astfel:
+Pentru simplificare, din acest moment, jucatorul se va identifica cu nava spatiala.
+
+- “Navele spatiale” inamic vor fi reprezentate prin patrate:
+o In fiecare nivel al jocului (cel putin doua niveluri) vor exista doua tipuri de nave
+inamic:
+O nava principala (sau nava baza)
+Mai multe nave secundare - in primul nivel vor fi doua nave secundare, in al
+doilea nivel, 3 nave secundare …
+o Patratul care reprezinta nava inamic principala va avea latura mai mare decat
+patratele care reprezinta navele secundare
+o Exemplu de nave inamic:
+
+- “Campul de lupta” va fi reprezentat de un dreptunghi umplut. Initial, navele inamic se afla in
+interiorul acelui dreptunghi (pe teritoriu inamic), iar nava jucatorului se afla pe una din
+laturile dreptunghiului.
+
+Gameplay:
+- Scopul jucatorului este de a cuceri o parte cat mai mare din campul de lupta. Campul de
+lupta se imaparte in teren cucerit si teren inamic (initial tot campul de lupta este teren
+inamic). Jucatorul se poate deplasa in stanga/dreapta/sus/jos cu tastele sageata
+stanga/…/sageata jos pe frontiera terenului cucerit, pe laturile campului de lupta, si in
+interiorul terenului inamic. Atunci cand se deplaseaza pe frontiera terenului cucerit sau pe
+laturile campului de lupta, jucatorul este imun la atacurile navelor inamic. Atunci cand se
+deplaseaza in interiorul terenului inamic, jucatorul este sensibil la atacuri.
+
+- Exemplu de scena din joc (cu trei situatii posibile in care se afla nava jucatorului):
+o Nava spatiala a jucatorului este poligonul bleu
+Prima situatie: jucatorul se deplaseaza spre stanga, de-a lungul laturii de sus a
+dreptunghiului care reprezinta campul de lupta
+
+A doua situatie: jucatorul se deplaseaza in sus, de-a lungul frontierei care
+desparte terenul cucerit (colorat in albastru) de terenul inamic (colorat in
+galben)
+
+A treia situatie: jucatorul porneste de pe latura din stanga a campului de lupta,
+se deplaseaza spre dreapta, apoi in jos, apoi din nou spre dreapta, patrunzand
+in terenul inamic si lasand o urma a traiectoriei alese (polilinia mov)
+o Nava inamic principala este poligonul rosu
+o Navele inamic secundare sunt poligoanele portocalii
+(se pot folosi alte culori pentru desenarea scenei, aceste imagini fiind doar orientative)
+
+-
+
+Mod de cucerire al teritoriilor noi:
+o Pornind de pe teren sigur (o latura a campului de lupta (dreptunghiului) sau frontiera
+terenului cucerit) si intrand in interiorul terenului inamic, daca jucatorul ajunge din
+nou pe teren sigur, apare urmatorul fenomen:
+Polilinia (urma lasata de nava spatiala a jucatorului in deplasarea in terenul
+inamic) desparte terenul inamic in doua
+Suprafata in care se afla nava inamic principala
+Suprafata in care nu se afla nava principala (dar se pot afla navele
+secundare)
+Suprafata in care nu se afla nava principala va fi considerata zona cucerita (si
+va fi umpluta in culoarea albastra)
+o Exemplu de cucerire:
+
+Dupa cum se poate observa, cea mai de jos nava inamic secundara a fost
+prinsa in terenul cucerit si doborata. In locul ei va aparea pe ecran (in aceeasi
+pozitie cu nava doborata) mesajul “Mort” (sau alt mesaj asemanator)
+
+-
+
+Navele inamic au urmatorul comportament:
+o Cand jucatorul se afla pe teren sigur sau in orice moment in nivelul 1:
+
+Nava principala se mareste si se micsoreaza incontinuu (se scaleaza fata de
+centrul propriu), fara a iesi din interiorul terenului inamic (de exemplu se
+poate mari pana isi dubleaza latura initiala, apoi se micsoreaza pana cand
+latura devine jumatate din latura initiala, urmand sa se mareasca din nou –
+aces process ruleaza la infinit)
+
+Navele secundare se rotesc in jurul centrului propriu
+Pe langa transformarile anterioare, toate navele inamic realizeaza si translatii
+dupa traiectorii random (deplasandu-se incontinuu in interiorul terenului
+inamic) sau dupa traiectorii complexe construite anterior
+o De la nivelul 2 in sus (daca exista mai mult de doua niveluri), atunci cand jucatorul
+se deplaseaza in interiorul terenului inamic, traiectoriile dupa care se translateaza
+navele inamic se schimba astfel: toate navele inamic se vor deplasa inspre nava
+jucatorului.
+
+- Jucatorul are trei vieti. Daca pierde toate vietile, jocul se termina cu mesajul : “Ai pierdut”
+
+- Jucatorul isi poate pierde vietile astfel:
+o Daca este atins de una dintre navele inamic in timp ce se deplaseaza in interiorul
+terenului inamic
+o Daca polilinia care reprezinta urma sa lasata la deplasarea in interiorul terenului
+inamic este atinsa de catre una din navele inamic
+
+- Jucatorul poate termina un nivel cucerind un anumit procent din intregul camp de lupta (de
+exemplu 80%). Cand se termina un nivel, apare pe ecran mesajul “Ai terminat nivelul x”,
+dupa care apare scena pentru urmatorul nivel. Cand se termina toate nivelurile, apare pe
+ecran mesajul “Ai castigat!”
+
+Bonus1:
+- Nava inamic principala va trage cu proiectile sub forma de cercuri (aceste proiectile pot
+distruge nava jucatorului numai daca aceasta se deplaseaza in interiorul terenului inamic,
+traiectoria proiectilelor variind in functie de nivel
+o Exemplu: in nivelul 1, proiectilele se deplaseaza perpendicular pe laturile patratului
+care reprezinta nava inamic principala (se deplaseaza in sus,jos,stanga dreapta,
+dinspre nava inamic, inspre laturile campului de lupta); in nivelul 2, proiectilele
+urmaresc nava jucatorului, etc.
+Bonus 2:
+- In interiorul terenului inamic se vor afla “pachete” care, fiind cucerite, vor oferi anumite
+avantaje/dezavantaje jucatorului:
+
+o Pachet care opreste timpul pentru toate navele inamic (nu mai realizeaza nici o
+animatie)
+o Pachet care mareste viteza navei jucatorului
+o Pachet care micsoreaza viteza navei jucatorului
+o Pachet cu proiectile pentru nava jucatorului, proiectilele fiind de doua feluri:
+Proiectile care pot dobori numai navele inamic secundare
+Proiectile care pot dobori si nava principala (atunci cand nava principala este
+doborata, se termina nivelul curent)
+Pentru mai multe detalii, urmariti inregistrarea:
+http://www.youtube.com/watch?v=v2IW8dexBgU
